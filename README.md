@@ -1,2 +1,2 @@
-# WebPPOP
-Web Pengajuan Proposal Ormawa Politeknik Negeri Bandung
+# WebSipProKerOK
+Web Sistem Pengelolaan Program Kerja Organisasi Kemahasiswaan POLBAN
