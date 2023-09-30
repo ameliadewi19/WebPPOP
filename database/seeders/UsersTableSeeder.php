@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert([
+        $users = [
             [
                 'nama' => 'Admin',
                 'username' => 'admin',
@@ -70,6 +71,10 @@ class UsersTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
+        ];
+
+        foreach ($users as $user) {
+            User::firstOrCreate(['email' => $user['email']], $user);
+        }
     }
 }
