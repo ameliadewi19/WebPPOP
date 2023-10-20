@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ormawa', function (Blueprint $table) {
-            $table->id('id_ormawa');
-            $table->string('nama_ormawa');
-            $table->bigInteger('id_pembina');
+        Schema::create('kalender_akademik', function (Blueprint $table) {
+            $table->id('id_kegiatan');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_selesai');
+            $table->string('nama_kegiatan');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ormawa');
+        Schema::dropIfExists('lpj');
     }
 };

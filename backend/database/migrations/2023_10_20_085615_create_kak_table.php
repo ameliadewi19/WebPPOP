@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lpj', function (Blueprint $table) {
-            $table->id('id_lpj');
-            $table->bigInteger('id_proker');
+        Schema::create('kak', function (Blueprint $table) {
+            $table->id('id_kak');
+            $table->bigInteger('id_ketua');
+            $table->string('file_kak');
+            $table->string('file_rab');
             $table->string('status');
-            $table->longText('catatan');
-            $table->string('file_lpj');
+            $table->longText('catatan')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lpj');
+        Schema::dropIfExists('kak');
     }
 };
