@@ -27,15 +27,19 @@ class TimelineController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'id_kegiatan' => 'required',
             'nama_kegiatan' => 'required',
             'tanggal_mulai' => 'required|date',
-            'tanggal_akhir' => 'required|date',
+            'tanggal_selesai' => 'required|date',
+            'izin_submit' => 'required',
         ]);
 
         $timeline = new Timeline;
+        $timeline->id_kegiatan = $request->id_kegiatan;
         $timeline->nama_kegiatan = $request->nama_kegiatan;
         $timeline->tanggal_mulai = $request->tanggal_mulai;
-        $timeline->tanggal_akhir = $request->tanggal_akhir;
+        $timeline->tanggal_selesai = $request->tanggal_selesai;
+        $timeline->izin_submit = $request->izin_submit;
         $timeline->save();
 
         return response()->json($timeline, 201);
@@ -50,18 +54,23 @@ class TimelineController extends Controller
         }
 
         $this->validate($request, [
+            'id_kegiatan' => 'required',
             'nama_kegiatan' => 'required',
             'tanggal_mulai' => 'required|date',
-            'tanggal_akhir' => 'required|date',
+            'tanggal_selesai' => 'required|date',
+            'izin_submit' => 'required',
         ]);
 
+        $timeline->id_kegiatan = $request->id_kegiatan;
         $timeline->nama_kegiatan = $request->nama_kegiatan;
         $timeline->tanggal_mulai = $request->tanggal_mulai;
-        $timeline->tanggal_akhir = $request->tanggal_akhir;
+        $timeline->tanggal_selesai = $request->tanggal_selesai;
+        $timeline->izin_submit = $request->izin_submit;
         $timeline->save();
 
         return response()->json($timeline);
     }
+
 
     public function destroy($id)
     {

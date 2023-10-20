@@ -9,12 +9,12 @@ class Timeline extends Model
     protected $table = 'timeline'; // Nama tabel database yang sesuai
 
     protected $fillable = [
+        'id_kegiatan',
         'nama_kegiatan',
         'tanggal_mulai',
-        'tanggal_akhir',
+        'tanggal_selesai',
+        'izin_submit',
     ];
-
-    // Tambahkan properti-properitas atau metode-metode tambahan sesuai kebutuhan
 
     // Contoh metode untuk mengambil data timeline berdasarkan tanggal mulai
     public function scopeByTanggalMulai($query, $tanggalMulai)
