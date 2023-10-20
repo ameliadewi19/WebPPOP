@@ -12,14 +12,14 @@ class AcademicEventSeeder extends Seeder
         // Contoh data kegiatan akademik
         $events = [
             [
-                'tanggal_mulai' => '2023-10-25',
-                'tanggal_akhir' => '2023-10-28',
-                'nama_kegiatan' => 'Ujian Midterm',
-            ],
-            [
                 'tanggal_mulai' => '2023-11-15',
                 'tanggal_akhir' => '2023-11-20',
-                'nama_kegiatan' => 'Pendaftaran Semester Baru',
+                'nama_kegiatan' => 'MARKISA',
+            ],
+            [
+                'tanggal_mulai' => '2023-12-15',
+                'tanggal_akhir' => '2023-12-16',
+                'nama_kegiatan' => 'Dies Natalis HIMAKOM',
             ],
         ];
 

@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\dummyAPI;
 use App\Http\Controllers\AcademicEventController;
 
 
@@ -21,8 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get("data", [dummyAPI::class,"getData"]);
-
 // KALENDER AKADEMIK
 
 // Mengambil semua data kegiatan akademik
@@ -39,3 +36,38 @@ Route::put('academic-events/{id}', [AcademicEventController::class, 'update']);
 
 // Menghapus data kegiatan akademik berdasarkan ID
 Route::delete('academic-events/{id}', [AcademicEventController::class, 'destroy']);
+
+// PENGUMUMAN
+
+// Mengambil semua data Pengumuman
+Route::get('pengumuman', 'PengumumanController@index');
+
+// Mengambil data Pengumuman berdasarkan ID
+Route::get('pengumuman/{id}', 'PengumumanController@show');
+
+// Menyimpan data Pengumuman baru ke Database
+Route::post('pengumuman', 'PengumumanController@store');
+
+// Memperbarui data Pengumuman berdasarkan ID
+Route::put('pengumuman/{id}', 'PengumumanController@update');
+
+// Menghapus data Pengumuman berdasarkan ID
+Route::delete('pengumuman/{id}', 'PengumumanController@destroy');
+
+
+// PERGERAKAN
+
+// Mengambil semua data Pergerakan dari Database
+Route::get('pergerakan', 'PergerakanController@index');
+
+// Mengambil data Pergerakan dari Database berdasarkan ID
+Route::get('pergerakan/{id}', 'PergerakanController@show');
+
+// Menyimpan data Pergerakan ke Database
+Route::post('pergerakan', 'PergerakanController@store');
+
+// Memperbarui data Pergerakan berdasarkan ID
+Route::put('pergerakan/{id}', 'PergerakanController@update');
+
+// Menghapus data pergerakan berdasarkan ID
+Route::delete('pergerakan/{id}', 'PergerakanController@destroy');
