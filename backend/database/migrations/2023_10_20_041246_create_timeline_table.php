@@ -9,11 +9,14 @@ class CreateTimelineTable extends Migration
     public function up()
     {
         Schema::create('timeline', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_timeline');
+            $table->string('id_kegiatan');
             $table->string('nama_kegiatan');
             $table->date('tanggal_mulai');
-            $table->date('tanggal_akhir');
+            $table->date('tanggal_selesai');
+            $table->string('izin_submit');
             $table->timestamps();
+
         });
     }
 
