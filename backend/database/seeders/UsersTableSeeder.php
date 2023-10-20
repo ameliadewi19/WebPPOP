@@ -71,17 +71,17 @@ class UsersTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'nama' => 'Pembina',
-                'username' => 'pembinahimakom',
-                'email' => 'pembinahimakom@example.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('pembinahimakom'),
-                'role' => 'pembina',
-                'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'nama' => 'Pembina',
+            //     'username' => 'pembinahimakom',
+            //     'email' => 'pembinahimakom@example.com',
+            //     'email_verified_at' => now(),
+            //     'password' => Hash::make('pembinahimakom'),
+            //     'role' => 'pembina',
+            //     'remember_token' => Str::random(10),
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
         ];
 
         foreach ($users as $user) {
