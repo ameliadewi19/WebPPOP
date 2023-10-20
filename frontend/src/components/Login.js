@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const history = useNavigate();
@@ -12,7 +12,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/confirmation', { username, password });
+      const response = await axios.post('/confirmation', { email, password });
 
       if (response.data.success) {
         setMessage('Login successful');
@@ -32,7 +32,7 @@ function Login() {
           <div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
             <div className="d-table-cell align-middle">
               <div className="text-center mt-4">
-                <h1 className="h2">Welcome back!</h1>
+                <h1 className="h2">Login Web Pengelolaan Ormawa POLBAN</h1>
                 <p className="lead">
                   Sign in to your account to continue
                 </p>
@@ -44,7 +44,7 @@ function Login() {
                     <form onSubmit={handleSubmit}>
                       <div className="mb-3">
                         <label className="form-label">Email</label>
-                        <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Password</label>

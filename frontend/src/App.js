@@ -11,6 +11,10 @@ import Dashboard from './components/Dashboard.js';
 import KAK from './components/KAK.js';
 import ProgramKerja from './components/ProgramKerja.js';
 import PeminjamanSarpras from './components/PeminjamanSarpras.js';
+import Timeline from './components/Timeline.js';
+import Pengumuman from './components/Pengumuman.js';
+import KalenderAkademik from './components/KalenderAkademik.js';
+import UploadKAK from './components/SubMenu/UploadKAK.js';
 
 function App() {
   return (
@@ -67,6 +71,46 @@ function App() {
             <div className="main">
               <Navbar />
               <PeminjamanSarpras />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/timeline" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <Timeline />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/pengumuman" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <Pengumuman />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/kalender-akademik" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <KalenderAkademik />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/kak/upload-kak" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <UploadKAK />
               <Footer />
             </div>
           </div>
