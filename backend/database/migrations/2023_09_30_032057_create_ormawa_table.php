@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('ormawa', function (Blueprint $table) {
             $table->id('id_ormawa');
             $table->string('nama_ormawa');
-            $table->bigInteger('id_pembina');
             $table->timestamps();
         });
     }
