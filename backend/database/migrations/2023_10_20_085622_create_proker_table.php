@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id('id_proker');
             $table->bigInteger('id_kak');
             $table->string('nama_kegiatan');
+            $table->string('ketua_pelaksana');
             $table->longText('deskripsi_kegiatan');
-            $table->date('tanggal_mulai');
-            $table->date('tanggal_akhir');
-            $table->string('status');
-            $table->longText('catatan');
-            $table->string('file_proposal');
-            $table->string('file_rab');
+            $table->date('tanggal_mulai')->nullable();
+            $table->date('tanggal_akhir')->nullable();
+            $table->string('status')->nullable();
+            $table->longText('catatan')->nullable();
+            $table->string('file_proposal')->nullable();
+            $table->string('file_rab')->nullable();
             $table->timestamps();
         });
     }
