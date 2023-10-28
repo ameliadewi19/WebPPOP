@@ -100,7 +100,7 @@ Route::put('/ormawa/{id}', [OrmawaController::class, 'update']);
 Route::delete('/ormawa/{id}', [OrmawaController::class, 'destroy']);
 
 // API routes for Kak
-Route::get('/kak', [KAKController::class, 'index']);
+Route::get('/kak/bulk/{id}', [KAKController::class, 'index']);
 Route::get('/kak/{id}', [KAKController::class, 'show']);
 Route::post('/kak', [KAKController::class, 'store']);
 Route::put('/kak/{id}', [KAKController::class, 'update']);
