@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import apiClientAuth from '../services/axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -22,29 +23,22 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      // const response = await axios.post('/confirmation', { email, password });
-      const response = await axios.post('http://localhost:8000/api/login', formData);
-      console.log(response.data);
-
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('role', response.data.role);
-
-      navigate('/dashboard'); 
+      const response = await axios.post('/api/auth/login', formData);
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('role', response.data.user.role);
+      console.log('Login berhasil');
+      console.log(response.data.user);
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Gagal',
+        text: 'Silakan cek kembali email dan password Anda',
+      });
     }
   };
-
-  // const handleLogout = async () => {
-  //     try {
-  //         const response = await axios.post('http://localhost:8000/api/logout');
-  //         console.log(response.data);
-  //     } catch (error) {
-  //         console.error(error);
-  //     }
-  // };
 
   return (
     <main className="d-flex w-100">

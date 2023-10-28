@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 
+// import ProtectedRoute from './components/ProtectedRoute.js';
 import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
@@ -16,6 +17,28 @@ import Pengumuman from './pages/Pengumuman.js';
 import KalenderAkademik from './pages/KalenderAkademik.js';
 import UploadKAK from './components/SubMenu/UploadKAK.js';
 
+function checkAuthorization() {
+  const token = localStorage.getItem('token');
+
+  console.log("token lokal:", token);
+  
+  if (!token) {
+    return false;
+  }
+  return true;
+}
+
+function ProtectedRoute({ children }) {
+
+  const userHasAuthorization = checkAuthorization(); 
+
+  if (!userHasAuthorization) {
+    return <Navigate to={`/`} />;
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -26,54 +49,64 @@ function App() {
           </>
         }/>
         <Route path="/dashboard" element={
-          <div className="wrapper">
-            <Sidebar />
-            <div className="main">
-              <Navbar />
-              <Dashboard />
-              <Footer />
+          <ProtectedRoute>
+            <div className="wrapper">
+              <Sidebar />
+              <div className="main">
+                <Navbar />
+                <Dashboard />
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ProtectedRoute>
         }/>
         <Route path="/kak" element={
-          <div className="wrapper">
-            <Sidebar />
-            <div className="main">
-              <Navbar />
-              <KAK />
-              <Footer />
+          <ProtectedRoute>
+            <div className="wrapper">
+              <Sidebar />
+              <div className="main">
+                <Navbar />
+                <KAK />
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ProtectedRoute>
         }/>
         <Route path="/program-kerja" element={
-          <div className="wrapper">
-            <Sidebar />
-            <div className="main">
-              <Navbar />
-              <ProgramKerja />
-              <Footer />
+          <ProtectedRoute>
+            <div className="wrapper">
+              <Sidebar />
+              <div className="main">
+                <Navbar />
+                <ProgramKerja />
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ProtectedRoute>
         }/>
         <Route path="/pergerakan" element={
-          <div className="wrapper">
-            <Sidebar />
-            <div className="main">
-              <Navbar />
-              <Pergerakan />
-              <Footer />
+          <ProtectedRoute>
+            <div className="wrapper">
+              <Sidebar />
+              <div className="main">
+                <Navbar />
+                <Pergerakan />
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ProtectedRoute>
         }/>
         <Route path="/peminjaman-sarpras" element={
-          <div className="wrapper">
-            <Sidebar />
-            <div className="main">
-              <Navbar />
-              <PeminjamanSarpras />
-              <Footer />
+          <ProtectedRoute>
+            <div className="wrapper">
+              <Sidebar />
+              <div className="main">
+                <Navbar />
+                <PeminjamanSarpras />
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ProtectedRoute>
         }/>
         <Route path="/timeline" element={
           <div className="wrapper">
