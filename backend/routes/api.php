@@ -6,14 +6,17 @@ use App\Http\Controllers\AcademicEventController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PergerakanController;
 use App\Http\Controllers\TimelineController;
-
-
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\OrmawaController;
 use App\Http\Controllers\KAKController;
 use App\Http\Controllers\ProkerController;
 use App\Http\Controllers\LPJController;
+use Illuminate\Support\Facades\Auth;
+
+use App\Http\Middleware\CheckRole;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,9 +28,22 @@ use App\Http\Controllers\LPJController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);    
 });
+
+Route::get('/test', [AuthController::class, 'test'])->middleware(CheckRole::class . ':admin');
 
 // KALENDER AKADEMIK
 
@@ -80,12 +96,6 @@ Route::put('pergerakan/{id}', [PergerakanController::class,'update']);
 
 // Menghapus data pergerakan berdasarkan ID
 Route::delete('pergerakan/{id}', 'PergerakanController@destroy');
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-});
 
 Route::get('/test', [TestController::class, 'test']);
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

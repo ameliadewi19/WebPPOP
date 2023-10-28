@@ -4,15 +4,25 @@ import { useNavigate } from 'react-router-dom';
 
 // Using Arrow Function
 const Dashboard = () => {
+    const [data, setData] = useState(null);
     const history = useNavigate();
 
-    useEffect(() => {
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
+    // useEffect(() => {
+    //   const isLoggedIn = localStorage.getItem('isLoggedIn');
   
-      if (!isLoggedIn) {
-        window.location.href = '/'; // Ganti dengan rute login Anda
-      }
-    }, []);
+    //   if (!isLoggedIn) {
+    //     window.location.href = '/'; // Ganti dengan rute login Anda
+    //   }
+
+    //   axios.get('http://localhost:8000/api/test')
+    //   .then(response => {
+    //     setData(response.data);
+    //     console.log(response.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
+    // }, []);
 
     return (
       <main class="content">
@@ -38,7 +48,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                         </div>
-                        <h1 class="mt-1 mb-3">2.382</h1>
+                        
                         <div class="mb-0">
                           <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
                           <span class="text-muted">Since last week</span>

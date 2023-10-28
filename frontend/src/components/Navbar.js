@@ -4,9 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import feather from 'feather-icons';
 
 const Navbar = () => {
+	const navigate = useNavigate();
     useEffect(() => {
         feather.replace(); // Replace the icons after component mounts
     }, []);
+
+	const handleLogout = async (e) => {
+		e.preventDefault();
+
+		try {
+		  await axios.post('/api/auth/logout');
+		  localStorage.removeItem('token');
+		  navigate('/'); // Redirect ke halaman login setelah logout
+		} catch (error) {
+		  console.error('Error logging out:', error);
+		}
+	  };	  
 
     return (
         <nav className="navbar navbar-expand navbar-light navbar-bg">
@@ -163,7 +176,8 @@ const Navbar = () => {
 								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
 								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Log out</a>
+								<a class="dropdown-item" href="" onClick={handleLogout}>Log out</a>
+								{/* <button onClick={handleLogout}>Logout</button> */}
 							</div>
 						</li>
 					</ul>

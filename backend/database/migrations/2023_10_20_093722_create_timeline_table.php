@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nama_kegiatan');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
+            $table->string('izin_submit');
             $table->timestamps();
         });
     }
