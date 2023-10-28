@@ -21,7 +21,9 @@ function Login() {
     try {
       const response = await axios.post('/api/auth/login', formData);
       localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('role', response.data.user.role);
       console.log('Login berhasil');
+      console.log(response.data.user);
       navigate('/dashboard');
     } catch (error) {
       console.error(error);
