@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('tanggal_selesai');
             $table->string('izin_submit');
             $table->timestamps();
+
         });
     }
 
