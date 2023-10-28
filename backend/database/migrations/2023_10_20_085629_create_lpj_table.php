@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kak', function (Blueprint $table) {
-            $table->id('id_kak');
-            $table->bigInteger('id_ormawa');
+        Schema::create('kalender_akademik', function (Blueprint $table) {
+            $table->id('id_kegiatan');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_selesai');
+            $table->string('nama_kegiatan');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kak');
+        Schema::dropIfExists('lpj');
     }
 };

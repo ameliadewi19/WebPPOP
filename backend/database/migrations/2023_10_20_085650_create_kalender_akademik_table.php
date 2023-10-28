@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proker', function (Blueprint $table) {
-            $table->id('id_proker');
-            $table->bigInteger('id_kak');
-            $table->string('nama_kegiatan');
-            $table->longText('deskripsi_kegiatan');
-            $table->date('tanggal_mulai');
-            $table->date('tanggal_akhir');
+        Schema::create('lpj', function (Blueprint $table) {
+            $table->id('id_lpj');
+            $table->bigInteger('id_proker');
             $table->string('status');
             $table->longText('catatan');
-            $table->string('file_proposal');
-            $table->string('file_rab');
+            $table->string('file_lpj')->nulable();
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proker');
+        Schema::dropIfExists('kalender_akademik');
     }
 };
