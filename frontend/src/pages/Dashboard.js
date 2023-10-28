@@ -9,9 +9,9 @@ const Dashboard = () => {
     useEffect(() => {
       const isLoggedIn = localStorage.getItem('isLoggedIn');
   
-      if (!isLoggedIn) {
-        window.location.href = '/'; // Ganti dengan rute login Anda
-      }
+      // if (!isLoggedIn) {
+      //   window.location.href = '/'; // Ganti dengan rute login Anda
+      // }
     }, []);
 
     return (

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
 import 'bootstrap/dist/js/bootstrap.bundle';
-import EditKAKModal from './Modals/EditKAKModal';
-import FileKAKModal from './Modals/FileKAKModal';
+import EditKAKModal from '../components/Modals/EditKAKModal';
+import FileKAKModal from '../components/Modals/FileKAKModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ const KAK = () => {
     };
 
     const handleUpload = () => {
-        navigate('/kak/upload-kak');
+        navigate('/upload-kak');
     };
 
     const handleDelete = async () => {

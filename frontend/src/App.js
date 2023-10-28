@@ -5,15 +5,15 @@ import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
 
-import Login from './components/Login.js';
-import Pergerakan from './components/Pergerakan.js';
-import Dashboard from './components/Dashboard.js';
-import KAK from './components/KAK.js';
-import ProgramKerja from './components/ProgramKerja.js';
-import PeminjamanSarpras from './components/PeminjamanSarpras.js';
-import Timeline from './components/Timeline.js';
-import Pengumuman from './components/Pengumuman.js';
-import KalenderAkademik from './components/KalenderAkademik.js';
+import Login from './pages/Login.js';
+import Pergerakan from './pages/Pergerakan.js'
+import Dashboard from './pages/Dashboard.js';
+import KAK from './pages/KAK.js';
+import ProgramKerja from './pages/ProgramKerja.js';
+import PeminjamanSarpras from './pages/PeminjamanSarpras.js';
+import Timeline from './pages/Timeline.js';
+import Pengumuman from './pages/Pengumuman.js';
+import KalenderAkademik from './pages/KalenderAkademik.js';
 import UploadKAK from './components/SubMenu/UploadKAK.js';
 
 function App() {
@@ -105,7 +105,7 @@ function App() {
             </div>
           </div>
         }/>
-        <Route path="/kak/upload-kak" element={
+        <Route path="/upload-kak" element={
           <div className="wrapper">
             <Sidebar />
             <div className="main">
