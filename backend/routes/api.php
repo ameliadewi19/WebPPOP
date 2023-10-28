@@ -43,8 +43,6 @@ Route::group([
     Route::get('/user-profile', [AuthController::class, 'userProfile']);    
 });
 
-Route::get('/test', [AuthController::class, 'test'])->middleware(CheckRole::class . ':admin');
-
 // KALENDER AKADEMIK
 
 // Mengambil semua data kegiatan akademik

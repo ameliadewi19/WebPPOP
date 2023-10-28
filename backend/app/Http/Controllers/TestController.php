@@ -20,7 +20,8 @@ class TestController extends Controller
     }
 
     public function test(Request $request) {
-        return response()->json(['message' => 'Halo Admin!']);
+        $user = auth()->user();
+        return response()->json(['message' => 'Halo Admin!', $user->role]);
         // $user = auth()->user();
     
         // if ($user->role === 'admin') {
