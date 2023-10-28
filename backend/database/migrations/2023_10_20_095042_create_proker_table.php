@@ -23,6 +23,7 @@ return new class extends Migration
             $table->longText('catatan')->nullable();
             $table->string('file_proposal')->nullable();
             $table->string('file_rab')->nullable();
+            $table->string('izin_submit');
             $table->timestamps();
         });
     }
