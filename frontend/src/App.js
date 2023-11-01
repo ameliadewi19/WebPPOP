@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 
-// import ProtectedRoute from './components/ProtectedRoute.js';
 import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
@@ -19,8 +18,10 @@ import UploadKAK from './components/SubMenu/UploadKAK.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
 
   console.log("token lokal:", token);
+  console.log("role:", role);
   
   if (!token) {
     return false;
