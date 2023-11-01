@@ -59,12 +59,12 @@ function Login() {
                     <form onSubmit={handleSubmit}>
                       <div className="mb-3">
                         <label className="form-label">Email</label>
-                        <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={(e) => setEmail(e.target.value)} />
                         {/* <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleInputChange} /> */}
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Password</label>
-                        <input className="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" value={formData.password} onChange={handleInputChange} />
+                        <input className="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" value={formData.password} onChange={(e) => setPassword(e.target.value)} />
                       </div>
                       {/* <div>
                         <div className="form-check align-items-center">
