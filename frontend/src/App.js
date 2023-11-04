@@ -31,11 +31,7 @@ function checkRole() {
   const role = localStorage.getItem('role');
   console.log("role:", role);
 
-  if (role === 'admin') {
-    return 'admin';
-  } else {
-    return 'user';
-  }
+  return role;
 }
 
 function ProtectedRoute({ children }) {
@@ -78,7 +74,7 @@ function App() {
               <Sidebar />
               <div className="main">
                 <Navbar />
-                {userRole === 'admin' ? <KAKAdmin /> : <KAK />}
+                {userRole === 'ormawa' ? <KAK /> : <KAKAdmin />}
                 <Footer />
               </div>
             </div>
