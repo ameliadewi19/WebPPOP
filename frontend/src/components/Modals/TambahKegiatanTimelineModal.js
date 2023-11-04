@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
 
-const UploadKAKModal = ({ showModal, setShowModal }) => {
+const TambahKegiatanTimelineModal = ({ showModal, setShowModal }) => {
     const [formData, setFormData] = useState({ namaOrmawa: '', fileKAK: null, fileRAB: null });
     const modalRef = useRef();
     
@@ -77,4 +77,4 @@ const UploadKAKModal = ({ showModal, setShowModal }) => {
     );
   };
   
-  export default UploadKAKModal;
+  export default TambahKegiatanTimelineModal;
