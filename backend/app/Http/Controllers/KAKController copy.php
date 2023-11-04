@@ -8,32 +8,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class KAKController extends Controller
 {
-    /**
-     * Create a new KAKController instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    // Method for handling HTTP GET requests
+    public function index($id_kak)
     {
-        $this->middleware('auth:api', ['except' => []]);
-    }
-
-    // Method for handling HTTP GET requests to show one data
-    public function index()
-    {
-        $kaks = KAK::with('prokers')->get();
-
-        if ($kaks->isEmpty()) {
-            return response()->json(['message' => 'No KAKs found'], 404);
-        }
-
+        $kaks = KAK::with('prokers')->where('id_kak', $id_kak)->get();
         return response()->json($kaks, 200);
     }
 
-    // Method for handling HTTP GET requests
-    public function show($id_kak)
+
+
+    // Method for handling HTTP GET requests to show a single product
+    public function show($id)
     {
-        $kaks = KAK::with('prokers')->where('id_kak', $id_kak)->get();
+        $kaks = KAK::find();
+        if (!$kaks) {
+            return response()->json(['message' => 'KAK not found'], 404);
+        }
         return response()->json($kaks, 200);
     }
 

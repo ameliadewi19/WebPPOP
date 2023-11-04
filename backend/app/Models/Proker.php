@@ -21,6 +21,7 @@ class Proker extends Model
         'catatan',
         'file_proposal',
         'file_rab',
+        'izin_submit'
     ];
 
     public function kak(){

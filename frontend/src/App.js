@@ -9,6 +9,7 @@ import Login from './pages/Login.js';
 import Pergerakan from './pages/Pergerakan.js'
 import Dashboard from './pages/Dashboard.js';
 import KAK from './pages/KAK.js';
+import KAKAdmin from './pages/KAKAdmin.js';
 import ProgramKerja from './pages/ProgramKerja.js';
 import PeminjamanSarpras from './pages/PeminjamanSarpras.js';
 import Timeline from './pages/Timeline.js';
@@ -18,15 +19,19 @@ import UploadKAK from './components/SubMenu/UploadKAK.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
-
   console.log("token lokal:", token);
-  console.log("role:", role);
   
   if (!token) {
     return false;
   }
   return true;
+}
+
+function checkRole() {
+  const role = localStorage.getItem('role');
+  console.log("role:", role);
+
+  return role;
 }
 
 function ProtectedRoute({ children }) {
@@ -41,6 +46,8 @@ function ProtectedRoute({ children }) {
 }
 
 function App() {
+  const userRole = checkRole();
+
   return (
     <BrowserRouter>
       <Routes>
@@ -67,7 +74,7 @@ function App() {
               <Sidebar />
               <div className="main">
                 <Navbar />
-                <KAK />
+                {userRole === 'ormawa' ? <KAK /> : <KAKAdmin />}
                 <Footer />
               </div>
             </div>
