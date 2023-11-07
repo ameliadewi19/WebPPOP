@@ -3,108 +3,64 @@ import axios from 'axios';
 import feather from 'feather-icons';
 
 const UploadKAK = ({ }) => {
-
+    const [role, setRole] = useState(null);
     useEffect(() => {
-        feather.replace(); // Replace the icons after component mounts
-        // Pasang event listener pada tombol "Tambah"
+        feather.replace(); 
+        const role = localStorage.getItem('role');
+        setRole(role);
     }, []);
 
+    const [proker, setProker] = useState([
+        {
+            namaKegiatan: '',
+            ketuaPelaksana: '',
+            jenisKegiatan: ''
+        }
+    ]);
     const [formData, setFormData] = useState({ 
-        namaOrmawa: '',
+        namaOrmawa: role,
         fileKAK: null,
         fileRAB: null,
-        proker: [
-            {
-                namaKegiatan: '',
-                ketuaPelaksana: '',
-                jenisKegiatan: ''
-            }
-        ]
+        proker: []
     });
     
-    const handleInputChange = (e, index) => {
-        const { name, value, type, files } = e.target; 
-        // Jika input adalah file, kita memerlukan penanganan khusus
-        const newValue = type === 'file' ? files[0] : value;
-        
-        setFormData({
-          ...formData,
-          [name]: newValue,
-        });
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleProkerChange = (e, index) => {
+        let data = [...proker];
+        data[index][e.target.name] = e.target.value;
+        setProker(data);
     };
     
-    const handleSubmit = () => {
-      
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      formData.namaOrmawa = role;
+      formData.proker = proker;
+      console.log(formData);
+      feather.replace();
+    };
+
+    const addInputRow = () => {
+        let object = {
+            namaKegiatan: '',
+            ketuaPelaksana: '',
+            jenisKegiatan: ''
+        };
+        setProker([...proker, object]);
     };
 
     const handleDeleteRow = (index) => {
-        const programKerja = [...formData.programKerja];
-        programKerja.splice(index, 1); // Hapus baris dengan index tertentu
-        setFormData({
-            ...formData,
-            programKerja
-        });
+        let data = [...proker];
+        data.splice(index, 1);
+        setProker(data);
     };
-
-    const addInputRow = (event) => {
-        event.preventDefault();
-        const inputProker = document.getElementById('input-proker');
-      
-        // Buat elemen-elemen baru untuk baris input
-        const newRow = document.createElement('div');
-        newRow.classList.add('mb-3', 'row');
-      
-        const input1 = document.createElement('div');
-        input1.classList.add('col-sm-4');
-        const inputElement1 = document.createElement('input');
-        inputElement1.type = 'text';
-        inputElement1.className = 'form-control';
-        inputElement1.name = 'fProker';
-        inputElement1.placeholder = 'Nama Kegiatan';
-        input1.appendChild(inputElement1);
-      
-        const input2 = document.createElement('div');
-        input2.classList.add('col-sm-4');
-        const inputElement2 = document.createElement('input');
-        inputElement2.type = 'text';
-        inputElement2.className = 'form-control';
-        inputElement2.name = 'fProker';
-        inputElement2.placeholder = 'Ketua Pelaksana';
-        input2.appendChild(inputElement2);
-      
-        const input3 = document.createElement('div');
-        input3.classList.add('col-sm-3');
-
-        const inputElement3 = document.createElement('input');
-        inputElement3.type = 'text';
-        inputElement3.className = 'form-control';
-        inputElement3.name = 'fProker';
-        inputElement3.placeholder = 'Jenis kegiatan';
-        input3.appendChild(inputElement3);
-
-        const input4 = document.createElement('div');
-        input4.classList.add('col-sm-1');
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'btn btn-danger float-end';
-        deleteButton.innerHTML = '<i class="align-middle" data-feather="trash"></i>';
-        deleteButton.addEventListener('click', () => handleDeleteRow(newRow));
-        input4.appendChild(deleteButton);
-      
-        // Tambahkan elemen-elemen ke dalam row
-        newRow.appendChild(input1);
-        newRow.appendChild(input2);
-        newRow.appendChild(input3);
-        newRow.appendChild(input4);
-      
-        // Tambahkan row baru ke dalam div input-proker
-        inputProker.appendChild(newRow);
-      };
-      
   
     return (
         <main class="content">
             <div class="container-fluid p-0">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="namaOrmawa" className="form-label">Nama ORMAWA</label>
                         <input
@@ -115,7 +71,7 @@ const UploadKAK = ({ }) => {
                             name="namaOrmawa"
                             placeholder="ORMAWA"
                             value={formData.namaOrmawa}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e)}
                         />
                     </div>
                     <div className="mb-3">
@@ -125,7 +81,7 @@ const UploadKAK = ({ }) => {
                             className="form-control"
                             id="fileKAK"
                             name="fileKAK"
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e)}
                         />
                     </div>
                     <div className="mb-3">
@@ -135,7 +91,7 @@ const UploadKAK = ({ }) => {
                             className="form-control"
                             id="fileRAB"
                             name="fileRAB"
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e)}
                         />
                     </div>
                     <div id='dynamic-inputs' className="mb-3">
@@ -148,7 +104,7 @@ const UploadKAK = ({ }) => {
                             </div>
                         </div>
                         <div id='input-proker'>
-                            {formData.proker.map((proker, index) => (
+                            {proker.map((proker, index) => (
                                 <div className='row mb-3' key={index}>
                                     <div className="col-sm-4">
                                         <input
@@ -156,8 +112,8 @@ const UploadKAK = ({ }) => {
                                             className="form-control"
                                             name="namaKegiatan"
                                             placeholder="Nama Kegiatan"
+                                            onChange={(e) => handleProkerChange(e, index)}
                                             value={proker.namaKegiatan}
-                                            onChange={(e) => handleInputChange(e, index)}
                                         />
                                     </div>
                                     <div className="col-sm-4">
@@ -166,8 +122,8 @@ const UploadKAK = ({ }) => {
                                             className="form-control"
                                             name="ketuaPelaksana"
                                             placeholder="Ketua Pelaksana"
+                                            onChange={(e) => handleProkerChange(e, index)}
                                             value={proker.ketuaPelaksana}
-                                            onChange={(e) => handleInputChange(e, index)}
                                         />
                                     </div>
                                     <div className="col-sm-3">
@@ -176,8 +132,8 @@ const UploadKAK = ({ }) => {
                                             className="form-control"
                                             name="jenisKegiatan"
                                             placeholder="Jenis kegiatan"
+                                            onChange={(e) => handleProkerChange(e, index)}
                                             value={proker.jenisKegiatan}
-                                            onChange={(e) => handleInputChange(e, index)}
                                         />
                                     </div>
                                     <div className='col-sm-1'>
@@ -188,6 +144,9 @@ const UploadKAK = ({ }) => {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                    <div className="mb-3">
+                        <button type="submit" className="btn btn-primary float-end" onClick={handleSubmit}>Submit</button>
                     </div>
                 </form>
             </div>
