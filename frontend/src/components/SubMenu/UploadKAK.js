@@ -34,12 +34,23 @@ const UploadKAK = ({ }) => {
         setProker(data);
     };
     
-    const handleSubmit = (e) => {
+    const submit = (e) => {
       e.preventDefault();
       formData.namaOrmawa = role;
       formData.proker = proker;
       console.log(formData);
       feather.replace();
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        axios.post('/api/kak', formData)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     const addInputRow = () => {
@@ -60,7 +71,7 @@ const UploadKAK = ({ }) => {
     return (
         <main class="content">
             <div class="container-fluid p-0">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={submit}>
                     <div className="mb-3">
                         <label htmlFor="namaOrmawa" className="form-label">Nama ORMAWA</label>
                         <input
