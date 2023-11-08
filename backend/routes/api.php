@@ -14,6 +14,7 @@ use App\Http\Controllers\KAKController;
 use App\Http\Controllers\ProkerController;
 use App\Http\Controllers\LPJController;
 use App\Http\Controllers\KetuaOrmawaController;
+use App\Http\Controllers\VerifikasiKAKController;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Middleware\CheckRole;
@@ -121,7 +122,7 @@ Route::post('/ormawa', [OrmawaController::class, 'store']);
 Route::put('/ormawa/{id}', [OrmawaController::class, 'update']);
 Route::delete('/ormawa/{id}', [OrmawaController::class, 'destroy']);
 
-// API routes for Kak
+// API routes for KAK
 Route::group([
     'middleware' => 'api',
     'prefix' => 'kak'
@@ -131,6 +132,16 @@ Route::group([
     Route::post('/', [KAKController::class, 'store']);
     Route::put('/{id}', [KAKController::class, 'update']);
     Route::delete('/{id}', [KAKController::class, 'destroy']);
+});
+
+// API routes for verifikasi KAK
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'kak/verifikasi'
+], function () {
+    Route::post('/acc', [VerifikasiKAKController::class, 'acc']);
+    Route::post('/revisi', [VerifikasiKAKController::class, 'revisi']);
+    Route::post('/tolak', [VerifikasiKAKController::class, 'tolak']);
 });
 
 //API routes for Proker
