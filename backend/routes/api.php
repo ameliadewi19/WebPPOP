@@ -42,7 +42,8 @@ Route::group([
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);    
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']);     
 });
 
 // KETUA ORMAWA
@@ -56,6 +57,7 @@ Route::group([
     Route::post('/', [KetuaOrmawaController::class, 'store']);
     Route::put('/{id}', [KetuaOrmawaController::class, 'update']);
     Route::delete('/{id}', [KetuaOrmawaController::class, 'destroy']);
+    Route::get('/user/{id}', [KetuaOrmawaController::class, 'getUser']);
 });
 
 // KALENDER AKADEMIK
@@ -144,12 +146,17 @@ Route::group([
     Route::post('/tolak', [VerifikasiKAKController::class, 'tolak']);
 });
 
-//API routes for Proker
-Route::get('/proker', [ProkerController::class, 'index']);
-Route::get('/proker/{id}', [ProkerController::class, 'show']);
-Route::post('/proker', [ProkerController::class, 'store']);
-Route::put('/proker/{id}', [ProkerController::class, 'update']);
-Route::delete('/proker/{id}', [ProkerController::class, 'destroy']);
+// API routes for KAK
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'proker'
+], function () {
+    Route::get('/', [ProkerController::class, 'index']);
+    Route::get('/{id}', [ProkerController::class, 'show']);
+    Route::post('/', [ProkerController::class, 'store']);
+    Route::put('/{id}', [ProkerController::class, 'update']);
+    Route::delete('/{id}', [ProkerController::class, 'destroy']);
+});
 
 //API routes for LPJ
 Route::get('/lpj', [LPJController::class, 'index']);

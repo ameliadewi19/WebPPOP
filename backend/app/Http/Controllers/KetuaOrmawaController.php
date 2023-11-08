@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\KetuaOrmawa;
+use App\Models\User;
 
 class KetuaOrmawaController extends Controller
 {
@@ -91,5 +92,16 @@ class KetuaOrmawaController extends Controller
         $ketuaOrmawa->delete();
 
         return response()->json(['message' => 'Data deleted successfully'], 204);
+    }
+
+    public function getUser($id)
+    {
+        $User = User::find($id);
+
+        if (!$User) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        return response()->json(['data' => $User], 200);
     }
 }
