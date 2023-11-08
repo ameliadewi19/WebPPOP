@@ -22,6 +22,8 @@ class Proker extends Model
         'file_proposal',
         'file_rab',
         'izin_submit',
+        'jenis_kegiatan'
+        'izin_submit',
         'jenis_kegiatan',
     ];
 

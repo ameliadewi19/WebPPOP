@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ProkerController extends Controller
 {
+    /**
+     * Create a new KAKController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
+    
     // Method for handling HTTP GET requests
     public function index()
     {
