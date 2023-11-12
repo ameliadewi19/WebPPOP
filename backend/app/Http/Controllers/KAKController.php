@@ -135,5 +135,6 @@ class KAKController extends Controller
         }
         $kak->delete();
         return response()->json(['message' => 'KAK deleted'], 200);
-    }    
+    }
+
 }
