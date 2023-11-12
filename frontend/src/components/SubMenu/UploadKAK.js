@@ -2,14 +2,30 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const UploadKAK = ({ }) => {
     const navigate = useNavigate();
     const [role, setRole] = useState(null);
+    const [idKetua, setIdKetua] = useState(null)
+    const [namaOrmawa, setNamaOrmawa] = useState(null);
+
     useEffect(() => {
         feather.replace(); 
         const role = localStorage.getItem('role');
         setRole(role);
+        const idUser = localStorage.getItem('idUser');
+        axios.get(`/api/auth/get-ketua/${idUser}`)
+            .then((res) => {
+                console.log(res.data);
+                console.log(res.data.data.id_ketua);
+                setIdKetua(res.data.data.id_ketua);
+                setNamaOrmawa(res.data.data.ormawa.nama_ormawa);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        
     }, []);
 
     const [proker, setProker] = useState([
@@ -34,13 +50,7 @@ const UploadKAK = ({ }) => {
     });
     
     const handleInputChange = (e) => {
-        if (e.target.name === 'id_ketua') {
-          // Menggunakan parseInt untuk mengonversi ke tipe integer
-          setFormData({ ...formData, [e.target.name]: parseInt(e.target.value, 10) });
-        } else {
-          // Jika field bukan 'id_ketua', maka tetapkan nilainya sebagai string
-          setFormData({ ...formData, [e.target.name]: e.target.value });
-        }
+        setFormData({ ...formData, [e.target.name]: e.target.value });
       };
       
 
@@ -59,17 +69,29 @@ const UploadKAK = ({ }) => {
 
     const handleSubmit = async (e) => {
         formData.prokers = proker;
+        formData.id_ketua = idKetua;
         e.preventDefault();
         console.log(formData);
         axios.post('/api/kak/', formData)
             .then((res) => {
                 console.log(res);
-                alert("KAK berhasil diupload");
-                navigate('/kak');
+                Swal.fire({
+                    icon: "success",
+                    title: "KAK berhasil diupload",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    navigate('/kak');
+                });
             })
             .catch((err) => {
                 console.log(err);
-                alert("KAK gagal diupload");
+                Swal.fire({
+                    icon: "error",
+                    title: "KAK gagal diupload",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             });
     };
 
@@ -109,20 +131,7 @@ const UploadKAK = ({ }) => {
                             id="namaOrmawa"
                             name="namaOrmawa"
                             placeholder="ORMAWA"
-                            value={role}
-                            onChange={(e) => handleInputChange(e)}
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="idKetua" className="form-label">ID Ketua</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            id="idKetua"
-                            name="id_ketua"
-                            placeholder="Id Ketua"
-                            value={formData.id_ketua}
-                            onChange={(e) => handleInputChange(e)}
+                            value={namaOrmawa}
                         />
                     </div>
                     <div className="mb-3">
