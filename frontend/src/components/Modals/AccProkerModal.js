@@ -19,11 +19,14 @@ const AccProkerModal = ({ showModal, setShowModal, handleSubmit, selectedProkerI
     
         if (role === "sekumbem") {
             tahapValue = 1;
-        } else if (role === "kli") {
+        } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "wd3") {
+        } else if (role === "kli") {
             tahapValue = 3;
+        } else if (role === "wd3") {
+            tahapValue = 4;
         }
+    
     
         console.log("Tahap: ", tahapValue);
         axios.post('/api/proker/verifikasi/acc', {
@@ -51,10 +54,12 @@ const AccProkerModal = ({ showModal, setShowModal, handleSubmit, selectedProkerI
     
         if (role === "sekumbem") {
             tahapValue = 1;
-        } else if (role === "kli") {
+        } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "wd3") {
+        } else if (role === "kli") {
             tahapValue = 3;
+        } else if (role === "wd3") {
+            tahapValue = 4;
         }
     
         console.log("Tahap: ", tahapValue);
@@ -81,12 +86,14 @@ const AccProkerModal = ({ showModal, setShowModal, handleSubmit, selectedProkerI
     
         if (role === "sekumbem") {
             tahapValue = 1;
-        } else if (role === "kli") {
+        } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "wd3") {
+        } else if (role === "kli") {
             tahapValue = 3;
+        } else if (role === "wd3") {
+            tahapValue = 4;
         }
-    
+        
         console.log("Tahap: ", tahapValue);
         axios.post('/api/proker/verifikasi/tolak', {
             id_proker: selectedProkerId,

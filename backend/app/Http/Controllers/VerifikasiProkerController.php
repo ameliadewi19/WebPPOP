@@ -31,6 +31,8 @@ class VerifikasiProkerController extends Controller
             } else if ($tahap == "2"){
                 Proker::where('id_proker', $prokerId)->update(['status' => 'Acc tahap 2', 'catatan' => $catatan]);
             } else if ($tahap == "3"){
+                Proker::where('id_proker', $prokerId)->update(['status' => 'Acc tahap 3', 'catatan' => $catatan]);
+            } else if ($tahap == "4"){
                 Proker::where('id_proker', $prokerId)->update(['status' => 'Acc tahap akhir', 'catatan' => $catatan]);
             }
     
@@ -55,6 +57,8 @@ class VerifikasiProkerController extends Controller
             } else if ($tahap == "2"){
                 Proker::where('id_proker', $prokerId)->update(['status' => 'Revisi tahap 2', 'catatan' => $catatan]);
             } else if ($tahap == "3"){
+                Proker::where('id_proker', $prokerId)->update(['status' => 'Revisi tahap 3', 'catatan' => $catatan]);
+            } else if ($tahap == "4"){
                 Proker::where('id_proker', $prokerId)->update(['status' => 'Revisi tahap akhir', 'catatan' => $catatan]);
             }
     
@@ -78,6 +82,8 @@ class VerifikasiProkerController extends Controller
             } else if ($tahap == "2"){
                 Proker::where('id_proker', $prokerId)->update(['status' => 'Tolak tahap 2', 'catatan' => $catatan]);
             } else if ($tahap == "3"){
+                Proker::where('id_proker', $prokerId)->update(['status' => 'Tolak tahap 3', 'catatan' => $catatan]);
+            } else if ($tahap == "4"){
                 Proker::where('id_proker', $prokerId)->update(['status' => 'Tolak tahap akhir', 'catatan' => $catatan]);
             }
     
