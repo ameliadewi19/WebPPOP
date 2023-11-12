@@ -42,6 +42,11 @@ const UploadKAK = ({ }) => {
             catatan: ''
         }
     ]);
+    
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const [formData, setFormData] = useState({ 
         id_ketua : null,
         file_kak: null,
@@ -49,15 +54,61 @@ const UploadKAK = ({ }) => {
         prokers: []
     });
     
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
-      
+    const handleFileKAKChange = (e) => {
+        const fileKAK = e.target.files[0];
+        setFormData({ ...formData, file_kak: fileKAK });
+    };
+    
+    const handleFileRABChange = (e) => {
+        const fileRAB = e.target.files[0];
+        setFormData({ ...formData, file_rab: fileRAB });
+    };
 
     const handleProkerChange = (e, index) => {
         let data = [...proker];
         data[index][e.target.name] = e.target.value;
         setProker(data);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formDataWithPath = new FormData();
+        formDataWithPath.append('id_ketua', idKetua);
+        formDataWithPath.append('file_kak', formData.file_kak);
+        formDataWithPath.append('file_rab', formData.file_rab);
+
+        proker.forEach((prokerItem, index) => {
+            Object.entries(prokerItem).forEach(([key, value]) => {
+                formDataWithPath.append(`prokers[${index}][${key}]`, value);
+            });
+        });
+        console.log(formDataWithPath);
+        // Kirim formData ke Backend
+        try {
+            const response = await axios.post('/api/kak/', formDataWithPath, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Pastikan untuk mengatur tipe konten
+                },
+            });
+            console.log(response.data); // Output respons dari backend
+            Swal.fire({
+                icon: "success",
+                title: "KAK berhasil diupload",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                navigate('/kak');
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: "error",
+                title: "KAK gagal diupload",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
     };
     
     const submit = (e) => {
@@ -65,34 +116,6 @@ const UploadKAK = ({ }) => {
       
       console.log(formData);
       feather.replace();
-    };
-
-    const handleSubmit = async (e) => {
-        formData.prokers = proker;
-        formData.id_ketua = idKetua;
-        e.preventDefault();
-        console.log(formData);
-        axios.post('/api/kak/', formData)
-            .then((res) => {
-                console.log(res);
-                Swal.fire({
-                    icon: "success",
-                    title: "KAK berhasil diupload",
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    navigate('/kak');
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-                Swal.fire({
-                    icon: "error",
-                    title: "KAK gagal diupload",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            });
     };
 
     const addInputRow = () => {
@@ -141,7 +164,7 @@ const UploadKAK = ({ }) => {
                             className="form-control"
                             id="fileKAK"
                             name="file_kak"
-                            onChange={(e) => handleInputChange(e)}
+                            onChange={(e) => handleFileKAKChange(e)}
                             required
                         />
                     </div>
@@ -152,7 +175,7 @@ const UploadKAK = ({ }) => {
                             className="form-control"
                             id="fileRAB"
                             name="file_rab"
-                            onChange={(e) => handleInputChange(e)}
+                            onChange={(e) => handleFileRABChange(e)}
                             required
                         />
                     </div>
