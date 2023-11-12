@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\OrmawaController;
 use App\Http\Controllers\KAKController;
+use App\Http\Controllers\KAKDetailController;
 use App\Http\Controllers\ProkerController;
 use App\Http\Controllers\LPJController;
 use App\Http\Controllers\KetuaOrmawaController;
@@ -123,6 +124,7 @@ Route::group([
     Route::post('/', [KAKController::class, 'store']);
     Route::put('/{id}', [KAKController::class, 'update']);
     Route::delete('/{id}', [KAKController::class, 'destroy']);
+    Route::get('/jumlah', [KAKController::class, 'jumlah']);
 });
 
 // API routes for verifikasi KAK
@@ -133,6 +135,14 @@ Route::group([
     Route::post('/acc', [VerifikasiKAKController::class, 'acc']);
     Route::post('/revisi', [VerifikasiKAKController::class, 'revisi']);
     Route::post('/tolak', [VerifikasiKAKController::class, 'tolak']);
+});
+
+// API routes for KAK
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'kak/detail'
+], function () {
+    Route::get('/jumlah', [KAKDetailController::class, 'jumlah']);
 });
 
 // API routes for Proker
