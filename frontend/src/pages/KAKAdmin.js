@@ -6,6 +6,7 @@ import AccModal from '../components/Modals/AccModal';
 import EditKAKModal from '../components/Modals/EditKAKModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import FileKAKModal from '../components/Modals/FileKAKModal';
 
 // Using Arrow Function
 const KAKAdmin = () => {
@@ -13,8 +14,16 @@ const KAKAdmin = () => {
     const [showAccModal, setShowAccModal] = useState(false);
     const [selectedKakId, setSelectedKakId] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [fileData, setFileData] = useState(null);
 
     const role = localStorage.getItem('role');
+
+    const handleShowModal = async (file) => {
+        setFileData(file);
+        console.log("file: ", file);
+        setShowModal(true);
+    };
 
     const handleShowAccModal = (kakId, status) => {
         setSelectedKakId(kakId);
@@ -123,7 +132,10 @@ const KAKAdmin = () => {
                             <td>{kak.ketua_ormawa.ormawa.nama_ormawa}</td>
                             <td>{kak.ketua_ormawa.nama_ketua}</td>
                             <td>
-                                <a href={`/storage/${kak.file_kak}`} target="_blank" rel="noopener noreferrer">Dokumen KAK</a>
+                                <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
+                                    Dokumen KAK
+                                </a>
+                                <FileKAKModal pdfData={kak.file_kak} showModal={showModal} setShowModal={setShowModal} />
                             </td>
                             <td>
                                 <a href={`/storage/${kak.file_rab}`} target="_blank" rel="noopener noreferrer">Dokumen RAB</a>

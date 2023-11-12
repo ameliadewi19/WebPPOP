@@ -81,9 +81,9 @@ function Login() {
                   </div>
                 </div>
               </div>
-              <div className="text-center mb-3">
+              {/* <div className="text-center mb-3">
                 Don't have an account? <a href="pages-sign-up.html">Sign up</a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
