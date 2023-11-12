@@ -19,10 +19,12 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
     
         if (role === "sekumbem") {
             tahapValue = 1;
-        } else if (role === "kli") {
+        } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "wd3") {
+        } else if (role === "kli") {
             tahapValue = 3;
+        } else if (role === "wd3") {
+            tahapValue = 4;
         }
     
         console.log("Tahap: ", tahapValue);
@@ -51,10 +53,12 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
     
         if (role === "sekumbem") {
             tahapValue = 1;
-        } else if (role === "kli") {
+        } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "wd3") {
+        } else if (role === "kli") {
             tahapValue = 3;
+        } else if (role === "wd3") {
+            tahapValue = 4;
         }
     
         console.log("Tahap: ", tahapValue);
@@ -81,10 +85,12 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
     
         if (role === "sekumbem") {
             tahapValue = 1;
-        } else if (role === "kli") {
+        } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "wd3") {
+        } else if (role === "kli") {
             tahapValue = 3;
+        } else if (role === "wd3") {
+            tahapValue = 4;
         }
     
         console.log("Tahap: ", tahapValue);
@@ -151,7 +157,7 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
                                 <textarea
                                     className="form-control"
                                     id="catatan"
-                                    value={catatan}
+                                    // value={catatan}
                                     onChange={handleCatatanChange}
                                 ></textarea>
                             </div>

@@ -15,6 +15,7 @@ const Timeline = () => {
         const role = localStorage.getItem('role');
         setRole(role);
         fetchTimeline();
+        // console.log("test");
     }, []);
 
     const handleShowModal = () => {
@@ -29,6 +30,17 @@ const Timeline = () => {
             console.log(err);
         }
     }
+
+    const handleIzinSubmit = (id_timeline) => {
+        // axios.put(`http://localhost:8000/api/proker/izin-submit/${id_timeline}`)
+        //   .then(response => {
+        //     console.log('Izin submit updated successfully:', response.data);
+        //   })
+        //   .catch(error => {
+        //     console.error('Error updating izin submit:', error);
+        //   });
+        fetchTimeline();
+      }
 
     return (
         <main class="content">
@@ -54,6 +66,9 @@ const Timeline = () => {
                               <th>Tanggal Mulai</th>
                               <th>Tanggal Akhir</th>
                               <th>Aksi</th>
+                              {role === 'admin' &&
+                                <th>Izin Submit</th>
+                              }
                           </tr>
                           </thead>
                           <tbody>
@@ -79,6 +94,20 @@ const Timeline = () => {
                                         <button className="btn btn-sm btn-primary">Edit</button>
                                         <button className="btn btn-sm btn-danger">Hapus</button>
                                     </td>
+                                    {role === 'admin' && item.izin_submit === 'true' && <td><button
+                                        className="btn btn-sm btn-primary"
+                                        onClick={() => handleIzinSubmit(item.id_timeline)}
+                                    >
+                                        {item.izin_submit}
+                                    </button></td>
+                                    }
+                                    {role === 'admin' && item.izin_submit === 'false' && <td><button
+                                            className="btn btn-sm btn-danger"
+                                            onClick={() => handleIzinSubmit(item.id_timeline)}
+                                        >
+                                            {item.izin_submit}
+                                        </button></td>
+                                    }
                                 </tr>
                             ))}
                           </tbody>

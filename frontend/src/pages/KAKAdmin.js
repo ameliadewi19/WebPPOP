@@ -33,14 +33,15 @@ const KAKAdmin = () => {
             if (role === "sekumbem"){
                 const filteredKaks = response.data.filter(kak => kak.status === 'Diajukan' || kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1');
                 setKaks(filteredKaks);
-            } else if (role === "kli"){
+            } else if (role === "admin"){
                 const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 1' || kak.status === 'Revisi tahap 2' || kak.status === 'Tolak tahap 2');
                 setKaks(filteredKaks);
-            } else if (role === "wd3"){
-                const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 2' || kak.status === 'Revisi tahap Akhir' || kak.status === 'Tolak tahap akhir');
+            } else if (role === "kli"){
+                const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 2' || kak.status === 'Revisi tahap 3' || kak.status === 'Tolak tahap 3');
                 setKaks(filteredKaks);
-            } else if (role === "admin"){
-                setKaks(response.data);
+            } else if (role === "wd3"){
+                const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 3' || kak.status === 'Revisi tahap Akhir' || kak.status === 'Tolak tahap akhir');
+                setKaks(filteredKaks);
             }
         })
         .catch(error => {
@@ -54,7 +55,6 @@ const KAKAdmin = () => {
     }, []);
 
     const renderButton = (kak) => {
-        if (role === 'sekumbem') {
             return (
                 <div>
                     <button
@@ -86,79 +86,6 @@ const KAKAdmin = () => {
                     </button>
                 </div>
             );
-        } else if (role === 'kli') {
-            return (
-                <div>
-                    <button
-                        className="btn btn-primary mt-2"
-                        style={{ marginRight: '5px' }}
-                        data-bs-toggle="modal"
-                        data-bs-target="#pesanModal"
-                        onClick={() => handleShowAccModal(kak, "acc")}
-                    >
-                        <i className="align-middle" data-feather="check"></i> Acc
-                    </button>
-                    <button
-                        className="btn btn-warning mt-2"
-                        style={{ marginRight: '5px' }}
-                        data-bs-toggle="modal"
-                        data-bs-target="#pesanModal"
-                        onClick={() => handleShowAccModal(kak, "revisi")}
-                    >
-                        <i className="align-middle" data-feather="edit"></i> Revisi
-                    </button>
-                    <button
-                        className="btn btn-danger mt-2"
-                        style={{ marginRight: '5px' }}
-                        data-bs-toggle="modal"
-                        data-bs-target="#pesanModal"
-                        onClick={() => handleShowAccModal(kak, "tolak")}
-                    >
-                        <i className="align-middle" data-feather="trash"></i> Tolak
-                    </button>
-                </div>
-            );
-        } else if (role === 'wd3') {
-            return (
-                <div>
-                    <button
-                        className="btn btn-primary mt-2"
-                        style={{ marginRight: '5px' }}
-                        data-bs-toggle="modal"
-                        data-bs-target="#pesanModal"
-                        onClick={() => handleShowAccModal(kak, "acc")}
-                    >
-                        <i className="align-middle" data-feather="check"></i> Acc
-                    </button>
-                    <button
-                        className="btn btn-warning mt-2"
-                        style={{ marginRight: '5px' }}
-                        data-bs-toggle="modal"
-                        data-bs-target="#pesanModal"
-                        onClick={() => handleShowAccModal(kak, "revisi")}
-                    >
-                        <i className="align-middle" data-feather="edit"></i> Revisi
-                    </button>
-                    <button
-                        className="btn btn-danger mt-2"
-                        style={{ marginRight: '5px' }}
-                        data-bs-toggle="modal"
-                        data-bs-target="#pesanModal"
-                        onClick={() => handleShowAccModal(kak, "tolak")}
-                    >
-                        <i className="align-middle" data-feather="trash"></i> Tolak
-                    </button>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <p>-</p>
-                </div>
-            );
-        }
-
-        return null; 
     }
 
     return (

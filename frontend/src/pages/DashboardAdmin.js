@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 // Using Arrow Function
-const Dashboard = () => {
+const DashboardAdmin = () => {
     const [role, setRole] = useState(null);
     const [roleCapital, setRoleCapital] = useState(null);
     const history = useNavigate();
@@ -37,7 +37,7 @@ const Dashboard = () => {
             <div class="col">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Status Pengajuan KAK</h5>
+                  <h5 class="card-title">Jumlah Ormawa Sudah Unggah KAK</h5>
                   <h1 class="mt-3 mb-1">14.212</h1>
                 </div>
               </div>
@@ -45,15 +45,24 @@ const Dashboard = () => {
             <div class="col">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Jumlah Proker Diajukan</h5>
+                  <h5 class="card-title">Jumlah Ormawa Belum Unggah KAK</h5>
+                  <h1 class="mt-3 mb-1">14.212</h1>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Jumlah KAK Belum di Review</h5>
                   <h1 class="mt-3 mb-1">14.212</h1>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </main>
     );
 };
 
-export default Dashboard;
+export default DashboardAdmin;
