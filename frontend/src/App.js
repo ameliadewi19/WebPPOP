@@ -6,7 +6,7 @@ import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
 
 import Login from './pages/Login.js';
-import Pergerakan from './pages/Pergerakan.js'
+import Pergerakan from './pages/Pergerakan.js';
 import Dashboard from './pages/Dashboard.js';
 import DashboardAdmin from './pages/DashboardAdmin.js';
 import KAK from './pages/KAK.js';
@@ -20,6 +20,7 @@ import KalenderAkademik from './pages/KalenderAkademik.js';
 import UploadKAK from './components/SubMenu/UploadKAK.js';
 import LPJ from './pages/LPJ.js';
 import LPJAdmin from './pages/LPJAdmin.js';
+import Ormawa from './pages/Ormawa.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -174,6 +175,16 @@ function App() {
             <div className="main">
               <Navbar />
               <KalenderAkademik />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/ormawa" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <Ormawa />
               <Footer />
             </div>
           </div>
