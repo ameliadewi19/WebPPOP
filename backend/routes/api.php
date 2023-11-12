@@ -64,55 +64,42 @@ Route::group([
 
 // KALENDER AKADEMIK
 
-// Mengambil semua data kegiatan akademik
-Route::get('academic-events', [AcademicEventController::class, 'index']);
-
-// Mengambil data kegiatan akademik berdasarkan ID
-Route::get('academic-events/{id}', [AcademicEventController::class, 'show']);
-
-// Menyimpan data kegiatan akademik baru
-Route::post('academic-events', [AcademicEventController::class, 'store']);
-
-// Memperbarui data kegiatan akademik berdasarkan ID
-Route::put('academic-events/{id}', [AcademicEventController::class, 'update']);
-
-// Menghapus data kegiatan akademik berdasarkan ID
-Route::delete('academic-events/{id}', [AcademicEventController::class, 'destroy']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'academic-events'
+], function () {
+    Route::get('/', [AcademicEventController::class, 'index']);
+    Route::get('/{id}', [AcademicEventController::class, 'show']);
+    Route::post('/', [AcademicEventController::class, 'store']);
+    Route::put('/{id}', [AcademicEventController::class, 'update']);
+    Route::delete('/{id}', [AcademicEventController::class, 'destroy']);
+});
 
 // PENGUMUMAN
 
-// Mengambil semua data Pengumuman
-Route::get('pengumuman', [PengumumanController::class, 'index']);
-
-// Mengambil data Pengumuman berdasarkan ID
-Route::get('pengumuman/{id}', [PengumumanController::class, 'show']);
-
-// Menyimpan data Pengumuman baru ke Database
-Route::post('pengumuman', [PengumumanController::class, 'store']);
-
-// Memperbarui data Pengumuman berdasarkan ID
-Route::put('pengumuman/{id}', [PengumumanController::class, 'update']);
-
-// Menghapus data Pengumuman berdasarkan ID
-Route::delete('pengumuman/{id}', [PengumumanController::class, 'destroy']);
-
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'pengumuman'
+], function () {
+    Route::get('/', [PengumumanController::class, 'index']);
+    Route::get('/{id}', [PengumumanController::class, 'show']);
+    Route::post('/', [PengumumanController::class, 'store']);
+    Route::put('/{id}', [PengumumanController::class, 'update']);
+    Route::delete('/{id}', [PengumumanController::class, 'destroy']);
+});
 
 // PERGERAKAN
 
-// Mengambil semua data Pergerakan dari Database
-Route::get('pergerakan', [PergerakanController::class,'index']);
-
-// Mengambil data Pergerakan dari Database berdasarkan ID
-Route::get('pergerakan/{id}', [PergerakanController::class,'show']);
-
-// Menyimpan data Pergerakan ke Database
-Route::post('pergerakan', [PergerakanController::class,'store']);
-
-// Memperbarui data Pergerakan berdasarkan ID
-Route::put('pergerakan/{id}', [PergerakanController::class,'update']);
-
-// Menghapus data pergerakan berdasarkan ID
-Route::delete('pergerakan/{id}', 'PergerakanController@destroy');
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'pergerakan'
+], function () {
+    Route::get('/', [PergerakanController::class, 'index']);
+    Route::get('/{id}', [PergerakanController::class, 'show']);
+    Route::post('/', [PergerakanController::class, 'store']);
+    Route::put('/{id}', [PergerakanController::class, 'update']);
+    Route::delete('/{id}', [PergerakanController::class, 'destroy']);
+});
 
 Route::get('/test', [TestController::class, 'test']);
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -196,8 +183,13 @@ Route::group([
 
 // TIMELINE
 
-Route::get('timeline', [TimelineController::class,'index']);
-Route::get('timeline/{id}', [TimelineController::class,'show']);
-Route::post('timeline', [TimelineController::class,'store']);
-Route::put('timeline/{id}', [TimelineController::class,'update']);
-Route::delete('timeline/{id}', [TimelineController::class,'destroy']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'timeline'
+], function () {
+    Route::get('/', [TimelineController::class, 'index']);
+    Route::get('/{id}', [TimelineController::class, 'show']);
+    Route::post('/', [TimelineController::class, 'store']);
+    Route::put('/{id}', [TimelineController::class, 'update']);
+    Route::delete('/{id}', [TimelineController::class, 'destroy']);
+});

@@ -7,6 +7,12 @@ use App\Models\AcademicEvent;
 
 class AcademicEventController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
+    
     public function index()
     {
         $events = AcademicEvent::all();
