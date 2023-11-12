@@ -21,7 +21,7 @@ const KAKAdmin = () => {
 
     const handleShowModal = async (file) => {
         setFileData(file);
-        console.log("file: ", file);
+        // console.log("file: ", file);
         setShowModal(true);
     };
 
