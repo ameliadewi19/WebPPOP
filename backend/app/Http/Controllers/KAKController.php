@@ -34,7 +34,12 @@ class KAKController extends Controller
     // Method for handling HTTP GET requests
     public function show($id_kak)
     {
-        $kaks = KAK::with('prokers')->where('id_kak', $id_kak)->get();
+        $kaks = KAK::with('prokers', 'ketua_ormawa', 'ketua_ormawa.ormawa')->where('id_kak', $id_kak)->get();
+        
+        if ($kaks->isEmpty()) {
+            return response()->json(['message' => 'No KAKs found'], 404);
+        }
+        
         return response()->json($kaks, 200);
     }
 

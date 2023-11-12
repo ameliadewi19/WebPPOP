@@ -15,6 +15,8 @@ use App\Http\Controllers\ProkerController;
 use App\Http\Controllers\LPJController;
 use App\Http\Controllers\KetuaOrmawaController;
 use App\Http\Controllers\VerifikasiKAKController;
+use App\Http\Controllers\VerifikasiProkerController;
+use App\Http\Controllers\VerifikasiLPJController;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Middleware\CheckRole;
@@ -146,7 +148,7 @@ Route::group([
     Route::post('/tolak', [VerifikasiKAKController::class, 'tolak']);
 });
 
-// API routes for KAK
+// API routes for Proker
 Route::group([
     'middleware' => 'api',
     'prefix' => 'proker'
@@ -156,15 +158,41 @@ Route::group([
     Route::post('/', [ProkerController::class, 'store']);
     Route::put('/{id}', [ProkerController::class, 'update']);
     Route::delete('/{id}', [ProkerController::class, 'destroy']);
+    Route::put('/izin-submit/{id}', [ProkerController::class, 'ubahIzinSubmit']);
 });
 
-//API routes for LPJ
-Route::get('/lpj', [LPJController::class, 'index']);
-Route::get('/lpj/{id}', [LPJController::class, 'show']);
-Route::post('/lpj', [LPJController::class, 'store']);
-Route::put('/lpj/{id}', [LPJController::class, 'update']);
-Route::delete('/lpj/{id}', [LPJController::class, 'destroy']);
-Route::delete('pergerakan/{id}', [PergerakanController::class,'destroy']);
+// API routes for verifikasi Proker
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'proker/verifikasi'
+], function () {
+    Route::post('/acc', [VerifikasiProkerController::class, 'acc']);
+    Route::post('/revisi', [VerifikasiProkerController::class, 'revisi']);
+    Route::post('/tolak', [VerifikasiProkerController::class, 'tolak']);
+});
+
+// API routes for LPJ
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'lpj'
+], function () {
+    Route::get('/', [LPJController::class, 'index']);
+    Route::get('/{id}', [LPJController::class, 'show']);
+    Route::post('/', [LPJController::class, 'store']);
+    Route::put('/{id}', [LPJController::class, 'update']);
+    Route::delete('/{id}', [LPJController::class, 'destroy']);
+    Route::delete('pergerakan/{id}', [PergerakanController::class,'destroy']);
+});
+
+// API routes for verifikasi Proker
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'lpj/verifikasi'
+], function () {
+    Route::post('/acc', [VerifikasiLPJController::class, 'acc']);
+    Route::post('/revisi', [VerifikasiLPJController::class, 'revisi']);
+    Route::post('/tolak', [VerifikasiLPJController::class, 'tolak']);
+});
 
 // TIMELINE
 

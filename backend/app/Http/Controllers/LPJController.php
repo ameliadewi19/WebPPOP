@@ -8,20 +8,37 @@ use Illuminate\Support\Facades\Validator;
 
 class LPJController extends Controller
 {
+    /**
+     * Create a new KAKController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
+    
     // Method for handling HTTP GET requests
     public function index()
     {
-        $lpjs = LPJ::all();
+        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')->get();
+
+        if (!$lpjs) {
+            return response()->json(['message' => 'LPJ not found'], 404);
+        }
+
         return response()->json($lpjs, 200);
     }
 
     // Method for handling HTTP GET requests to show a single product
     public function show($id)
     {
-        $lpjs = LPJ::find();
+        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')->where('id_lpj', $id)->get();
+
         if (!$lpjs) {
             return response()->json(['message' => 'LPJ not found'], 404);
         }
+
         return response()->json($lpjs, 200);
     }
 
@@ -29,7 +46,8 @@ class LPJController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_lpj' => 'required',
+            'id_proker' => 'required',
+            'file_lpj' => 'required'
         ]);
 
         if ($validator->fails()) {

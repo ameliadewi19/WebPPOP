@@ -11,11 +11,14 @@ import Dashboard from './pages/Dashboard.js';
 import KAK from './pages/KAK.js';
 import KAKAdmin from './pages/KAKAdmin.js';
 import ProgramKerja from './pages/ProgramKerja.js';
+import ProgramKerjaAdmin from './pages/ProgramKerjaAdmin.js';
 import PeminjamanSarpras from './pages/PeminjamanSarpras.js';
 import Timeline from './pages/Timeline.js';
 import Pengumuman from './pages/Pengumuman.js';
 import KalenderAkademik from './pages/KalenderAkademik.js';
 import UploadKAK from './components/SubMenu/UploadKAK.js';
+import LPJ from './pages/LPJ.js';
+import LPJAdmin from './pages/LPJAdmin.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -86,7 +89,19 @@ function App() {
               <Sidebar />
               <div className="main">
                 <Navbar />
-                <ProgramKerja />
+                {userRole === 'ormawa' ? <ProgramKerja /> : <ProgramKerjaAdmin />}
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+        }/>
+        <Route path="/lpj" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <Sidebar />
+              <div className="main">
+                <Navbar />
+                {userRole === 'ormawa' ? <LPJ /> : <LPJAdmin />}
                 <Footer />
               </div>
             </div>

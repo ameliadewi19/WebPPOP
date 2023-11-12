@@ -7,7 +7,7 @@ const ProgramKerja = () => {
     const location = useLocation();
     
     useEffect(() => {
-        feather.replace(); // Replace the icons after component mounts
+        feather.replasce(); // Replace the icons after component mounts
     }, []);
 
     return (
