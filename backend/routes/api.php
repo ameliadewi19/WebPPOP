@@ -142,7 +142,8 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'kak/detail'
 ], function () {
-    Route::get('/jumlah', [KAKDetailController::class, 'jumlah']);
+    Route::post('/jumlah', [KAKDetailController::class, 'jumlah']);
+    Route::post('/ormawa', [KAKDetailController::class, 'ormawa']);
 });
 
 // API routes for Proker

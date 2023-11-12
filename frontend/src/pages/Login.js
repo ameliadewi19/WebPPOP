@@ -30,6 +30,7 @@ function Login() {
       // console.log(response.data.user);
       const user = JSON.parse(localStorage.getItem('user'));
       console.log("id_user: ", user.id_user);
+      console.log("role: ", user.role);
       console.log(user);
       navigate('/dashboard');
     } catch (error) {

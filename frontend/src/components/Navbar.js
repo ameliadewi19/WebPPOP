@@ -4,9 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import feather from 'feather-icons';
 
 const Navbar = () => {
+	const [loading, setLoading] = useState(true);
+
 	const navigate = useNavigate();
     useEffect(() => {
         feather.replace(); // Replace the icons after component mounts
+		setLoading(false);
     }, []);
 
 	const handleLogout = async (e) => {
