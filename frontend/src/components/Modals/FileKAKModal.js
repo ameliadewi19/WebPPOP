@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
-import { Document, Page } from 'react-pdf';
 
 const FileKAKModal = ({ pdfUrl, showModal, setShowModal }) => {
     const modalRef = useRef();
