@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function Login() {
   const navigate = useNavigate();
@@ -16,29 +17,24 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
+    console.log("test");
     e.preventDefault();
-
     try {
-      const response = await axios.post('http://localhost:8000/api/login', formData);
-      console.log(response.data);
-
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('role', response.data.role);
-
-      navigate('/dashboard'); 
+      const response = await axios.post('/api/auth/login', formData);
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('role', response.data.user.role);
+      console.log('Login berhasil');
+      console.log(response.data.user);
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Gagal',
+        text: 'Silakan cek kembali email dan password Anda',
+      });
     }
   };
-
-  // const handleLogout = async () => {
-  //     try {
-  //         const response = await axios.post('http://localhost:8000/api/logout');
-  //         console.log(response.data);
-  //     } catch (error) {
-  //         console.error(error);
-  //     }
-  // };
 
   return (
     <main className="d-flex w-100">
@@ -47,7 +43,7 @@ function Login() {
           <div className="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
             <div className="d-table-cell align-middle">
               <div className="text-center mt-4">
-                <h1 className="h2">Welcome back!</h1>
+                <h1 className="h2">Login Web Pengelolaan Ormawa POLBAN</h1>
                 <p className="lead">
                   Sign in to your account to continue
                 </p>

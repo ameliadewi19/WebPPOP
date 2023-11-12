@@ -12,18 +12,17 @@ class TimelineSeeder extends Seeder
         // Data timeline yang ingin Anda masukkan ke database
         $data = [
             [
-                'id_kegiatan' => '1',
-                'nama_kegiatan' => 'Kegiatan 1',
-                'tanggal_mulai' => '2023-10-25',
-                'tanggal_selesai' => '2023-10-30',
-                'izin_submit' => 'Izin A',
+                'nama_kegiatan' => 'Kegiatan Pertama',
+                'tanggal_mulai' => '2023-10-20',
+                'tanggal_selesai' => '2023-10-25',
+                'izin_submit' => 'false'
             ],
             [
                 'id_kegiatan' => '2',
                 'nama_kegiatan' => 'Kegiatan 2',
                 'tanggal_mulai' => '2023-11-05',
                 'tanggal_selesai' => '2023-11-10',
-                'izin_submit' => 'Izin B',
+                'izin_submit' => 'false'
             ],
             // Tambahkan data timeline lainnya sesuai kebutuhan Anda
         ];
