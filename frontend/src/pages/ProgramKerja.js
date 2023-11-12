@@ -7,14 +7,14 @@ const ProgramKerja = () => {
     const location = useLocation();
     
     useEffect(() => {
-        feather.replace(); // Replace the icons after component mounts
+        feather.replasce(); // Replace the icons after component mounts
     }, []);
 
     return (
         <main class="content">
         <div class="container-fluid p-0">
 
-          <h1 class="h3 mb-3"><strong>Jadwal Ujian</strong></h1>
+          <h1 class="h3 mb-3"><strong>Program Kerja</strong></h1>
 
           
         </div>

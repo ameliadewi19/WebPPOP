@@ -4,26 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Models\KAK;
 use App\Models\Proker;
+use App\Models\KetuaOrmawa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class KAKController extends Controller
 {
-    // Method for handling HTTP GET requests
-    public function index($id_kak)
+    /**
+     * Create a new KAKController instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        $kaks = KAK::with('prokers')->where('id_kak', $id_kak)->get();
+        $this->middleware('auth:api', ['except' => []]);
+    }
+
+    // Method for handling HTTP GET requests to show one data
+    public function index()
+    {
+        $kaks = KAK::with('prokers', 'ketua_ormawa', 'ketua_ormawa.ormawa')->get();
+
+        if ($kaks->isEmpty()) {
+            return response()->json(['message' => 'No KAKs found'], 404);
+        }
+
         return response()->json($kaks, 200);
     }
 
-
-
-    // Method for handling HTTP GET requests to show a single product
-    public function show($id)
+    // Method for handling HTTP GET requests
+    public function show($id_kak)
     {
-        $kaks = KAK::find();
-        if (!$kaks) {
-            return response()->json(['message' => 'KAK not found'], 404);
+        $kaks = KAK::with('prokers', 'ketua_ormawa', 'ketua_ormawa.ormawa')->where('id_kak', $id_kak)->get();
+        
+        if ($kaks->isEmpty()) {
+            return response()->json(['message' => 'No KAKs found'], 404);
         }
+        
         return response()->json($kaks, 200);
     }
 
