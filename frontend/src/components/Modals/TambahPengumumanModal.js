@@ -31,15 +31,25 @@ const TambahPengumumanModal = ({ showModal, setShowModal, fetchPengumuman }) => 
             // Handle the response, e.g., update state or show a success message
             console.log('Pengumuman added successfully:', response.data);
     
+            // Reset the form values
+            setFormData({
+                slug: '',
+                judul_konten: '',
+                isi_konten: '',
+                gambar: '',
+                tanggal: '',
+            });
+    
             // Close the modal or perform any other necessary actions
             modalRef.current.click();
-
+    
             fetchPengumuman();
         } catch (error) {
             // Handle errors, e.g., show an error message
             console.error('Error adding pengumuman:', error);
         }
     };
+    
     
     return (
       <div className={`modal fade ${showModal ? 'show' : ''}`} id="addPengumumanModal" tabIndex="-1" aria-labelledby="addPengumumanModalLabel" aria-hidden={!showModal}>
