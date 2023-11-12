@@ -10,8 +10,10 @@ use App\Models\Ormawa;
 
 class KAKDetailController extends Controller
 {
-    public function jumlah()
+    public function jumlah(Request $request)
     {
+        $jenis = $request->input('jenis');
+
         // Dapatkan tahun saat ini
         $tahunSaatIni = date('Y');
         // Hitung tahun jabatan untuk tahun berikutnya
@@ -33,8 +35,61 @@ class KAKDetailController extends Controller
 
         $count_belum = $totalOrmawa - $count_sudah;
 
+        $count_review = 0;
+
+        if ($jenis == "1") {
+            // You can perform the count operation here if needed.
+            $count_review = KAK::where(function ($query) {
+                    $query->where('status', 'Diajukan');
+                        //   ->orWhere('status', 'Revisi tahap 1')
+                        //   ->orWhere('status', 'Tolak tahap 1');
+                })
+                ->count();
+        } else if ($jenis == "2") {
+            // You can perform the count operation here if needed.
+            $count_review = KAK::where(function ($query) {
+                    $query->where('status', 'Acc tahap 1')
+                          ->orWhere('status', 'Revisi tahap 2')
+                          ->orWhere('status', 'Tolak tahap 2');
+                })
+                ->count();
+        } else if ($jenis == "3") {
+            // You can perform the count operation here if needed.
+            $count_review = KAK::where(function ($query) {
+                    $query->where('status', 'Acc tahap 2')
+                          ->orWhere('status', 'Revisi tahap 3')
+                          ->orWhere('status', 'Tolak tahap 3');
+                })
+                ->count();
+        } else if ($jenis == "3") {
+            // You can perform the count operation here if needed.
+            $count_review = KAK::where(function ($query) {
+                    $query->where('status', 'Acc tahap 3')
+                          ->orWhere('status', 'Revisi tahap akhir')
+                          ->orWhere('status', 'Tolak tahap akhir');
+                })
+                ->count();
+        }
+
+
         // Kembalikan respons dengan jumlah KAK yang sesuai
-        return response()->json(['count_sudah' => $count_sudah, 'count_belum' => $count_belum], 200);
+        return response()->json(['count_sudah' => $count_sudah, 'count_belum' => $count_belum, 'count_review' => $count_review], 200);
+    }
+
+    public function ormawa(Request $request)
+    {
+        $id_ketua = $request->input('id');
+        $tahunSaatIni = date('Y');
+        $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
+
+        // Retrieve KAK data with the specified conditions and count of associated proker
+        $kak = KAK::whereHas('ketua_ormawa', function ($query) use ($id_ketua, $tahunJabatan) {
+            $query->where('tahun_jabatan', $tahunJabatan)
+                ->where('id_ketua', $id_ketua);
+        })->withCount('prokers')->first(); // Use first() instead of get()
+
+        // Return the response with the extracted statuses and count_proker
+        return response()->json(['status' => $kak->status, 'count_proker' => $kak->prokers_count], 200);
     }
 
 }

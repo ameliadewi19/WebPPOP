@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 
 import Sidebar from './components/Sidebar.js';
@@ -27,30 +27,46 @@ function checkAuthorization() {
   
   if (!token) {
     return false;
-  }
-  return true;
-}
-
-function checkRole() {
-  const role = localStorage.getItem('role');
-  console.log("role:", role);
-
-  return role;
-}
-
-function ProtectedRoute({ children }) {
-
-  const userHasAuthorization = checkAuthorization(); 
-
-  if (!userHasAuthorization) {
-    return <Navigate to={`/`} />;
+    }
+    return true;
   }
 
-  return children;
-}
+  function checkRole() {
+    const role = localStorage.getItem('role');
+    console.log("role:", role);
+
+    return role;
+  }
+
+  function ProtectedRoute({ children }) {
+
+    const userHasAuthorization = checkAuthorization(); 
+
+    if (!userHasAuthorization) {
+      return <Navigate to={`/`} />;
+    }
+
+    return children;
+  }
 
 function App() {
-  const userRole = checkRole();
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true); // New state to track loading
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      const role = checkRole();
+      setUserRole(role);
+      setLoading(false); // Set loading to false once userRole is set
+    };
+
+    fetchUserRole();
+  }, []);
+
+  // Show loading indicator while waiting for userRole
+  if (loading) {
+    return <p></p>;
+  }
 
   return (
     <BrowserRouter>
