@@ -134,6 +134,7 @@ Route::group([
     Route::post('/', [KAKController::class, 'store']);
     Route::put('/{id}', [KAKController::class, 'update']);
     Route::delete('/{id}', [KAKController::class, 'destroy']);
+    Route::get('/file/{filename}', [KAKController::class, 'getFile']);
 });
 
 // API routes for verifikasi KAK
