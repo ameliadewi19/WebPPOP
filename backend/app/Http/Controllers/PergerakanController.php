@@ -7,9 +7,18 @@ use App\Models\Pergerakan;
 
 class PergerakanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
     public function index()
     {
         $pergerakan = Pergerakan::all();
+
+        if ($pergerakan->isEmpty()) {
+            return response()->json(['message' => 'No KAKs found'], 404);
+        }
+
         return response()->json($pergerakan);
     }
 

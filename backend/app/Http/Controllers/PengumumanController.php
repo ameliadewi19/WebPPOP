@@ -7,6 +7,11 @@ use App\Models\Pengumuman;
 
 class PengumumanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
+
     public function index()
     {
         $pengumuman = Pengumuman::all();

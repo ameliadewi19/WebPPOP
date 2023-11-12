@@ -7,6 +7,10 @@ use App\Models\Timeline;
 
 class TimelineController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
     public function index()
     {
         $timeline = Timeline::all();
