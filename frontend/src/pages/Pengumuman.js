@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import feather from 'feather-icons';
 import Swal from 'sweetalert2';
 import TambahPengumumanModal from '../components/Modals/TambahPengumumanModal.js';
+import EditPengumumanModal from '../components/Modals/EditPengumumanModal.js';
 
 const Pengumuman = () => {
     const [pengumuman, setPengumuman] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedItemId, setSelectedItemId] = useState(null);
 
     useEffect(() => {
-        feather.replace(); // Replace the icons after component mounts
         fetchPengumuman();
     }, []);
 
@@ -27,7 +28,10 @@ const Pengumuman = () => {
     };
 
     const handleUpdate = (id) => {
-
+      // Set the selected item ID when "Update" is clicked
+      setSelectedItemId(id);
+      // Open the EditPengumumanModal
+      setShowEditModal(true);
     };
 
     const handleDelete = async (id) => {
@@ -115,7 +119,8 @@ const Pengumuman = () => {
                                                     })}
                                                     </td>
                                                     <td>
-                                                        <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(item.id_pengumuman)}>Update</button>
+                                                        <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(item.id_pengumuman)} data-bs-toggle="modal" data-bs-target="#editPengumumanModal">Update</button>
+                                                        <EditPengumumanModal showEditModal={showEditModal} setShowEditModal={setShowEditModal} selectedItemId={selectedItemId} fetchPengumuman={fetchPengumuman}/>
                                                         <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_pengumuman)}>Delete</button>
                                                     </td>
                                                     {/* Add more table data cells as needed */}
