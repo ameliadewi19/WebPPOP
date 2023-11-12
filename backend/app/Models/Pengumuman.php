@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pengumuman extends Model
 {
     protected $table = 'pengumuman'; // Nama tabel database yang sesuai
-
+    protected $primaryKey = 'id_pengumuman';
     protected $fillable = [
         'slug',
         'judul_konten',

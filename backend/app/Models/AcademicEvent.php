@@ -10,7 +10,7 @@ class AcademicEvent extends Model
     // use HasFactory;
 
     protected $table = 'academic_events'; // Sesuaikan dengan nama tabel di database
-
+    protected $primaryKey = 'id_kegiatan';
     protected $fillable = [
         'tanggal_mulai', 'tanggal_akhir', 'nama_kegiatan',
     ];
