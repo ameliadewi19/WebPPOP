@@ -7,38 +7,53 @@ import FileKAKModal from '../components/Modals/FileKAKModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { DataTable } from 'simple-datatables';
+import FileRABModal from '../components/Modals/FileRABModal';
 
 // Using Arrow Function
 const KAK = () => {
 
     const navigate = useNavigate();
     const [role, setRole] = useState(null);
-    const [idUser, setIdUser] = useState(null);
 
     const [showModal, setShowModal] = useState(false);
-    const [pdfUrl, setPdfUrl] = useState('');
+    const [fileData, setFileData] = useState(null);
+
     const [dataKak, setDataKak] = useState([]);
 
-    const [idKetua, setIdKetua] = useState(null)
-    const [kakOrmawa, setKakOrmawa] = useState(null);
+    const [idUser, setIdUser] = useState(null);
+    const [idKetua, setIdKetua] = useState(null);
 
     useEffect(() => {
         feather.replace(); // Replace the icons after component mounts
         const role = localStorage.getItem('role');
         const idUser = localStorage.getItem('idUser');
         setIdUser(idUser);
+        console.log("idUser:", idUser);
         setRole(role);
+        fetchOrmawa(idUser);
         fetchDataKAK();
-    }, []);
+    }, [idKetua]);
 
-    const fetchOrmawa = () => {
-
+    const fetchOrmawa = (id) => {
+        console.log("idUser fetchormawa:", id);
+        axios.get(`/api/auth/get-ketua/${id}`)
+            .then((res) => {
+                setIdKetua(res.data.data.id_ketua);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        
+        console.log("idKetua ormawa:", idKetua);
     }
 
     const fetchDataKAK = () => {
+        console.log("idKetua:", idKetua);
         axios.get(`/api/kak/`)
         .then((res) => {
-            setDataKak(res.data);
+            const data = res.data.filter((kak) => kak.id_ketua === idKetua);
+            setDataKak(data);
+            console.log(data);
         })
         .catch((err) => {
             console.log(err);
@@ -56,9 +71,10 @@ const KAK = () => {
         }
     }, [dataKak]);
 
-    const handleShowModal = () => {
+    const handleShowModal = async (file) => {
+        setFileData(file);
+        // Tampilkan modal
         setShowModal(true);
-        setPdfUrl('/test.pdf')
     };
 
     const handleUpload = () => {
@@ -89,14 +105,13 @@ const KAK = () => {
                 <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <h5 className="card-title">KAK</h5>
-                    <button class="btn btn-primary mt-2" onClick={handleUpload} ><i className="align-middle" data-feather="upload"></i> <span className="align-middle">Upload KAK</span></button>
+                    <button class="btn btn-primary mt-2" onClick={handleUpload}><i className="align-middle" data-feather="upload"></i> <span className="align-middle">Upload KAK</span></button>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
                     <table className="table datatable table-striped">
                         <thead>
                         <tr>
-                            <th scope='col'>No</th>
                             <th scope='col'>Dokumen KAK</th>
                             <th scope='col'>Dokumen RAB</th>
                             <th scope='col'>Status</th>
@@ -105,22 +120,26 @@ const KAK = () => {
                         </tr>
                         </thead>
                         <tbody>
-                            {dataKak.map((kak, index) => (
+                            {dataKak.map((kak) =>(
                                 <tr key={kak.id_kak}>
-                                    <td>{index + 1}</td>
                                     <td>
-                                        <a onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
-                                            {kak.file_kak}
+                                        <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
+                                            Dokumen KAK
                                         </a>
-                                        <FileKAKModal pdfUrl={pdfUrl} showModal={showModal} setShowModal={setShowModal} />
+                                        <FileKAKModal pdfData={kak.file_kak} showModal={showModal} setShowModal={setShowModal} />
                                     </td>
-                                    <td>{kak.file_rab}</td>
+                                    <td>
+                                        <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
+                                            Dokumen RAB
+                                        </a>
+                                        <FileRABModal pdfData={kak.file_rab} showModal={showModal} setShowModal={setShowModal} />
+                                    </td>
                                     <td>{kak.status}</td>
                                     <td>{kak.catatan}</td>
                                     <td>
-                                    <button class="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#editKAKModal" style={{marginRight: '5px'}}><i className="align-middle" data-feather="edit"></i></button>
-                                    <EditKAKModal showModal={showModal} setShowModal={setShowModal} />
-                                    <button class="btn btn-danger mt-2" onClick={handleDelete}><i className="align-middle" data-feather="trash"></i></button>
+                                        <button class="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#editKAKModal" style={{marginRight: '5px'}}><i className="align-middle" data-feather="edit"></i></button>
+                                        <EditKAKModal showModal={showModal} setShowModal={setShowModal} />
+                                        <button class="btn btn-danger mt-2" onClick={handleDelete}><i className="align-middle" data-feather="trash"></i></button>
                                     </td>
                                 </tr>
                             ))}
