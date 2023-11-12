@@ -51,27 +51,36 @@ class PengumumanController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Find the Pengumuman model instance by ID
         $pengumuman = Pengumuman::find($id);
-        
+
+        // Check if the Pengumuman with the given ID exists
         if (!$pengumuman) {
             return response()->json(['message' => 'Pengumuman not found'], 404);
         }
 
+        // Validate the incoming request data
         $this->validate($request, [
-            'slug' => 'required|unique:pengumuman,slug,' . $id,
+            'slug' => 'required|unique:pengumuman,slug,' . $id . ',id_pengumuman',
             'judul_konten' => 'required',
             'isi_konten' => 'required',
             'tanggal' => 'date',
         ]);
 
-        $pengumuman->slug = $request->slug;
-        $pengumuman->judul_konten = $request->judul_konten;
-        $pengumuman->isi_konten = $request->isi_konten;
-        $pengumuman->gambar = $request->gambar;
-        $pengumuman->tanggal = $request->tanggal;
-        $pengumuman->save();
+        // Prepare the data for update
+        $updateData = [
+            'slug' => $request->slug,
+            'judul_konten' => $request->judul_konten,
+            'isi_konten' => $request->isi_konten,
+            'gambar' => $request->gambar,
+            'tanggal' => $request->tanggal,
+        ];
 
-        return response()->json($pengumuman);
+        // Use the update method to update the model
+        $pengumuman->update($updateData);
+
+        // Return a response indicating success
+        return response()->json(['message' => 'Pengumuman updated successfully', 'data' => $pengumuman]);
     }
 
     public function destroy($id)
