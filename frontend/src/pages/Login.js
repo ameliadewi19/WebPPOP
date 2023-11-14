@@ -30,6 +30,7 @@ function Login() {
       // console.log(response.data.user);
       const user = JSON.parse(localStorage.getItem('user'));
       console.log("id_user: ", user.id_user);
+      console.log("role: ", user.role);
       console.log(user);
       navigate('/dashboard');
     } catch (error) {
@@ -80,9 +81,9 @@ function Login() {
                   </div>
                 </div>
               </div>
-              <div className="text-center mb-3">
+              {/* <div className="text-center mb-3">
                 Don't have an account? <a href="pages-sign-up.html">Sign up</a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

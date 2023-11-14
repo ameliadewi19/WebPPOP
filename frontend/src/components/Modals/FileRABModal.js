@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PDFViewer from './PDFViewer';
 
-const FileKAKModal = ({ pdfData, showModal, setShowModal }) => {
+const FileRABModal = ({ pdfData, showModal, setShowModal }) => {
     const modalRef = useRef();
     
     return (
-        <div className={`modal fade ${showModal ? 'show' : ''}`} id="FileKAKModal" tabIndex="-1" aria-labelledby="FileKAKModalLabel" aria-hidden={!showModal}>
+        <div className={`modal fade ${showModal ? 'show' : ''}`} id="FileRABModal" tabIndex="-1" aria-labelledby="FileRABModalLabel" aria-hidden={!showModal}>
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="FileKAKModalLabel">File KAK</h5>
+                <h5 className="modal-title" id="FileKAKModalLabel">File RAB</h5>
                 <button type="button" className="d-none" ref={modalRef} data-bs-dismiss="modal"></button>
               </div>
               <div className="modal-body">
@@ -24,4 +24,4 @@ const FileKAKModal = ({ pdfData, showModal, setShowModal }) => {
       );
 };
 
-export default FileKAKModal;
+export default FileRABModal;

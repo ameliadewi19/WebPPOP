@@ -52,6 +52,12 @@ const Sidebar = () => {
                         </a>
                     </li>
 
+                    <li className={`sidebar-item ${location.pathname === '/ormawa' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/ormawa">
+                            <i className="align-middle" data-feather="user"></i> <span className="align-middle">Ormawa</span>
+                        </a>
+                    </li>
+
                     <li className={`sidebar-item ${location.pathname === '/peminjaman-sarpras' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/peminjaman-sarpras">
                             <i className="align-middle" data-feather="archive"></i> <span className="align-middle">Peminjaman SarPras</span>
