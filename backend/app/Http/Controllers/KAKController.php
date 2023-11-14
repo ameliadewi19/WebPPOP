@@ -7,6 +7,7 @@ use App\Models\Proker;
 use App\Models\KetuaOrmawa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 class KAKController extends Controller
 {
     /**
@@ -48,8 +49,8 @@ class KAKController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_ketua' => 'required',
-            'file_kak' => 'required',
-            'file_rab' => 'required',
+            'file_kak' => 'required|file',
+            'file_rab' => 'required|file',
             'prokers' => 'required|array', // Validate "prokers" as an array
         ]);
 
@@ -57,17 +58,52 @@ class KAKController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
+        // Simpan file KAK
+        if ($request->hasFile('file_kak')) {
+            $fileKAK = $request->file('file_kak');
+            $fileNameKAKTemp  = time() . '_' . $fileKAK->getClientOriginalName();
+            $fileKAK->move(public_path('uploads'), $fileNameKAKTemp);
+            $fileKAKPath = 'uploads/' . $fileNameKAKTemp;
+        }
+
+        // Simpan file RAB
+        if ($request->hasFile('file_rab')) {
+            $fileRAB = $request->file('file_rab');
+            $fileNameRABTemp  = time() . '_' . $fileRAB->getClientOriginalName();
+            $fileRAB->move(public_path('uploads'), $fileNameRABTemp);
+            $fileRABPath = 'uploads/' . $fileNameRABTemp;
+        }
+
         // Create the KAK record with specified fields
         $kak = KAK::create([
             'id_ketua' => $request->input('id_ketua'),
-            'file_kak' => $request->input('file_kak'),
-            'file_rab' => $request->input('file_rab'),
+            'file_kak' => $fileKAKPath,
+            'file_rab' => $fileRABPath,
             'status' => 'Diajukan', // Set status to "Diajukan"
             'catatan' => '', // Set catatan to an empty string
         ]);
 
         // Capture the id_kak from the newly created KAK record
         $id_kak = $kak->id_kak;
+        // Ubah nama file menjadi menggunakan id_kak yang sudah ada
+        if ($id_kak) {
+            $newFileNameKAK = $id_kak . '_' . $fileKAK->getClientOriginalName();
+            $newFileNameRAB = $id_kak . '_' . $fileRAB->getClientOriginalName();
+
+            // Ubah nama file menjadi id_kak_namafile
+            if ($fileKAKPath) {
+                rename(public_path('uploads') . '/' . $fileNameKAKTemp, public_path('uploads') . '/' . $newFileNameKAK);
+                $fileKAKPath = 'uploads/' . $newFileNameKAK;
+            }
+            if ($fileRABPath) {
+                rename(public_path('uploads') . '/' . $fileNameRABTemp, public_path('uploads') . '/' . $newFileNameRAB);
+                $fileRABPath = 'uploads/' . $newFileNameRAB;
+            }
+
+            $kak->file_kak = $newFileNameKAK;
+            $kak->file_rab = $newFileNameRAB;
+            $kak->save();
+        }
         // Insert "proker" records associated with the KAK
         $prokers = [];
         if ($request->has('prokers')) {
@@ -133,7 +169,37 @@ class KAKController extends Controller
         if (!$kak) {
             return response()->json(['message' => 'KAK not found'], 404);
         }
+        
+        // Path file yang akan dihapus
+        $filePaths = [$kak->file_kak, $kak->file_rab];
+
         $kak->delete();
+
+        // Hapus file terkait setelah menghapus entitas KAK
+        foreach ($filePaths as $filePath) {
+            if ($filePath && file_exists(public_path($filePath))) {
+                unlink(public_path($filePath));
+            }
+        }
         return response()->json(['message' => 'KAK deleted'], 200);
-    }    
+    }
+
+    
+    // Method for handling HTTP GET requests to show file
+    public function getFile($filename)
+    {
+        $path = public_path('uploads/'. $filename);
+
+        if (!File::exists($path)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        // $file = File::get($path);
+        // $type = File::mimeType($path);
+
+        // $response = response()->make($file, 200);
+        // $response->header('Content-Type', $type);
+
+        return response()->file($path, ['Content-Type' => 'application/pdf']);
+    }
 }

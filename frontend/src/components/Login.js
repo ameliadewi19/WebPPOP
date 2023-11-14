@@ -67,9 +67,9 @@ function Login() {
                           <label className="form-check-label text-small" htmlFor="customControlInline">Remember me</label>
                         </div>
                       </div> */}
-                      <div className="d-grid gap-2 mt-3">
+                      {/* <div className="d-grid gap-2 mt-3">
                         <button type="submit" className="btn btn-lg btn-primary">Sign in</button>
-                      </div>
+                      </div> */}
                     </form>
                   </div>
                 </div>
