@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use JWAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class JWT
 {

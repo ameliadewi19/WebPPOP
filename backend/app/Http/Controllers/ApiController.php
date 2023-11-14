@@ -59,7 +59,7 @@ class ApiController extends Controller
         //Request is validated
         //Crean token
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (! $token = \Tymon\JWTAuth\Facades\JWTAuth::attempt($credentials)) {
                 return response()->json([
                  'success' => false,
                  'message' => 'Login credentials are invalid.',

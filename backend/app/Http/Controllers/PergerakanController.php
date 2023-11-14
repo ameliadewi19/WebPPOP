@@ -48,8 +48,8 @@ class PergerakanController extends Controller
         }
 
         $this->validate($request, [
-            'deskripsi_kegiatan' => 'required',
             'nama_pergerakan' => 'required',
+            'deskripsi_pergerakan' => 'required',
         ]);
 
         $pergerakan->nama_pergerakan = $request->nama_pergerakan;
