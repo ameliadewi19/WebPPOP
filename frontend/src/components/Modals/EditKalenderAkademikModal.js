@@ -37,21 +37,6 @@ const EditKalenderAkademikModal = ({ showEditModal, setShowEditModal, selectedIt
 
     const handleClose = () => {
         setShowEditModal(false);
-        const testData = async () => {
-            try {
-                const response = await axios.get(`/api/academic-events/${selectedItemId}`);
-                const data = response.data;
-                console.log(data);
-                setFormData({
-                    tanggal_mulai: data.tanggal_mulai,
-                    tanggal_selesai: data.tanggal_selesai,
-                    nama_kegiatan: data.nama_kegiatan,
-                });
-            } catch (error) {
-                console.error(`Error fetching Kalender Akademik with id ${selectedItemId}:`, error);
-            }
-        };
-        testData();
     };
 
     const handleSubmit = async () => {
@@ -76,8 +61,12 @@ const EditKalenderAkademikModal = ({ showEditModal, setShowEditModal, selectedIt
             });
 
             // Close the modal or perform any other necessary actions
-            modalRef.current.click();
-
+            setShowEditModal(false);
+            var elementsToRemove = document.querySelectorAll('.modal-backdrop');
+            
+            elementsToRemove.forEach(function (element) {
+                element.parentNode.removeChild(element);
+            });
             fetchKalenderAkademik();
         } catch (error) {
             // Handle errors, e.g., show an error message
@@ -86,7 +75,7 @@ const EditKalenderAkademikModal = ({ showEditModal, setShowEditModal, selectedIt
     };
 
     return (
-        <div className={`modal fade ${showEditModal ? 'show' : ''}`} id="editKalenderAkademikModal" tabIndex="-1" aria-labelledby="editKalenderAkademikModalLabel" aria-hidden={!showEditModal}>
+        <div className={`modal fade ${showEditModal ? 'show' : 'hide'}`} id="editKalenderAkademikModal" tabIndex="-1" aria-labelledby="editKalenderAkademikModalLabel" aria-hidden={!showEditModal}>
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
