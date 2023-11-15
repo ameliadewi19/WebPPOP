@@ -9,6 +9,7 @@ const Timeline = () => {
     const [role, setRole] = useState(null);
     const history = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [editTimelineId, setEditTimelineId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [timeline, setTimeline] = useState([]);
 
@@ -24,9 +25,10 @@ const Timeline = () => {
         setShowModal(true);
     }
 
-    const handleShowEditModal = () => {
-        setShowEditModal(true);
-      };
+    const handleShowEditModal = (idTimeline) => {
+      setEditTimelineId(idTimeline);
+      setShowEditModal(true);
+    };
       
     const handleDelete = (idTimeline) => {
         const isConfirmed = window.confirm('Are you sure you want to delete this item?');
@@ -117,8 +119,8 @@ const Timeline = () => {
                                     </td>
                                     <td>
                                         {/* <button className="btn btn-sm btn-primary" onClick={handleEdit}>Edit</button> */}
-                                        <button class="btn btn-sm btn-primary " onClick={handleShowEditModal} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><span className="align-middle">Edit</span></button>
-                                        <EditKegiatanTimelineModal showModal={showEditModal} setShowModal={setShowEditModal} reloadData={fetchTimeline} timelineId={item.id_timeline}/>
+                                        <button class="btn btn-sm btn-primary " onClick={() => handleShowEditModal(item.id_timeline)} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><span className="align-middle">Edit</span></button>
+                                        <EditKegiatanTimelineModal showModal={showEditModal} setShowModal={setShowEditModal} reloadData={fetchTimeline} timelineId={editTimelineId}/>
                                         <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_timeline)}>Hapus</button>
                                     </td>
                                     {role === 'admin' && item.izin_submit === 'true' && <td><button
