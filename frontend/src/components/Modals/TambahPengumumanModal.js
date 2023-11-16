@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 
 const TambahPengumumanModal = ({ showModal, setShowModal, fetchPengumuman }) => {
@@ -24,10 +24,15 @@ const TambahPengumumanModal = ({ showModal, setShowModal, fetchPengumuman }) => 
             formDataToSend.append('isi_konten', formData.isi_konten);
             formDataToSend.append('gambar', formData.gambar);
             formDataToSend.append('tanggal', formData.tanggal);
-    
+
+            console.log(formDataToSend);
             // Send a POST request to your API endpoint
-            const response = await axios.post('/api/pengumuman', formDataToSend);
-    
+            // const response = await axios.post('/api/pengumuman', formDataToSend);
+            const response = await axios.post('/api/pengumuman', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Pastikan untuk mengatur tipe konten
+                },
+            });
             // Handle the response, e.g., update state or show a success message
             console.log('Pengumuman added successfully:', response.data);
     
@@ -99,25 +104,13 @@ const TambahPengumumanModal = ({ showModal, setShowModal, fetchPengumuman }) => 
                 <div className="mb-3">
                     <label htmlFor="gambar" className="form-label">Gambar</label>
                     <input
-                        type="text"
-                        className="form-control"
-                        id="gambar"
-                        name="gambar"
-                        placeholder="Gambar Path (sementara)"
-                        value={formData.gambar}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* <div className="mb-3">
-                    <label htmlFor="gambar" className="form-label">Gambar</label>
-                    <input
                         type="file"
                         className="form-control"
                         id="gambar"
                         name="gambar"
                         onChange={handleInputChange}
                     />
-                </div> */}
+                </div>
                 <div className="mb-3">
                     <label htmlFor="tanggal" className="form-label">Tanggal</label>
                     <input

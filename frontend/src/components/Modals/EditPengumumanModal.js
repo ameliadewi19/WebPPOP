@@ -46,7 +46,12 @@ const EditPengumumanModal = ({ showEditModal, setShowEditModal, selectedItemId, 
             const response = await axios.put(`/api/pengumuman/${selectedItemId}`, formData);
 
             console.log('Pengumuman updated successfully:', response.data);
-            modalRef.current.click();
+            setShowEditModal(false);
+            var elementsToRemove = document.querySelectorAll('.modal-backdrop');
+            
+            elementsToRemove.forEach(function (element) {
+                element.parentNode.removeChild(element);
+            });
             fetchPengumuman();
         } catch (error) {
             console.error(`Error updating pengumuman with id ${selectedItemId}:`, error);
