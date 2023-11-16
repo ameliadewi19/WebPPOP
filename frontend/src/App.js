@@ -23,6 +23,7 @@ import LPJAdmin from './pages/LPJAdmin.js';
 import Ormawa from './pages/Ormawa.js';
 import KelolaAkun from './pages/KelolaAkun.js';
 import KetuaOrmawa from './pages/KetuaOrmawa.js';
+import EditKAK from './components/SubMenu/EditKAK.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -211,6 +212,16 @@ function App() {
             </div>
           </div>
         }/>
+        <Route path="/edit-kak/:kakId" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <EditKAK />
+              <Footer />
+            </div>
+          </div>
+        }/>
 
         <Route path="/ketua-ormawa" element={
           <div className="wrapper">
@@ -218,6 +229,7 @@ function App() {
             <div className="main">
               <Navbar />
               <KetuaOrmawa />
+              <EditKAK />
               <Footer />
             </div>
           </div>
