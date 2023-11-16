@@ -32,7 +32,7 @@ class AcademicEventController extends Controller
     {
         $event = new AcademicEvent;
         $event->tanggal_mulai = $request->tanggal_mulai;
-        $event->tanggal_akhir = $request->tanggal_akhir;
+        $event->tanggal_selesai = $request->tanggal_selesai;
         $event->nama_kegiatan = $request->nama_kegiatan;
         $event->save();
         return response()->json($event, 201);

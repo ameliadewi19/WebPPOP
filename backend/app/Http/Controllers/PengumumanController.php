@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Pengumuman;
 
 class PengumumanController extends Controller
@@ -35,14 +36,23 @@ class PengumumanController extends Controller
             'slug' => 'required|unique:pengumuman',
             'judul_konten' => 'required',
             'isi_konten' => 'required',
+            'gambar' => 'required|file', // Add validation for image file
             'tanggal' => 'date',
         ]);
+
+        // Handle file upload
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar');
+            $gambarName = time() . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move(public_path('uploads/pengumuman'), $gambarName);
+            $gambarPath = 'uploads/pengumuman/' . $gambarName;
+        }
 
         $pengumuman = new Pengumuman;
         $pengumuman->slug = $request->slug;
         $pengumuman->judul_konten = $request->judul_konten;
         $pengumuman->isi_konten = $request->isi_konten;
-        $pengumuman->gambar = $request->gambar;
+        $pengumuman->gambar = $gambarPath;
         $pengumuman->tanggal = $request->tanggal;
         $pengumuman->save();
 
