@@ -15,7 +15,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login']]);
     }
     /**
      * Get a JWT via given credentials.
@@ -42,9 +42,11 @@ class AuthController extends Controller
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
+            'nama' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
+            'username' => 'required',
+            'role' => 'required'
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -86,6 +88,12 @@ class AuthController extends Controller
         return response()->json(['data' => $KetuaOrmawa], 200);
     }
 
+    public function getAllUsers() {
+        $users = User::all();
+    
+        return response()->json(['users' => $users], 200);
+    }
+
     /**
      * Refresh a token.
      *
@@ -117,4 +125,60 @@ class AuthController extends Controller
             'user' => auth()->user()
         ]);
     }
+
+    /**
+     * Delete a User.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAccount($id) {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User successfully deleted'], 200);
+    }
+
+    /**
+     * Edit User Information.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function editAccount(Request $request, $id) {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'string|between:2,100',
+            'email' => 'string|email|max:100|unique:users,email,' . $id,
+            'password' => 'string|confirmed|min:6',
+            'username' => 'string|unique:users,username,' . $id,
+            'role' => 'string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $data = $validator->validated();
+
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        $user->update($data);
+
+        return response()->json(['message' => 'User successfully updated', 'user' => $user], 200);
+    }
+    
 }
