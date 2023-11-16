@@ -20,6 +20,7 @@ import KalenderAkademik from './pages/KalenderAkademik.js';
 import UploadKAK from './components/SubMenu/UploadKAK.js';
 import LPJ from './pages/LPJ.js';
 import LPJAdmin from './pages/LPJAdmin.js';
+import EditKAK from './components/SubMenu/EditKAK.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -168,6 +169,16 @@ function App() {
             <div className="main">
               <Navbar />
               <UploadKAK />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/edit-kak/:kakId" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <EditKAK />
               <Footer />
             </div>
           </div>
