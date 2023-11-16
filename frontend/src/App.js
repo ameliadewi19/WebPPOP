@@ -21,6 +21,8 @@ import UploadKAK from './components/SubMenu/UploadKAK.js';
 import LPJ from './pages/LPJ.js';
 import LPJAdmin from './pages/LPJAdmin.js';
 import Ormawa from './pages/Ormawa.js';
+import KelolaAkun from './pages/KelolaAkun.js';
+import KetuaOrmawa from './pages/KetuaOrmawa.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -195,6 +197,27 @@ function App() {
             <div className="main">
               <Navbar />
               <UploadKAK />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/kelola-akun" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <KelolaAkun />
+              <Footer />
+            </div>
+          </div>
+        }/>
+
+        <Route path="/ketua-ormawa" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <KetuaOrmawa />
               <Footer />
             </div>
           </div>

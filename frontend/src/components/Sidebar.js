@@ -54,7 +54,13 @@ const Sidebar = () => {
 
                     <li className={`sidebar-item ${location.pathname === '/ormawa' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/ormawa">
-                            <i className="align-middle" data-feather="user"></i> <span className="align-middle">Ormawa</span>
+                            <i className="align-middle" data-feather="users"></i> <span className="align-middle">Ormawa</span>
+                        </a>
+                    </li>
+
+                    <li className={`sidebar-item ${location.pathname === '/ketua-ormawa' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/ketua-ormawa">
+                            <i className="align-middle" data-feather="user"></i> <span className="align-middle">Ketua Ormawa</span>
                         </a>
                     </li>
 
@@ -81,6 +87,14 @@ const Sidebar = () => {
                             <i className="align-middle" data-feather="calendar"></i> <span className="align-middle">Kalender Akademik</span>
                         </a>
                     </li>
+
+                    <li className={`sidebar-item ${location.pathname === '/kelola-akun' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/kelola-akun">
+                            <i className="align-middle" data-feather="user"></i> <span className="align-middle">Kelola Akun</span>
+                        </a>
+                    </li>
+
+                    
                 </ul>
             </div>
         </nav>

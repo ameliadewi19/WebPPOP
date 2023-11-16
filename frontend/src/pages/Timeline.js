@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import feather from 'feather-icons';
+// import feather from 'feather-icons';
 import TambahKegiatanTimelineModal from '../components/Modals/TambahKegiatanTimelineModal.js';
 import EditKegiatanTimelineModal from '../components/Modals/EditKegiatanTimelineModal.js';
 
@@ -14,7 +14,7 @@ const Timeline = () => {
     const [timeline, setTimeline] = useState([]);
 
     useEffect(() => {
-        feather.replace(); // Replace the icons after component mounts
+        // feather.replace(); // Replace the icons after component mounts
         const role = localStorage.getItem('role');
         setRole(role);
         fetchTimeline();
@@ -79,9 +79,15 @@ const Timeline = () => {
               <div className="col-xl-12">
                   <div className="card">
                   <div className="card-header d-flex justify-content-between align-items-center">
-                      <h5 className="card-title">Timeline</h5>
-                      <button class="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addUploadKAKModal"><i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Kegiatan</span></button>
-                      <TambahKegiatanTimelineModal showModal={showModal} setShowModal={setShowModal} reloadData={fetchTimeline}/>
+                      <h5 className="card-title mt-2">Timeline</h5>
+                      {role === 'admin' && (
+                        <>
+                          <button className="btn btn-primary" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addUploadKAKModal">
+                            <i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Kegiatan</span>
+                          </button>
+                          <TambahKegiatanTimelineModal showModal={showModal} setShowModal={setShowModal} reloadData={fetchTimeline} />
+                        </>
+                      )}
                   </div>
                   <div className="card-body">
                       <div className="table-responsive">
@@ -135,7 +141,7 @@ const Timeline = () => {
                                             onClick={() => handleIzinSubmit(item.id_timeline)}
                                         >
                                             {item.izin_submit}
-                                        </button></td>
+                                    </button></td>
                                     }
                                 </tr>
                             ))}

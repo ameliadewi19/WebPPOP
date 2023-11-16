@@ -7,6 +7,7 @@ import EditKAKModal from '../components/Modals/EditKAKModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import FileKAKModal from '../components/Modals/FileKAKModal';
+import FileRABModal from '../components/Modals/FileRABModal';
 
 // Using Arrow Function
 const KAKAdmin = () => {
@@ -43,15 +44,12 @@ const KAKAdmin = () => {
                 const filteredKaks = response.data.filter(kak => kak.status === 'Diajukan' || kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1');
                 setKaks(filteredKaks);
             } else if (role === "admin"){
-                const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 1' || kak.status === 'Revisi tahap 2' || kak.status === 'Tolak tahap 2');
-                setKaks(filteredKaks);
-            } else if (role === "kli"){
-                const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 2' || kak.status === 'Revisi tahap 3' || kak.status === 'Tolak tahap 3');
-                setKaks(filteredKaks);
-            } else if (role === "wd3"){
-                const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 3' || kak.status === 'Revisi tahap Akhir' || kak.status === 'Tolak tahap akhir');
-                setKaks(filteredKaks);
+                setKaks(response.data);
+                // const filteredKaks = response.data.filter(kak => kak.status === 'Acc tahap 1' || kak.status === 'Revisi tahap akhir' || kak.status === 'Tolak tahap akhir');
+                // setKaks(filteredKaks);
             }
+
+
         })
         .catch(error => {
             console.error('Error fetching KAK data:', error);
@@ -135,10 +133,13 @@ const KAKAdmin = () => {
                                 <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
                                     Dokumen KAK
                                 </a>
-                                <FileKAKModal pdfData={kak.file_kak} showModal={showModal} setShowModal={setShowModal} />
-                            </td>
+                                <FileKAKModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                            </td>    
                             <td>
-                                <a href={`/storage/${kak.file_rab}`} target="_blank" rel="noopener noreferrer">Dokumen RAB</a>
+                                <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
+                                    Dokumen RAB
+                                </a>
+                                <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                             </td>
                             <td>{kak.status}</td>
                             <td>{kak.catatan}</td>
@@ -156,34 +157,18 @@ const KAKAdmin = () => {
                                 ))}
                             </td>
                             <td>
-                                {renderButton(kak.id_kak)}
-                                {/* <button
-                                    className="btn btn-primary mt-2"
-                                    style={{ marginRight: '5px' }}
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#pesanModal"
-                                    onClick={() => handleShowAccModal(kak.id_kak, "acc")}
-                                >
-                                <i className="align-middle" data-feather="check"></i> Acc
-                                </button>
-                                <button
-                                    className="btn btn-warning mt-2"
-                                    style={{ marginRight: '5px' }}
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#pesanModal"
-                                    onClick={() => handleShowAccModal(kak.id_kak, "revisi")}
-                                >
-                                <i className="align-middle" data-feather="edit"></i> Revisi
-                                </button>
-                                <button
-                                    className="btn btn-danger mt-2"
-                                    style={{ marginRight: '5px' }}
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#pesanModal"
-                                    onClick={() => handleShowAccModal(kak.id_kak, "tolak")}
-                                >
-                                <i className="align-middle" data-feather="trash"></i> Tolak
-                                </button> */}
+                                    {role === 'admin' ? (
+                                        kak.status === 'Acc tahap akhir' ? 'kak selesai diproses' :
+                                        kak.status === 'Submit proposal' ||
+                                        kak.status === 'Revisi tahap 1' ||
+                                        kak.status === 'Tolak tahap 1' ?
+                                        'Belum di acc oleh Sekumbem' :
+                                        renderButton(kak.id_kak)
+                                    ) : (
+                                        role === 'sekumbem' && kak.status === 'Diajukan' ?
+                                        'Belum submit proposal' :
+                                        renderButton(kak.id_kak)
+                                    )}
                             </td>
                             </tr>
                         ))} 
