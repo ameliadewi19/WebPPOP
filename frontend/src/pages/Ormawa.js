@@ -1,127 +1,119 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import TambahOrmawaModal from '../components/Modals/TambahOrmawaModal.js';
+import EditOrmawaModal from '../components/Modals/EditOrmawaModal.js';
 
-// Using Arrow Function
 const Ormawa = () => {
-    const history = useNavigate();
+  const history = useNavigate();
+  const [ormawas, setOrmawas] = useState([]);
+  const [role, setRole] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [IdOrmawa, setIdOrmawa] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  
+  useEffect(() => {
+    const role = localStorage.getItem('role');
+    setRole(role);
 
-    return (
-      <main class="content">
-        <div class="container-fluid p-0">
+    fetchData();
+  }, []); // Empty dependency array ensures the effect runs only once on mount
 
-          <h1 class="h3 mb-3"><strong>Ormawa</strong></h1>
+  // Fetch data from the API when the component mounts
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/api/ormawa');
+      console.log('Response Data:', response.data); // Log the response data
+      setOrmawas(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-          <div class="row">
-            <div class="col-xl-6 col-xxl-5 d-flex">
-              <div class="w-100">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Sales</h5>
-                          </div>
+  const handleShowModal = () => {
+    setShowModal(true);
+  }
 
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="truck"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">2.382</h1>
-                        <div class="mb-0">
-                          <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Visitors</h5>
-                          </div>
+  const handleShowEditModal = (IdOrmawa) => {
+    setIdOrmawa(IdOrmawa);
+    setShowEditModal(true);
+  };
 
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="users"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">14.212</h1>
-                        <div class="mb-0">
-                          <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Earnings</h5>
-                          </div>
+  const handleDelete = (id_ormawa) => {
+    const isConfirmed = window.confirm('Are you sure you want to delete this item?');
 
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="dollar-sign"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">$21.300</h1>
-                        <div class="mb-0">
-                          <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Orders</h5>
-                          </div>
+    if (isConfirmed) {
+      axios.delete(`/api/ormawa/${id_ormawa}`)
+        .then((response) => {
+          console.log(response.data.message); 
+        })
+        .catch((error) => {
+          console.error('Error deleting item:', error);
+        });
 
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="shopping-cart"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">64</h1>
-                        <div class="mb-0">
-                          <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      setShowModal(false);
+    }
+
+    fetchData();
+};
+
+  return (
+    <main className="content">
+      <div className="container-fluid p-0">
+        <h1 className="h3 mb-3"><strong>Ormawa</strong></h1>
+
+        {/* Display data in a table */}
+        <div className="row">
+          <div className="col-12">
+            <div className="card">
+              <div className="card-header d-flex justify-content-between align-items-center">
+                <h5 className="card-title">Ormawa</h5>
+                {role === 'admin' && (
+                    <>
+                    <button class="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addOrmawaModal"><i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Ormawa</span></button>
+                    <TambahOrmawaModal showModal={showModal} setShowModal={setShowModal} reloadData={fetchData}/>
+                    </>
+                )}
               </div>
-            </div>
-
-            <div class="col-xl-6 col-xxl-7">
-              <div class="card flex-fill w-100">
-                <div class="card-header">
-
-                  <h5 class="card-title mb-0">Recent Movement</h5>
-                </div>
-                <div class="card-body py-3">
-                  <div class="chart chart-sm">
-                    <canvas id="chartjs-dashboard-line"></canvas>
-                  </div>
+              <div className="card-body">
+                <div className="table-responsive">
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nama Ormawa</th>
+                        <th>Pembina</th>
+                        <th>Aksi</th>
+                        {/* Add more columns as needed */}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ormawas.map((ormawa, index) => (
+                        <tr key={index}>
+                          <td>{index+1}</td>
+                          <td>{ormawa.nama_ormawa}</td>
+                          <td>{ormawa.pembina}</td>
+                            {role === 'admin' && <td>
+                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(ormawa.id_ormawa)} data-bs-toggle="modal" data-bs-target="#editOrmawaModal"><span className="align-middle">Edit</span></button>
+                                        <EditOrmawaModal showModal={handleShowEditModal} setShowModal={setShowEditModal} reloadData={fetchData} IdOrmawa={IdOrmawa}/>
+                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(ormawa.id_ormawa)}>Hapus</button>
+                                    </td>
+                                    }
+                                    {role !== 'admin' && <td>-</td>
+                                    }
+                          {/* Add more columns as needed */}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
-      </main>
-    );
+      </div>
+    </main>
+  );
 };
 
 export default Ormawa;

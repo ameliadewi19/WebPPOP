@@ -1,0 +1,24 @@
+.bg-login-container {
+    position: relative;
+}
+  
+  .bg-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('./bg-login.jpg'); /* Sesuaikan dengan path gambar Anda */
+    background-size: cover;
+    background-position: center;
+    /* filter: grayscale(1); Atur nilai grayscale sesuai kebutuhan (0-1) */
+    filter: brightness(0.3);
+    z-index: -1;
+  }
+  
+  .login-container {
+    z-index: 1;
+    /* Gaya lainnya untuk konten login */
+  }
+  

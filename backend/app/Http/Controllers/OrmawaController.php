@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Validator;
 
 class OrmawaController extends Controller
 {
+    /**
+     * Create a new KAKController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => []]);
+    }
+    
     public function index()
     {
         $ormawas = Ormawa::all();
@@ -29,6 +39,7 @@ class OrmawaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_ormawa' => 'required',
+            'pembina' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -44,6 +55,7 @@ class OrmawaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_ormawa' => 'required',
+            'pembina' => 'required'
         ]);
 
         if ($validator->fails()) {

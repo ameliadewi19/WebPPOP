@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\KetuaOrmawa;
 use App\Models\Ormawa;
 use Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,7 +16,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'userData']]);
     }
     /**
      * Get a JWT via given credentials.
@@ -42,9 +43,11 @@ class AuthController extends Controller
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
+            'nama' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
+            'username' => 'required',
+            'role' => 'required'
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -86,6 +89,12 @@ class AuthController extends Controller
         return response()->json(['data' => $KetuaOrmawa], 200);
     }
 
+    public function getAllUsers() {
+        $users = User::all();
+    
+        return response()->json(['users' => $users], 200);
+    }
+
     /**
      * Refresh a token.
      *
@@ -109,6 +118,90 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
+     
+    public function userData($id)
+    {
+        $userData = User::find($id);
+
+        if (!$userData) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        return response()->json($userData);
+    }
+
+    public function editProfil(Request $request, $id_user)
+    {
+        $user = User::find($id_user);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'nama' => 'required|string',
+            'username' => 'required|string|unique:users,username,' . $id_user . ',id_user',
+            'email' => 'required|string|unique:users,email,' . $id_user . ',id_user',
+            // Add more validation rules for other fields as needed
+        ]);
+        
+        $user->update($validatedData);
+
+        return response()->json(['message' => 'Profile updated successfully']);
+    }
+
+
+    public function ubahPassword(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:6|different:old_password',
+            'new_password_confirmation' => 'required|string|same:new_password',
+        ]);
+
+        // Periksa apakah old password sesuai dengan password saat ini di database
+        if (!Hash::check($validatedData['old_password'], $user->password)) {
+            return response()->json(['message' => 'Old password is incorrect'], 422);
+        }
+
+        // Update password ke yang baru
+        $user->update([
+            'password' => Hash::make($validatedData['new_password']),
+        ]);
+
+        return response()->json(['message' => 'Password updated successfully']);
+    }
+
+    public function ubahPasswordAdmin(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $rules = [
+            'new_password' => 'required|string|min:6',
+            'new_password_confirmation' => 'required|string|same:new_password',
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        // Update password ke yang baru
+        $user->update([
+            'password' => Hash::make($validatedData['new_password']),
+        ]);
+
+        return response()->json(['message' => 'Password updated successfully']);
+    }
+
     protected function createNewToken($token){
         return response()->json([
             'access_token' => $token,
@@ -117,4 +210,60 @@ class AuthController extends Controller
             'user' => auth()->user()
         ]);
     }
+
+    /**
+     * Delete a User.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAccount($id) {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User successfully deleted'], 200);
+    }
+
+    /**
+     * Edit User Information.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function editAccount(Request $request, $id) {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'string|between:2,100',
+            'email' => 'string|email|max:100|unique:users,email,' . $id,
+            'password' => 'string|confirmed|min:6',
+            'username' => 'string|unique:users,username,' . $id,
+            'role' => 'string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $data = $validator->validated();
+
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        $user->update($data);
+
+        return response()->json(['message' => 'User successfully updated', 'user' => $user], 200);
+    }
+    
 }
