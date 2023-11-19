@@ -30,24 +30,13 @@ const LPJAdmin = () => {
                     lpj.status === 'Tolak tahap 1'
                 );
             } else if (role === "admin") {
-                filteredLPJ = response.data.filter(lpj =>
-                    lpj.status === 'Acc tahap 1' ||
-                    lpj.status === 'Revisi tahap 2' ||
-                    lpj.status === 'Tolak tahap 2'
-                );
-            } else if (role === "kli") {
-                filteredLPJ = response.data.filter(lpj =>
-                    lpj.status === 'Acc tahap 2' ||
-                    lpj.status === 'Revisi tahap 3' ||
-                    lpj.status === 'Tolak tahap 3'
-                );
-            } else if (role === "wd3") {
-                filteredLPJ = response.data.filter(lpj =>
-                    lpj.status === 'Acc tahap 3' ||
-                    lpj.status === 'Revisi tahap Akhir' ||
-                    lpj.status === 'Tolak tahap akhir'
-                );
-            }
+                filteredLPJ = response.data;
+                // filteredLPJ = response.data.filter(lpj =>
+                //     lpj.status === 'Acc tahap 1' ||
+                //     lpj.status === 'Revisi tahap 2' ||
+                //     lpj.status === 'Tolak tahap 2'
+                // );
+            } 
       
             setLPJ(filteredLPJ); // Mengatur data LPJ ke state LPJ
             console.log(filteredLPJ);
@@ -161,7 +150,15 @@ const LPJAdmin = () => {
                                 <td>{lpjItem.proker.file_proposal}</td>
                                 <td>{lpjItem.proker.file_rab}</td>
                                 <td>{lpjItem.file_lpj}</td>
-                                <td>{renderButton(lpjItem.id_lpj)}</td>
+                                <td>
+                                {lpjItem.status === 'Acc tahap akhir' ? 'LPJ selesai diproses' :
+                                    lpjItem.status === 'Submit lpj' ||
+                                    lpjItem.status === 'Revisi tahap 1' ||
+                                    lpjItem.status === 'Tolak tahap 1' ?
+                                    'Belum di acc oleh Sekumbem' :
+                                    renderButton(lpjItem.id_lpj)
+                                }
+                                </td>
                                 {role === 'admin' && lpjItem.proker.izin_submit === 'true' &&
                                     <td>
                                         <button

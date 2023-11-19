@@ -45,6 +45,26 @@ Route::group([
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
+    Route::get('/user-profile/{id}', [AuthController::class, 'userData']);
+    Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']); 
+    Route::get('/users', [AuthController::class, 'getAllUsers']); 
+    Route::delete('/users/{id}', [AuthController::class, 'deleteAccount']);
+    Route::put('/users/{id}', [AuthController::class, 'editAccount']);
+    Route::put('/ubah-profil/{id}', [AuthController::class, 'editProfil']);
+    Route::put('/ubah-password/{id}', [AuthController::class, 'ubahPassword']);
+    Route::put('/ubah-password-admin/{id}', [AuthController::class, 'ubahPasswordAdmin']);
+});
+
+
+// KELOLA AKUN
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']);     
 });
@@ -108,11 +128,16 @@ Route::get('/test', [TestController::class, 'test']);
 // });
 
 // API routes for Ormawa
-Route::get('/ormawa', [OrmawaController::class, 'index']);
-Route::get('/ormawa/{id}', [OrmawaController::class, 'show']);
-Route::post('/ormawa', [OrmawaController::class, 'store']);
-Route::put('/ormawa/{id}', [OrmawaController::class, 'update']);
-Route::delete('/ormawa/{id}', [OrmawaController::class, 'destroy']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'ormawa'
+], function () {
+    Route::get('/', [OrmawaController::class, 'index']);
+    Route::get('/{id}', [OrmawaController::class, 'show']);
+    Route::post('/', [OrmawaController::class, 'store']);
+    Route::put('/{id}', [OrmawaController::class, 'update']);
+    Route::delete('/{id}', [OrmawaController::class, 'destroy']);
+});
 
 // API routes for KAK
 Route::group([

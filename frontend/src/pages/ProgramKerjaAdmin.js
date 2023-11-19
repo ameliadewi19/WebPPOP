@@ -25,31 +25,23 @@ const ProgramKerjaAdmin = () => {
 
           if (role === "sekumbem") {
               filteredProkers = response.data.filter(proker =>
+                  proker.status === 'Diajukan' ||
                   proker.status === 'Submit proposal' ||
                   proker.status === 'Revisi tahap 1' ||
                   proker.status === 'Tolak tahap 1'
               );
           } else if (role === "admin") {
-              filteredProkers = response.data.filter(proker =>
-                  proker.status === 'Acc tahap 1' ||
-                  proker.status === 'Revisi tahap 2' ||
-                  proker.status === 'Tolak tahap 2'
-              );
-          } else if (role === "kli") {
-              filteredProkers = response.data.filter(proker =>
-                  proker.status === 'Acc tahap 2' ||
-                  proker.status === 'Revisi tahap 3' ||
-                  proker.status === 'Tolak tahap 3'
-              );
-          } else if (role === "wd3") {
-            filteredProkers = response.data.filter(proker =>
-                proker.status === 'Acc tahap 3' ||
-                proker.status === 'Revisi tahap akhir' ||
-                proker.status === 'Tolak tahap akhir'
-            );
+            filteredProkers = response.data;
+            //   filteredProkers = response.data.filter(proker =>
+            //       proker.status === 'Acc tahap 1' ||
+            //       proker.status === 'Revisi tahap 2' ||
+            //       proker.status === 'Tolak tahap 2'
+            //   );
           }
 
           setProkers(filteredProkers);
+
+          console.log(response.data);
       } catch (error) {
           console.error('Error fetching proker data:', error);
       }
@@ -140,14 +132,15 @@ const ProgramKerjaAdmin = () => {
                             <th>File Proposal</th>
                             <th>File RAB</th>
                             <th>Aksi</th>
-                            {role === 'admin' && <th>Izin Submit</th>}
+                            {/* {role === 'admin' && <th>Izin Submit</th>} */}
                         </tr>
                         </thead>
                         <tbody>
                           {prokers.map((proker, index) => (
                               <tr key={index}>
                                   <td>{index + 1}</td>
-                                  <td>{proker.kak.ketua_ormawa.ormawa.nama_ormawa}</td>
+                                  {/* <td>{proker.kak.ketua_ormawa.ormawa.nama_ormawa}</td>/ */}
+                                  <td>{proker.kak?.ketua_ormawa?.ormawa?.nama_ormawa || 'N/A'}</td>
                                   <td>{proker.nama_kegiatan}</td>
                                   <td>{proker.ketua_pelaksana}</td>
                                   <td>{proker.deskripsi_kegiatan}</td>
@@ -157,8 +150,24 @@ const ProgramKerjaAdmin = () => {
                                   <td>{proker.catatan}</td>
                                   <td>{proker.file_proposal}</td>
                                   <td>{proker.file_rab}</td>
-                                  <td>{renderButton(proker.id_proker)}</td>
-                                  {role === 'admin' && proker.izin_submit === 'true' && <td><button
+
+                                  <td>
+                                    {role === 'admin' ? (
+                                        proker.status === 'Acc tahap akhir' ? 'Proker selesai diproses' :
+                                        proker.status === 'Diajukan' ||
+                                        proker.status === 'Submit proposal' ||
+                                        proker.status === 'Revisi tahap 1' ||
+                                        proker.status === 'Tolak tahap 1' ?
+                                        'Belum di acc oleh Sekumbem' :
+                                        renderButton(proker.id_proker)
+                                    ) : (
+                                        role === 'sekumbem' && proker.status === 'Diajukan' ?
+                                        'Belum submit proposal' :
+                                        renderButton(proker.id_proker)
+                                    )}
+                                  </td>
+                                  {/* <td>{renderButton(proker.id_proker)}</td> */}
+                                  {/* {role === 'admin' && proker.izin_submit === 'true' && <td><button
                                         className="btn btn-primary mt-2"
                                         onClick={() => handleIzinSubmit(proker.id_proker)}
                                     >
@@ -171,7 +180,7 @@ const ProgramKerjaAdmin = () => {
                                     >
                                         {proker.izin_submit}
                                     </button></td>
-                                  }
+                                  } */}
                               </tr>
                           ))}
                       </tbody>

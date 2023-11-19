@@ -3,9 +3,11 @@ import PDFViewer from './PDFViewer';
 
 const FileRABModal = ({ pdfData, showModal, setShowModal }) => {
     const modalRef = useRef();
-    
+
+    // console.log("Ini file", pdfData);
+
     return (
-        <div className={`modal fade ${showModal ? 'show' : ''}`} id="FileRABModal" tabIndex="-1" aria-labelledby="FileRABModalLabel" aria-hidden={!showModal}>
+        <div className={`modal fade`} id="FileRABModal" tabIndex="-1" aria-labelledby="FileRABModalLabel" aria-hidden={!showModal}>
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <div className="modal-header">

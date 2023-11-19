@@ -21,11 +21,7 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
             tahapValue = 1;
         } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "kli") {
-            tahapValue = 3;
-        } else if (role === "wd3") {
-            tahapValue = 4;
-        }
+        } 
     
         console.log("Tahap: ", tahapValue);
         axios.post('/api/kak/verifikasi/acc', {
@@ -55,11 +51,7 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
             tahapValue = 1;
         } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "kli") {
-            tahapValue = 3;
-        } else if (role === "wd3") {
-            tahapValue = 4;
-        }
+        } 
     
         console.log("Tahap: ", tahapValue);
         axios.post('/api/kak/verifikasi/revisi', {
@@ -87,11 +79,7 @@ const AccModal = ({ showModal, setShowModal, handleSubmit, selectedKakId, select
             tahapValue = 1;
         } else if (role === "admin") {
             tahapValue = 2;
-        } else if (role === "kli") {
-            tahapValue = 3;
-        } else if (role === "wd3") {
-            tahapValue = 4;
-        }
+        } 
     
         console.log("Tahap: ", tahapValue);
         axios.post('/api/kak/verifikasi/tolak', {

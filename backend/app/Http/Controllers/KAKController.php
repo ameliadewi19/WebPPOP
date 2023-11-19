@@ -126,10 +126,62 @@ class KAKController extends Controller
 
     // Belum Jalan
     // Method for handling HTTP PUT/PATCH requests to update a product
+    // public function update(Request $request, $id)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'id_ketua' => 'required',
+    //         'file_kak' => 'file',
+    //         'file_rab' => 'file',
+    //         'prokers' => 'array',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['errors' => $validator->errors()], 400);
+    //     }
+
+    //     $kak = KAK::find($id);
+
+    //     if (!$kak) {
+    //         return response()->json(['message' => 'KAK not found'], 404);
+    //     }
+
+    //     // Update the KAK record
+    //     $kak->update($request->except('prokers'));
+
+    //     // Update associated proker records
+    //     $prokers = [];
+    //     if ($request->has('prokers')) {
+    //         foreach ($request->prokers as $prokerData) {
+    //             // Jika ID proker tidak ada, berarti ini merupakan proker baru.
+    //             if (!isset($prokerData['id_proker'])) {
+    //                 $prokerData['id_kak'] = $id;
+    //                 $prokerData['status'] = 'Diajukan';
+    //                 $prokerData['catatan'] = '';
+        
+    //                 $proker = Proker::create($prokerData);
+    //                 $prokers[] = $proker;
+    //             } else {
+    //                 $proker = Proker::find($prokerData['id_proker']);
+        
+    //                 if ($proker) {
+    //                     $proker->update($prokerData);
+    //                     $prokers[] = $proker;
+    //                 } else {
+    //                     return response()->json(['message' => 'Proker not found for ID: ' . $prokerData['id']], 404);
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return response()->json(['kak' => $kak, 'prokers' => $prokers], 200);
+    // }
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            
+            'file_kak' => 'file',
+            'file_rab' => 'file',
+            'prokers' => 'required|array', // Validate "prokers" as an array
         ]);
 
         if ($validator->fails()) {
@@ -139,26 +191,71 @@ class KAKController extends Controller
         $kak = KAK::find($id);
 
         if (!$kak) {
-            return response()->json(['message' => 'KAK not found'], 404);
+            return response()->json(['error' => 'KAK not found'], 404);
         }
 
-        // Update the KAK record
-        $kak->update($request->except('prokers'));
+        // Update file KAK if provided
+        if ($request->hasFile('file_kak')) {
+            // Delete old file
+            if ($kak->file_kak) {
+                unlink(public_path('uploads'),($kak->file_kak));
+            }
 
-        // Update associated proker records
+            // Upload new file
+            $fileKAK = $request->file('file_kak');
+            $fileNameKAK = $id . '_' . $fileKAK->getClientOriginalName();
+            $fileKAK->move(public_path('uploads'), $fileNameKAK);
+            $kak->file_kak = $fileNameKAK;
+        }
+
+        // Update file RAB if provided
+        if ($request->hasFile('file_rab')) {
+            // Delete old file
+            if ($kak->file_rab) {
+                unlink(public_path($kak->file_rab));
+            }
+
+            // Upload new file
+            $fileRAB = $request->file('file_rab');
+            $fileNameRAB = $id . '_' . $fileRAB->getClientOriginalName();
+            $fileRAB->move(public_path('uploads'), $fileNameRAB);
+            $kak->file_rab = $fileNameRAB;
+        }
+
+        $kak->save();
+        $id_kak = $kak->id_kak;
+
+        // Update or create associated "proker" records
+        $prokers = [];
         if ($request->has('prokers')) {
-            foreach ($request->prokers as $prokerData) {
-                $proker = Proker::find($prokerData['id']);
-
-                if ($proker) {
-                    $proker->update($prokerData);
+            foreach ($request->input('prokers') as $prokerData) {
+                // Jika ID proker tidak ada, berarti ini merupakan proker baru.
+                if (!isset($prokerData['id_proker'])) {
+                    $prokerData['id_kak'] = $id_kak;
+                    $prokerData['status'] = 'Diajukan';
+                    $prokerData['catatan'] = '';
+        
+                    $proker = Proker::create($prokerData);
+                    $prokers[] = $proker;
                 } else {
-                    return response()->json(['message' => 'Proker not found for ID: ' . $prokerData['id']], 404);
+                    $proker = Proker::find($prokerData['id_proker']);
+        
+                    if ($proker) {
+                        $proker->update([
+                            'nama_kegiatan' => $prokerData['nama_kegiatan'],
+                            'jenis_kegiatan' => $prokerData['jenis_kegiatan'],
+                            'ketua_pelaksana' => $prokerData['ketua_pelaksana'],
+                            'deskrpisi_kegiatan' => $prokerData['deskrpisi_kegiatan'],
+                        ]);
+                        $prokers[] = $proker;
+                    } else {
+                        return response()->json(['message' => 'Proker not found for ID: ' . $prokerData['id']], 404);
+                    }
                 }
             }
         }
 
-        return response()->json($kak, 200);
+        return response()->json(['kak' => $kak, 'prokers' => $prokers], 200);
     }
 
 

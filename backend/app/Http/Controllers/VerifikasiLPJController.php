@@ -29,12 +29,8 @@ class VerifikasiLPJController extends Controller
             if ($tahap == "1"){
                 LPJ::where('id_lpj', $lpjID)->update(['status' => 'Acc tahap 1', 'catatan' => $catatan]);
             } else if ($tahap == "2"){
-                LPJ::where('id_lpj', $lpjID)->update(['status' => 'Acc tahap 2', 'catatan' => $catatan]);
-            } else if ($tahap == "3"){
-                LPJ::where('id_lpj', $lpjID)->update(['status' => 'Acc tahap 3', 'catatan' => $catatan]);
-            } else if ($tahap == "3"){
                 LPJ::where('id_lpj', $lpjID)->update(['status' => 'Acc tahap akhir', 'catatan' => $catatan]);
-            }
+            } 
     
             return response()->json(['message' => 'Acc berhasil disubmit'], 200);
         } catch (\Exception $e) {
@@ -55,13 +51,9 @@ class VerifikasiLPJController extends Controller
             if ($tahap == "1"){
                 LPJ::where('id_lpj', $lpjID)->update(['status' => 'Revisi tahap 1', 'catatan' => $catatan]);
             } else if ($tahap == "2"){
-                LPJ::where('id_lpj', $lpjID)->update(['status' => 'Revisi tahap 2', 'catatan' => $catatan]);
-            } else if ($tahap == "3"){
-                LPJ::where('id_lpj', $lpjID)->update(['status' => 'Revisi tahap 3', 'catatan' => $catatan]);
-            } else if ($tahap == "3"){
                 LPJ::where('id_lpj', $lpjID)->update(['status' => 'Revisi tahap akhir', 'catatan' => $catatan]);
-            }
-    
+            } 
+
             return response()->json(['message' => 'Revisi berhasil disubmit'], 200);
         } catch (\Exception $e) {
             // Tangani kesalahan
@@ -80,12 +72,8 @@ class VerifikasiLPJController extends Controller
             if ($tahap == "1"){
                 LPJ::where('id_lpj', $lpjID)->update(['status' => 'Tolak tahap 1', 'catatan' => $catatan]);
             } else if ($tahap == "2"){
-                LPJ::where('id_lpj', $lpjID)->update(['status' => 'Tolak tahap 2', 'catatan' => $catatan]);
-            } else if ($tahap == "3"){
-                LPJ::where('id_lpj', $lpjID)->update(['status' => 'Tolak tahap 3', 'catatan' => $catatan]);
-            } else if ($tahap == "3"){
                 LPJ::where('id_lpj', $lpjID)->update(['status' => 'Tolak tahap akhir', 'catatan' => $catatan]);
-            }
+            } 
     
             return response()->json(['message' => 'Tolak berhasil disubmit'], 200);
         } catch (\Exception $e) {

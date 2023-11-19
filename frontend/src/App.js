@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Profiler } from 'react';
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
+import axios from 'axios'; // Add this line
+import { useNavigate } from 'react-router-dom';
 
 import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
@@ -21,6 +23,10 @@ import UploadKAK from './components/SubMenu/UploadKAK.js';
 import LPJ from './pages/LPJ.js';
 import LPJAdmin from './pages/LPJAdmin.js';
 import Ormawa from './pages/Ormawa.js';
+import KelolaAkun from './pages/KelolaAkun.js';
+import KetuaOrmawa from './pages/KetuaOrmawa.js';
+import Profil from './pages/Profil.js';
+import EditKAK from './components/SubMenu/EditKAK.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -53,16 +59,44 @@ function checkAuthorization() {
 function App() {
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true); // New state to track loading
+  const [token, setToken] = useState('');
+  
+  const refreshAuthToken = async (e) => {
+    try {  
+      // Only attempt to refresh if there is a token
+      if (e) {
+        const response = await axios.post('/api/auth/refresh');
+        const refreshedToken = response.data.access_token;
+  
+        localStorage.setItem('token', refreshedToken);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${refreshedToken}`;
+        console.log("Token refreshed:", refreshedToken);
+      }
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+  
+      // If there is an error, or token is not available, handle the error or redirect to login
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      // Use the navigate function to perform the redirection if you are inside a component that has access to it
+      return <Navigate to={`/`} />;
+    }
+  };
 
   useEffect(() => {
     const fetchUserRole = async () => {
       const role = checkRole();
       setUserRole(role);
-      setLoading(false); // Set loading to false once userRole is set
+      setLoading(false);
+      setToken(localStorage.getItem('token'));
+
+      // Call the refreshAuthToken function
+      await refreshAuthToken(token);
     };
 
     fetchUserRole();
-  }, []);
+  }, [token]);
+  
 
   // Show loading indicator while waiting for userRole
   if (loading) {
@@ -199,6 +233,48 @@ function App() {
             </div>
           </div>
         }/>
+        <Route path="/kelola-akun" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <KelolaAkun />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        <Route path="/profil" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <Profil />
+              <Footer />
+            </div>
+          </div>
+        }/>        <Route path="/edit-kak/:kakId" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <EditKAK />
+              <Footer />
+            </div>
+          </div>
+        }/>
+
+        <Route path="/ketua-ormawa" element={
+          <div className="wrapper">
+            <Sidebar />
+            <div className="main">
+              <Navbar />
+              <KetuaOrmawa />
+              <EditKAK />
+              <Footer />
+            </div>
+          </div>
+        }/>
+        
       </Routes>
     </BrowserRouter>
   );

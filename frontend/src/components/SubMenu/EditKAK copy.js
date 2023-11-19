@@ -1,36 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const UploadKAK = ({ }) => {
+const EditKAK = () => {
+    const { kakId } = useParams();
     const navigate = useNavigate();
     const [role, setRole] = useState(null);
-    const [idKetua, setIdKetua] = useState(null);
-    const [namaOrmawa, setNamaOrmawa] = useState(null);
 
-    useEffect(() => {
-        feather.replace(); 
-        const role = localStorage.getItem('role');
-        setRole(role);
-        const idUser = localStorage.getItem('idUser');
-        axios.get(`/api/auth/get-ketua/${idUser}`)
-            .then((res) => {
-                console.log(res.data);
-                console.log(res.data.data.id_ketua);
-                setIdKetua(res.data.data.id_ketua);
-                setNamaOrmawa(res.data.data.ormawa.nama_ormawa);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        
-    }, []);
+    const [formData, setFormData] = useState({ 
+        id_ketua : null,
+        file_kak: null,
+        file_rab: null,
+        prokers: []
+    });
 
     const [proker, setProker] = useState([
         {
-            id_kak: null,
+            id_kak: kakId,
+            id_proker: null,
             nama_kegiatan: '',
             ketua_pelaksana: '',
             jenis_kegiatan: '',
@@ -42,31 +31,70 @@ const UploadKAK = ({ }) => {
             catatan: ''
         }
     ]);
-    
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    const [formData, setFormData] = useState({ 
-        id_ketua : null,
-        file_kak: null,
-        file_rab: null,
-        prokers: []
-    });
-    
+    const [namaOrmawa, setNamaOrmawa] = useState(null);
+
+    useEffect(() => {
+        const role = localStorage.getItem('role');
+        setRole(role);
+        const idUser = localStorage.getItem('idUser');
+        if(kakId){
+            axios.get(`/api/kak/${kakId}`)
+            .then(response => {
+                const { id_ketua, file_kak, file_rab, prokers, ketua_ormawa } = response.data[0];
+                setFormData({ ...formData, id_ketua, file_kak, file_rab, prokers : [...prokers] });
+                setNamaOrmawa(ketua_ormawa.ormawa.nama_ormawa);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+    }, [kakId]);
+
     const handleFileKAKChange = (e) => {
-        const fileKAK = e.target.files[0];
-        setFormData({ ...formData, file_kak: fileKAK });
+        setFormData(prevState => ({ ...prevState, file_kak: e.target.files[0] }));
     };
     
     const handleFileRABChange = (e) => {
-        const fileRAB = e.target.files[0];
-        setFormData({ ...formData, file_rab: fileRAB });
+        setFormData(prevState => ({ ...prevState, file_rab: e.target.files[0] }));
     };
 
     const handleProkerChange = (e, index) => {
-        let data = [...proker];
+        let data = [...formData.prokers];
         data[index][e.target.name] = e.target.value;
+        updateProker(index, e.target.name, e.target.value); // Memperbarui state formData
+        setProker(data);
+    };
+
+    const updateProker = (index, field, value) => {
+        const updatedProkers = [...formData.prokers];
+        updatedProkers[index][field] = value;
+        setFormData(prevState => ({ ...prevState, prokers: updatedProkers }));
+    };
+
+    const addInputRow = () => {
+        let newProker = {
+            id_kak: kakId,
+            id_proker: null,
+            nama_kegiatan: '',
+            ketua_pelaksana: '',
+            jenis_kegiatan: '',
+            deskripsi_kegiatan: '',
+            izin_submit: 'false',
+            tanggal_mulai: '',
+            tanggal_akhir: '',
+            status: '',
+            catatan: ''
+        };
+        setFormData(prevState => ({
+            ...prevState,
+            prokers: [...prevState.prokers, newProker]
+        }));
+    };
+
+    const handleDeleteRow = (index) => {
+        let data = [...proker];
+        data.splice(index, 1);
         setProker(data);
     };
 
@@ -74,7 +102,7 @@ const UploadKAK = ({ }) => {
         e.preventDefault();
 
         const formDataWithPath = new FormData();
-        formDataWithPath.append('id_ketua', idKetua);
+        formDataWithPath.append('id_ketua', formData.id_ketua);
         formDataWithPath.append('file_kak', formData.file_kak);
         formDataWithPath.append('file_rab', formData.file_rab);
 
@@ -83,15 +111,17 @@ const UploadKAK = ({ }) => {
                 formDataWithPath.append(`prokers[${index}][${key}]`, value);
             });
         });
-        console.log(formDataWithPath);
+        console.log("formData: ", formData);
+        console.log("FormData: ", formDataWithPath);
+        console.log("proker: ", proker);
         // Kirim formData ke Backend
         try {
-            const response = await axios.post('/api/kak/', formDataWithPath, {
+            const response = await axios.put(`/api/kak/${kakId}`, formDataWithPath, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Pastikan untuk mengatur tipe konten
                 },
             });
-            console.log(response.data); // Output respons dari backend
+            console.log("update", response.data); // Output respons dari backend
             Swal.fire({
                 icon: "success",
                 title: "KAK berhasil diupload",
@@ -115,30 +145,6 @@ const UploadKAK = ({ }) => {
       e.preventDefault();
       
       console.log(formData);
-      feather.replace();
-    };
-
-    const addInputRow = () => {
-        let object = {
-            id_kak: null,
-            nama_kegiatan: '',
-            ketua_pelaksana: '',
-            jenis_kegiatan: '',
-            deskripsi_kegiatan: '',
-            izin_submit: 'false',
-            tanggal_mulai: '',
-            tanggal_akhir: '',
-            status: '',
-            catatan: ''
-        };
-        setProker([...proker, object]);
-        feather.replace();
-    };
-
-    const handleDeleteRow = (index) => {
-        let data = [...proker];
-        data.splice(index, 1);
-        setProker(data);
     };
   
     return (
@@ -189,7 +195,7 @@ const UploadKAK = ({ }) => {
                             </div>
                         </div>
                         <div id='input-proker'>
-                            {proker.map((proker, index) => (
+                            {formData.prokers.map((proker, index) => (
                                 <div className='row mb-3' key={index}>
                                     <div className="col-sm-2">
                                         <input
@@ -258,4 +264,4 @@ const UploadKAK = ({ }) => {
     );
   };
   
-export default UploadKAK;
+export default EditKAK;
