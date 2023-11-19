@@ -19,6 +19,7 @@ const KAK = () => {
     const [fileData, setFileData] = useState(null);
 
     const [dataKak, setDataKak] = useState([]);
+    const [isDataAvailable, setIsDataAvailable] = useState(false);
 
     const [idUser, setIdUser] = useState(null);
     const [idKetua, setIdKetua] = useState(null);
@@ -54,6 +55,7 @@ const KAK = () => {
             const data = res.data.filter((kak) => kak.id_ketua === idKetua);
             setDataKak(data);
             console.log(data);
+            setIsDataAvailable(data.length > 0);
         })
         .catch((err) => {
             console.log(err);
@@ -65,7 +67,7 @@ const KAK = () => {
         if (dataKak.length > 0) {
             const table = new DataTable('.datatable', {
                 columns : [
-                    { select : 5, sortable : false },
+                    { select : 4, sortable : false },
                 ]
             });
         }
@@ -81,18 +83,9 @@ const KAK = () => {
         navigate('/upload-kak');
     };
 
-    const handleDelete = async () => {
-        const confirmDelete = await Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: 'Anda akan menghapus data ini',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText : 'Batal',
-            confirmButtonText: 'Ya, hapus!'
-        });
-    }
+    const handleEdit = (idKak) => {
+        navigate(`/edit-kak/${idKak}`);
+    };
 
     return (
       <main class="content">
@@ -105,7 +98,7 @@ const KAK = () => {
                 <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <h5 className="card-title">KAK</h5>
-                    <button class="btn btn-primary mt-2" onClick={handleUpload}><i className="align-middle" data-feather="upload"></i> <span className="align-middle">Upload KAK</span></button>
+                    <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
@@ -137,9 +130,7 @@ const KAK = () => {
                                     <td>{kak.status}</td>
                                     <td>{kak.catatan}</td>
                                     <td>
-                                        <button class="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#editKAKModal" style={{marginRight: '5px'}}><i className="align-middle" data-feather="edit"></i></button>
-                                        <EditKAKModal showModal={showModal} setShowModal={setShowModal} />
-                                        <button class="btn btn-danger mt-2" onClick={handleDelete}><i className="align-middle" data-feather="trash"></i></button>
+                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{marginRight: '5px'}}><i className='bi-pencil-square'></i></button>
                                     </td>
                                 </tr>
                             ))}
