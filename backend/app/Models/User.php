@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,6 +13,8 @@ class User extends Authenticatable implements JWTSubject
     use HasFactory, Notifiable;
 
     protected $primaryKey = 'id_user';
+    public $incrementing = false; // Set to false since it's a non-incrementing primary key
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +27,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'role'
     ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -32,6 +37,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -40,7 +46,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -50,8 +56,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+
     public function getJWTCustomClaims()
     {
         return [];
-    }   
+    }
 }

@@ -45,11 +45,14 @@ Route::group([
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::get('/user-profile/{id}', [AuthController::class, 'userData']);
     Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']); 
     Route::get('/users', [AuthController::class, 'getAllUsers']); 
     Route::delete('/users/{id}', [AuthController::class, 'deleteAccount']);
     Route::put('/users/{id}', [AuthController::class, 'editAccount']);
+    Route::put('/ubah-profil/{id}', [AuthController::class, 'editProfil']);
+    Route::put('/ubah-password/{id}', [AuthController::class, 'ubahPassword']);
+    Route::put('/ubah-password-admin/{id}', [AuthController::class, 'ubahPasswordAdmin']);
 });
 
 

@@ -3,12 +3,17 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 // import feather from 'feather-icons';
 import TambahAkunModal from '../components/Modals/TambahAkunModal.js';
+import EditProfilModal from '../components/Modals/EditProfilModal.js';
+import EditPasswordAdminModal from '../components/Modals/EditPasswordAdminModal.js';
 
 const KelolaAkun = () => {
     const [role, setRole] = useState(null);
     const history = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [users, setUsers] = useState([]);
+    const [IdUser, setIdUser] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
 
     useEffect(() => {
       // feather.replace(); // Replace the icons after component mounts
@@ -50,6 +55,21 @@ const KelolaAkun = () => {
       }
     };
 
+    const handleShowEditModal = (IdUser) => {
+      setIdUser(IdUser);
+      setShowEditModal(true);
+    };      
+
+    const handleShowPasswordModal = (IdUser) => {
+        setIdUser(IdUser);
+        setShowPasswordModal(true);
+    };      
+
+    const handleReloadData = () => {
+        // Panggil fungsi fetchUserProfile untuk memperbarui userProfile
+        fetchData();
+    };
+
     return (
         <main class="content">
           <div class="container-fluid p-0">
@@ -89,7 +109,39 @@ const KelolaAkun = () => {
                                 <td>{user.role}</td>
                                 <td>
                                   {role === 'admin' && (
-                                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(user.id_user)}>Hapus</button>
+                                    <>
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDelete(user.id_user)}>Hapus</button>
+                                    <button
+                                        className="btn btn-sm btn-primary me-2"
+                                        onClick={() => handleShowEditModal(user.id_user)}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editProfilModal"
+                                        style={{borderRadius: "5px"}}
+                                    >
+                                        <span className="align-middle">Edit Profil</span>
+                                    </button>
+                                    <EditProfilModal
+                                        showModal={handleShowEditModal}
+                                        setShowModal={setShowEditModal}
+                                        reloadData={handleReloadData}
+                                        userId={IdUser}
+                                    />
+                                    <button
+                                        className="btn btn-sm btn-success"
+                                        onClick={() => handleShowPasswordModal(user.id_user)}
+                                        data-bs-toggle="modal"
+                                        style={{borderRadius: "5px"}}
+                                        data-bs-target="#editPasswordModal"
+                                    >
+                                    <span className="align-middle">Edit Password</span>
+                                    </button>
+                                    <EditPasswordAdminModal
+                                        showModal={handleShowPasswordModal}
+                                        setShowModal={setShowPasswordModal}
+                                        reloadData={handleReloadData}
+                                        userId={IdUser}
+                                    />
+                                    </>
                                   )}
                                 </td>
                               </tr>

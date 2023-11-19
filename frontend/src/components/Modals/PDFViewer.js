@@ -9,6 +9,8 @@ const PDFViewer = ({ pdfUrl }) => {
 
   useEffect(() => {
     if (!isLoaded && pdfUrl) {
+
+      console.log("manggil 2:", pdfUrl);
       axios.get(`/api/kak/file/${pdfUrl}`, { responseType: 'blob' })
         .then(response => {
           const pdfBlob = URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));

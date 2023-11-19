@@ -125,7 +125,7 @@ const Timeline = () => {
                                     </td>
                                     <td>
                                         {/* <button className="btn btn-sm btn-primary" onClick={handleEdit}>Edit</button> */}
-                                        <button class="btn btn-sm btn-primary " onClick={() => handleShowEditModal(item.id_timeline)} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><span className="align-middle">Edit</span></button>
+                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(item.id_timeline)} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><span className="align-middle">Edit</span></button>
                                         <EditKegiatanTimelineModal showModal={showEditModal} setShowModal={setShowEditModal} reloadData={fetchTimeline} timelineId={editTimelineId}/>
                                         <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_timeline)}>Hapus</button>
                                     </td>

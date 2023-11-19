@@ -3,7 +3,7 @@ import PDFViewer from './PDFViewer';
 
 const FileKAKModal = ({ pdfData, showModal, setShowModal }) => {
     const modalRef = useRef();
-    console.log("Ini file", pdfData);
+    // console.log("Ini file", pdfData);
 
     // Pastikan pdfData tersedia sebelum membuat elemen PDFViewer
     const pdfViewerElement = pdfData ? <PDFViewer pdfUrl={pdfData} /> : null;

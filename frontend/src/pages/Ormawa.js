@@ -94,7 +94,7 @@ const Ormawa = () => {
                           <td>{ormawa.nama_ormawa}</td>
                           <td>{ormawa.pembina}</td>
                             {role === 'admin' && <td>
-                                        <button class="btn btn-sm btn-primary " onClick={() => handleShowEditModal(ormawa.id_ormawa)} data-bs-toggle="modal" data-bs-target="#editOrmawaModal"><span className="align-middle">Edit</span></button>
+                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(ormawa.id_ormawa)} data-bs-toggle="modal" data-bs-target="#editOrmawaModal"><span className="align-middle">Edit</span></button>
                                         <EditOrmawaModal showModal={handleShowEditModal} setShowModal={setShowEditModal} reloadData={fetchData} IdOrmawa={IdOrmawa}/>
                                         <button className="btn btn-sm btn-danger" onClick={() => handleDelete(ormawa.id_ormawa)}>Hapus</button>
                                     </td>
