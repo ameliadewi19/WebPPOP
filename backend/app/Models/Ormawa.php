@@ -11,4 +11,5 @@ class Ormawa extends Model
     protected $primaryKey = 'id_ormawa';
     public $incrementing = true;
     public $timestamps = true;
+
 }

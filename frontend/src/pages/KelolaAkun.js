@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import TambahAkunModal from '../components/Modals/TambahAkunModal.js';
 import EditProfilModal from '../components/Modals/EditProfilModal.js';
 import EditPasswordAdminModal from '../components/Modals/EditPasswordAdminModal.js';
+import Swal from 'sweetalert2';
 
 const KelolaAkun = () => {
     const [role, setRole] = useState(null);
@@ -28,23 +29,40 @@ const KelolaAkun = () => {
     };
   
     const handleDelete = (id_user) => {
-      const isConfirmed = window.confirm('Are you sure you want to delete this account?');
-  
-      if (isConfirmed) {
-        axios
-          .delete(`/api/auth/users/${id_user}`)
-          .then((response) => {
-            console.log(response.data.message);
-          })
-          .catch((error) => {
-            console.error('Error deleting account:', error);
-          });
-  
-        setShowModal(false);
-      }
-  
-      fetchData();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete(`/api/auth/users/${id_user}`)
+            .then((response) => {
+              console.log(response.data.message);
+              Swal.fire(
+                'Deleted!',
+                'The account has been deleted.',
+                'success'
+              );
+            })
+            .catch((error) => {
+              console.error('Error deleting account:', error);
+              Swal.fire(
+                'Error!',
+                'Failed to delete the account.',
+                'error'
+              );
+            });
+    
+          fetchData();
+        }
+      });
     };
+    
   
     const fetchData = async () => {
       try {
@@ -110,7 +128,7 @@ const KelolaAkun = () => {
                                 <td>
                                   {role === 'admin' && (
                                     <>
-                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDelete(user.id_user)}>Hapus</button>
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDelete(user.id_user)}><i className='bi-trash'></i></button>
                                     <button
                                         className="btn btn-sm btn-primary me-2"
                                         onClick={() => handleShowEditModal(user.id_user)}
@@ -118,7 +136,7 @@ const KelolaAkun = () => {
                                         data-bs-target="#editProfilModal"
                                         style={{borderRadius: "5px"}}
                                     >
-                                        <span className="align-middle">Edit Profil</span>
+                                        <span className="align-middle"><i className='bi-pencil'></i></span>
                                     </button>
                                     <EditProfilModal
                                         showModal={handleShowEditModal}
@@ -133,7 +151,7 @@ const KelolaAkun = () => {
                                         style={{borderRadius: "5px"}}
                                         data-bs-target="#editPasswordModal"
                                     >
-                                    <span className="align-middle">Edit Password</span>
+                                    <span className="align-middle"><i className='bi-lock'></i></span>
                                     </button>
                                     <EditPasswordAdminModal
                                         showModal={handleShowPasswordModal}

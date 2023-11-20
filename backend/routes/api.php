@@ -13,6 +13,7 @@ use App\Http\Controllers\OrmawaController;
 use App\Http\Controllers\KAKController;
 use App\Http\Controllers\KAKDetailController;
 use App\Http\Controllers\ProkerController;
+use App\Http\Controllers\ProkerDetailController;
 use App\Http\Controllers\LPJController;
 use App\Http\Controllers\KetuaOrmawaController;
 use App\Http\Controllers\VerifikasiKAKController;
@@ -183,6 +184,15 @@ Route::group([
     Route::put('/{id}', [ProkerController::class, 'update']);
     Route::delete('/{id}', [ProkerController::class, 'destroy']);
     Route::put('/izin-submit/{id}', [ProkerController::class, 'ubahIzinSubmit']);
+    Route::get('/getProker', [ProkerController::class, 'getTotalProkerTiapOrmawa']);
+});
+
+// Detail proker
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'proker/detail'
+], function () {
+    Route::get('/jumlahTiapOrmawa', [ProkerDetailController::class, 'jumlahTiapOrmawa']);
 });
 
 // API routes for verifikasi Proker

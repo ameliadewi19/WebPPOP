@@ -5,8 +5,11 @@ import feather from 'feather-icons';
 
 const Sidebar = () => {
     const location = useLocation();
+    const [role, setRole] = useState(null);
     
     useEffect(() => {
+        const role = localStorage.getItem('role');
+        setRole(role);
         feather.replace(); // Replace the icons after component mounts
     }, []);
 
@@ -48,53 +51,58 @@ const Sidebar = () => {
 
                     <li className={`sidebar-item ${location.pathname === '/pergerakan' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/pergerakan">
-                            <i className="align-middle" data-feather="activity"></i> <span className="align-middle">Pergerakan</span>
+                            <i className="bi-list-ol"></i> <span className="align-middle">Pergerakan</span>
                         </a>
                     </li>
 
+                    {role && role !== 'ormawa' && 
+                    <>
+
                     <li className={`sidebar-item ${location.pathname === '/ormawa' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/ormawa">
-                            <i className="align-middle" data-feather="users"></i> <span className="align-middle">Ormawa</span>
+                            <i className="bi-people"></i> <span className="align-middle">Ormawa</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/ketua-ormawa' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/ketua-ormawa">
-                            <i className="align-middle" data-feather="user"></i> <span className="align-middle">Ketua Ormawa</span>
+                            <i className="bi-person-badge"></i> <span className="align-middle">Ketua Ormawa</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/peminjaman-sarpras' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/peminjaman-sarpras">
-                            <i className="align-middle" data-feather="archive"></i> <span className="align-middle">Peminjaman SarPras</span>
+                            <i className="bi-building"></i> <span className="align-middle">Peminjaman SarPras</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/timeline' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/timeline">
-                            <i className="align-middle" data-feather="clock"></i> <span className="align-middle">Timeline</span>
+                            <i className="bi-calendar-week-fill" data-feather="clock"></i> <span className="align-middle">Timeline</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/pengumuman' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/pengumuman">
-                            <i className="align-middle" data-feather="clipboard"></i> <span className="align-middle">Pengumuman</span>
+                            <i className="bi-newspaper"></i> <span className="align-middle">Pengumuman</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/kalender-akademik' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/kalender-akademik">
-                            <i className="align-middle" data-feather="calendar"></i> <span className="align-middle">Kalender Akademik</span>
+                            <i className="bi-calendar"></i> <span className="align-middle">Kalender Akademik</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/kelola-akun' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/kelola-akun">
-                            <i className="align-middle" data-feather="user"></i> <span className="align-middle">Kelola Akun</span>
+                            <i className="bi-person-fill-gear"></i> <span className="align-middle">Kelola Akun</span>
                         </a>
                     </li>
 
+                    </>
                     
+                    }
                 </ul>
             </div>
         </nav>
