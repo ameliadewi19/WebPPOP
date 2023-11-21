@@ -52,26 +52,30 @@ const Dashboard = () => {
       <main class="content">
         <div class="container-fluid p-0">
           <h1 class="h3 mb-3"><strong>{roleCapital}</strong> Dashboard</h1>
-          <div class="row">
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Status Pengajuan KAK</h5>
-                  <h1 className={`mt-3 mb-1 ${getStatusClass()}`}>
-                    {status}
-                  </h1>
+          {role && role === 'ormawa' &&
+            <>
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Status Pengajuan KAK</h5>
+                    <h1 className={`mt-3 mb-1 ${getStatusClass()}`}>
+                      {status}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Jumlah Proker Diajukan</h5>
+                    <h1 class="mt-3 mb-1">{proker}</h1>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Jumlah Proker Diajukan</h5>
-                  <h1 class="mt-3 mb-1">{proker}</h1>
-                </div>
-              </div>
-            </div>
-          </div>
+            </>
+          }
         </div>
       </main>
     );

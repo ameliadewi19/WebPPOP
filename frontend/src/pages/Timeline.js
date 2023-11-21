@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 // import feather from 'feather-icons';
 import TambahKegiatanTimelineModal from '../components/Modals/TambahKegiatanTimelineModal.js';
 import EditKegiatanTimelineModal from '../components/Modals/EditKegiatanTimelineModal.js';
+import Swal from 'sweetalert2';
 
 const Timeline = () => {
     const [role, setRole] = useState(null);
@@ -31,22 +32,40 @@ const Timeline = () => {
     };
       
     const handleDelete = (idTimeline) => {
-        const isConfirmed = window.confirm('Are you sure you want to delete this item?');
-    
-        if (isConfirmed) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
           axios.delete(`/api/timeline/${idTimeline}`)
             .then((response) => {
-              console.log(response.data.message); 
+              console.log(response.data.message);
+              Swal.fire(
+                'Deleted!',
+                'The item has been deleted.',
+                'success'
+              );
             })
             .catch((error) => {
               console.error('Error deleting item:', error);
+              Swal.fire(
+                'Error!',
+                'Failed to delete the item.',
+                'error'
+              );
             });
-
+    
           setShowModal(false);
+          fetchTimeline(); // Assuming fetchTimeline is a function to refresh the timeline data
         }
-
-        fetchTimeline();
+      });
     };
+    
       
 
     const fetchTimeline = async () => {
@@ -125,9 +144,9 @@ const Timeline = () => {
                                     </td>
                                     <td>
                                         {/* <button className="btn btn-sm btn-primary" onClick={handleEdit}>Edit</button> */}
-                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(item.id_timeline)} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><span className="align-middle">Edit</span></button>
+                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(item.id_timeline)} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><i className='bi-pencil'></i></button>
                                         <EditKegiatanTimelineModal showModal={showEditModal} setShowModal={setShowEditModal} reloadData={fetchTimeline} timelineId={editTimelineId}/>
-                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_timeline)}>Hapus</button>
+                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_timeline)}><i className='bi-trash'></i></button>
                                     </td>
                                     {role === 'admin' && item.izin_submit === 'true' && <td><button
                                         className="btn btn-sm btn-primary"

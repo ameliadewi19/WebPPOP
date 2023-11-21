@@ -49,6 +49,7 @@ const KAKAdmin = () => {
                 // setKaks(filteredKaks);
             }
 
+            console.log(response.data);
 
         })
         .catch(error => {
@@ -71,7 +72,7 @@ const KAKAdmin = () => {
                         data-bs-target="#pesanModal"
                         onClick={() => handleShowAccModal(kak, "acc")}
                     >
-                        <i className="align-middle" data-feather="check"></i> Acc
+                        <i className="bi-check2"></i> Acc
                     </button>
                     <button
                         className="btn btn-warning mt-2"
@@ -80,7 +81,7 @@ const KAKAdmin = () => {
                         data-bs-target="#pesanModal"
                         onClick={() => handleShowAccModal(kak, "revisi")}
                     >
-                        <i className="align-middle" data-feather="edit"></i> Revisi
+                        <i className="bi-pencil"></i> Revisi
                     </button>
                     <button
                         className="btn btn-danger mt-2"
@@ -89,7 +90,7 @@ const KAKAdmin = () => {
                         data-bs-target="#pesanModal"
                         onClick={() => handleShowAccModal(kak, "tolak")}
                     >
-                        <i className="align-middle" data-feather="trash"></i> Tolak
+                        <i className="bi-trash"></i> Tolak
                     </button>
                 </div>
             );
@@ -127,8 +128,23 @@ const KAKAdmin = () => {
                         {kaks.map((kak, index) => (
                             <tr key={index}>
                             <td>{index + 1}</td>
-                            <td>{kak.ketua_ormawa.ormawa.nama_ormawa}</td>
-                            <td>{kak.ketua_ormawa.nama_ketua}</td>
+                            <td>
+                            {kak.ketua_ormawa ? (
+                                // Render the content if ketua_ormawa exists
+                                kak.ketua_ormawa.ormawa.nama_ormawa
+                            ) : (
+                                // Render alternative content if ketua_ormawa doesn't exist
+                                '-'
+                            )}
+                            </td>
+                            <td>{kak.ketua_ormawa ? (
+                                // Render the content if ketua_ormawa exists
+                                kak.ketua_ormawa.nama_ketua
+                            ) : (
+                                // Render alternative content if ketua_ormawa doesn't exist
+                                '-'
+                            )}</td>
+                            {/* <td>{kak.ketua_ormawa.nama_ketua}</td> */}
                             <td>
                                 <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
                                     Dokumen KAK
