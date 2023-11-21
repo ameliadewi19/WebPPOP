@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import feather from 'feather-icons';
 import AccProkerModal from '../components/Modals/AccProkerModal';
+import FileProposalModal from '../components/Modals/FileProposalModal';
+import FileRABModal from '../components/Modals/FileRABModal';
 
 const ProgramKerjaAdmin = () => {
     const location = useLocation();
@@ -10,6 +12,8 @@ const ProgramKerjaAdmin = () => {
     const [showAccModal, setShowAccModal] = useState(false);
     const [selectedProkerId, setSelectedProkerId] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [fileData, setFileData] = useState(null);
 
     const role = localStorage.getItem('role');
 
@@ -69,6 +73,12 @@ const ProgramKerjaAdmin = () => {
       fetchData();
     }
 
+    const handleShowModal = async (file) => {
+      setFileData(file);
+      console.log("fileData: ", file);
+      setShowModal(true);
+    };
+
     const renderButton = (kak) => {
           return (
               <div>
@@ -79,7 +89,7 @@ const ProgramKerjaAdmin = () => {
                       data-bs-target="#pesanModal"
                       onClick={() => handleShowAccModal(kak, "acc")}
                   >
-                      <i className="align-middle" data-feather="check"></i> Acc
+                      <i className="bi-check2"></i> Acc
                   </button>
                   <button
                       className="btn btn-warning mt-2"
@@ -88,7 +98,7 @@ const ProgramKerjaAdmin = () => {
                       data-bs-target="#pesanModal"
                       onClick={() => handleShowAccModal(kak, "revisi")}
                   >
-                      <i className="align-middle" data-feather="edit"></i> Revisi
+                      <i className="bi-edit"></i> Revisi
                   </button>
                   <button
                       className="btn btn-danger mt-2"
@@ -97,7 +107,7 @@ const ProgramKerjaAdmin = () => {
                       data-bs-target="#pesanModal"
                       onClick={() => handleShowAccModal(kak, "tolak")}
                   >
-                      <i className="align-middle" data-feather="trash"></i> Tolak
+                      <i className="bi-trash"></i> Tolak
                   </button>
               </div>
           );
@@ -148,8 +158,18 @@ const ProgramKerjaAdmin = () => {
                                   <td>{proker.tanggal_akhir}</td>
                                   <td>{proker.status}</td>
                                   <td>{proker.catatan}</td>
-                                  <td>{proker.file_proposal}</td>
-                                  <td>{proker.file_rab}</td>
+                                  <td>
+                                    <a onClick={() => handleShowModal(proker.file_proposal)} data-bs-toggle="modal" data-bs-target="#FileProposalModal" href='#'>
+                                    Dokumen Proposal
+                                    </a>
+                                    <FileProposalModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                  </td>
+                                  <td>
+                                    <a onClick={() => handleShowModal(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
+                                    Dokumen RAB
+                                    </a>
+                                    <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                  </td>
 
                                   <td>
                                     {role === 'admin' ? (

@@ -10,7 +10,7 @@ class AcademicEventController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => []]);
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
     }
     
     public function index()

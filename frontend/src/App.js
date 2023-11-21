@@ -27,6 +27,8 @@ import KelolaAkun from './pages/KelolaAkun.js';
 import KetuaOrmawa from './pages/KetuaOrmawa.js';
 import Profil from './pages/Profil.js';
 import EditKAK from './components/SubMenu/EditKAK.js';
+import Landing from './pages/Landing.js';
+import MorePengumuman from './pages/MorePengumuman.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -50,7 +52,7 @@ function checkAuthorization() {
     const userHasAuthorization = checkAuthorization(); 
 
     if (!userHasAuthorization) {
-      return <Navigate to={`/`} />;
+      return <Navigate to={`/login`} />;
     }
 
     return children;
@@ -61,27 +63,27 @@ function App() {
   const [loading, setLoading] = useState(true); // New state to track loading
   const [token, setToken] = useState('');
   
-  const refreshAuthToken = async (e) => {
-    try {  
-      // Only attempt to refresh if there is a token
-      if (e) {
-        const response = await axios.post('/api/auth/refresh');
-        const refreshedToken = response.data.access_token;
+  // const refreshAuthToken = async (e) => {
+  //   try {  
+  //     // Only attempt to refresh if there is a token
+  //     if (e) {
+  //       const response = await axios.post('/api/auth/refresh');
+  //       const refreshedToken = response.data.access_token;
   
-        localStorage.setItem('token', refreshedToken);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${refreshedToken}`;
-        console.log("Token refreshed:", refreshedToken);
-      }
-    } catch (error) {
-      console.error('Error refreshing token:', error);
+  //       localStorage.setItem('token', refreshedToken);
+  //       axios.defaults.headers.common['Authorization'] = `Bearer ${refreshedToken}`;
+  //       console.log("Token refreshed:", refreshedToken);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error refreshing token:', error);
   
-      // If there is an error, or token is not available, handle the error or redirect to login
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
-      // Use the navigate function to perform the redirection if you are inside a component that has access to it
-      return <Navigate to={`/`} />;
-    }
-  };
+  //     // If there is an error, or token is not available, handle the error or redirect to login
+  //     localStorage.removeItem('token');
+  //     localStorage.removeItem('role');
+  //     // Use the navigate function to perform the redirection if you are inside a component that has access to it
+  //     return <Navigate to={`/`} />;
+  //   }
+  // };
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -91,7 +93,7 @@ function App() {
       setToken(localStorage.getItem('token'));
 
       // Call the refreshAuthToken function
-      await refreshAuthToken(token);
+      // await refreshAuthToken(token);
     };
 
     fetchUserRole();
@@ -107,6 +109,16 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={
+          <>
+            <Landing />
+          </>
+        }/>
+        <Route path="/pengumuman-more" element={
+          <>
+            <MorePengumuman />
+          </>
+        }/>
+        <Route path="/login" element={
           <>
             <Login />
           </>
@@ -252,7 +264,9 @@ function App() {
               <Footer />
             </div>
           </div>
-        }/>        <Route path="/edit-kak/:kakId" element={
+        }/>
+        
+        <Route path="/edit-kak/:kakId" element={
           <div className="wrapper">
             <Sidebar />
             <div className="main">

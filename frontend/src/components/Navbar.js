@@ -63,7 +63,8 @@ const Navbar = () => {
 
                         {userData && (
                             <a className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <img src="img/avatars/avatar.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" />
+                                <img src="img/avatars/profil.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" />
+                                {/* <img src="assets/instagram.svg" alt="instagram"/> */}
                                 <span className="text-dark">{userData.nama}</span>
                             </a>
                         )}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import TambahOrmawaModal from '../components/Modals/TambahOrmawaModal.js';
 import EditOrmawaModal from '../components/Modals/EditOrmawaModal.js';
+import Swal from 'sweetalert2';
 
 const Ormawa = () => {
   const history = useNavigate();
@@ -40,22 +41,40 @@ const Ormawa = () => {
   };
 
   const handleDelete = (id_ormawa) => {
-    const isConfirmed = window.confirm('Are you sure you want to delete this item?');
-
-    if (isConfirmed) {
-      axios.delete(`/api/ormawa/${id_ormawa}`)
-        .then((response) => {
-          console.log(response.data.message); 
-        })
-        .catch((error) => {
-          console.error('Error deleting item:', error);
-        });
-
-      setShowModal(false);
-    }
-
-    fetchData();
-};
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`/api/ormawa/${id_ormawa}`)
+          .then((response) => {
+            console.log(response.data.message);
+            Swal.fire(
+              'Deleted!',
+              'The item has been deleted.',
+              'success'
+            );
+          })
+          .catch((error) => {
+            console.error('Error deleting item:', error);
+            Swal.fire(
+              'Error!',
+              'Failed to delete the item.',
+              'error'
+            );
+          });
+  
+        setShowModal(false);
+        fetchData(); // Gantilah ini dengan fungsi untuk mengambil data baru
+      }
+    });
+  };
+  
 
   return (
     <main className="content">
@@ -94,9 +113,9 @@ const Ormawa = () => {
                           <td>{ormawa.nama_ormawa}</td>
                           <td>{ormawa.pembina}</td>
                             {role === 'admin' && <td>
-                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(ormawa.id_ormawa)} data-bs-toggle="modal" data-bs-target="#editOrmawaModal"><span className="align-middle">Edit</span></button>
+                                        <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(ormawa.id_ormawa)} data-bs-toggle="modal" data-bs-target="#editOrmawaModal"><span className="align-middle"><i className='bi-pencil'></i></span></button>
                                         <EditOrmawaModal showModal={handleShowEditModal} setShowModal={setShowEditModal} reloadData={fetchData} IdOrmawa={IdOrmawa}/>
-                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(ormawa.id_ormawa)}>Hapus</button>
+                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(ormawa.id_ormawa)}><i className='bi-trash'></i></button>
                                     </td>
                                     }
                                     {role !== 'admin' && <td>-</td>

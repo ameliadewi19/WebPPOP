@@ -54,7 +54,7 @@ function Login() {
                   <div className="text-center mt-4">
                   <h1 className="h2">Login Web Pengelolaan Ormawa POLBAN</h1>
                   <p className="lead">
-                    Sign in to your account to continue
+                    Sign in to your account to continue 
                   </p>
                 </div>
                 </div>
@@ -62,14 +62,36 @@ function Login() {
                   <div className="m-sm-3">
                     <form onSubmit={handleSubmit}>
                       <div className="mb-3">
-                        <label className="form-label">
-                            <i className="bi bi-envelope-fill me-2"></i> Email
-                        </label>
-                        <input className="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleInputChange} />
+                          <label className="form-label">
+                              Email
+                          </label>
+                          <div className="input-group">
+                              <span className="input-group-text"><i className="bi bi-envelope-fill"></i></span>
+                              <input
+                                  className="form-control form-control-lg"
+                                  type="email"
+                                  name="email"
+                                  placeholder="Enter your email"
+                                  value={formData.email}
+                                  onChange={handleInputChange}
+                              />
+                          </div>
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Password</label>
-                        <input className="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" value={formData.password} onChange={handleInputChange} />
+                          <label className="form-label">
+                              Password
+                          </label>
+                          <div className="input-group">
+                              <span className="input-group-text"><i className="bi bi-lock-fill"></i></span>
+                              <input
+                                  className="form-control form-control-lg"
+                                  type="password"
+                                  name="password"
+                                  placeholder="Enter your password"
+                                  value={formData.password}
+                                  onChange={handleInputChange}
+                              />
+                          </div>
                       </div>
                       <div className="d-grid gap-2 mt-3">
                         <button type="submit" className="btn btn-lg btn-primary">Sign in</button>
