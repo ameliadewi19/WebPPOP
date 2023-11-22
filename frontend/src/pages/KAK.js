@@ -96,7 +96,7 @@ const KAK = () => {
                 <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <h5 className="card-title">KAK</h5>
-                    <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
+                    <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={true || isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
