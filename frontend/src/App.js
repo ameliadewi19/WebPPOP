@@ -284,7 +284,6 @@ function App() {
             <div className="main">
               <Navbar />
               <KetuaOrmawa />
-              <EditKAK />
               <Footer />
             </div>
           </div>
