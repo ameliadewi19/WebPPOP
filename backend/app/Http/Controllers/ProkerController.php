@@ -7,6 +7,7 @@ use App\Models\KAK;
 use App\Models\Ormawa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class ProkerController extends Controller
 {
@@ -36,7 +37,7 @@ class ProkerController extends Controller
     public function show($id)
     {
         $prokers = Proker::with('kak.ketua_ormawa.ormawa')
-                 ->where('id', $id) // Menambahkan kondisi where
+                 ->where('id_proker', $id) // Menambahkan kondisi where
                  ->get();
 
         if (!$prokers) {
@@ -65,17 +66,42 @@ class ProkerController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'id_proker' => 'required',
+            'file_proposal' => 'file',
+            'file_rab' => 'file',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
+
         $proker = Proker::find($id);
         if (!$proker) {
             return response()->json(['message' => 'Proker not found'], 404);
         }
-        $proker->update($request->all());
+
+        // Simpan file Proposal
+        if ($request->hasFile('file_proposal')) {
+            $fileProposal = $request->file('file_proposal');
+            $fileNameProposal  = $id . '_' . $fileProposal->getClientOriginalName();
+            $fileProposal->move(public_path('uploads/proposal'), $fileNameProposal);
+
+        }
+
+        // Simpan file RAB
+        if ($request->hasFile('file_rab')) {
+            $fileRAB = $request->file('file_rab');
+            $fileNameRAB  = $id . '_' . $fileRAB->getClientOriginalName();
+            $fileRAB->move(public_path('uploads/proposal'), $fileNameRAB);
+
+        }
+        $proker->update([
+            'nama_kegiatan' => $request->input('nama_kegiatan'),
+            'tanggal_mulai' => $request->input('tanggal_mulai'),
+            'tanggal_akhir' => $request->input('tanggal_akhir'),
+            'status' => $request->input('status'),
+            'file_proposal' => $fileNameProposal ?? $proker->file_proposal,
+            'file_rab' => $fileNameRAB ?? $proker->file_rab,
+        ]);
         return response()->json($proker, 201);
     }
 
@@ -105,5 +131,22 @@ class ProkerController extends Controller
         } else {
             return response()->json(['message' => 'Proker not found'], 404);
         }
+    }
+
+    public function getFile($filename)
+    {
+        $path = public_path('uploads/proposal/'. $filename);
+
+        if (!File::exists($path)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        // $file = File::get($path);
+        // $type = File::mimeType($path);
+
+        // $response = response()->make($file, 200);
+        // $response->header('Content-Type', $type);
+
+        return response()->file($path, ['Content-Type' => 'application/pdf']);
     }
 }

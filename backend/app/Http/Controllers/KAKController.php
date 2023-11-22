@@ -62,23 +62,21 @@ class KAKController extends Controller
         if ($request->hasFile('file_kak')) {
             $fileKAK = $request->file('file_kak');
             $fileNameKAKTemp  = time() . '_' . $fileKAK->getClientOriginalName();
-            $fileKAK->move(public_path('uploads'), $fileNameKAKTemp);
-            $fileKAKPath = 'uploads/' . $fileNameKAKTemp;
+            $fileKAK->move(public_path('uploads/kak'), $fileNameKAKTemp);
         }
 
         // Simpan file RAB
         if ($request->hasFile('file_rab')) {
             $fileRAB = $request->file('file_rab');
             $fileNameRABTemp  = time() . '_' . $fileRAB->getClientOriginalName();
-            $fileRAB->move(public_path('uploads'), $fileNameRABTemp);
-            $fileRABPath = 'uploads/' . $fileNameRABTemp;
+            $fileRAB->move(public_path('uploads/kak'), $fileNameRABTemp);
         }
 
         // Create the KAK record with specified fields
         $kak = KAK::create([
             'id_ketua' => $request->input('id_ketua'),
-            'file_kak' => $fileKAKPath,
-            'file_rab' => $fileRABPath,
+            'file_kak' => $fileNameKAKTemp,
+            'file_rab' => $fileNameRABTemp,
             'status' => 'Diajukan', // Set status to "Diajukan"
             'catatan' => '', // Set catatan to an empty string
         ]);
@@ -92,12 +90,10 @@ class KAKController extends Controller
 
             // Ubah nama file menjadi id_kak_namafile
             if ($fileKAKPath) {
-                rename(public_path('uploads') . '/' . $fileNameKAKTemp, public_path('uploads') . '/' . $newFileNameKAK);
-                $fileKAKPath = 'uploads/' . $newFileNameKAK;
+                rename(public_path('uploads/kak') . '/' . $fileNameKAKTemp, public_path('uploads/kak') . '/' . $newFileNameKAK);
             }
             if ($fileRABPath) {
-                rename(public_path('uploads') . '/' . $fileNameRABTemp, public_path('uploads') . '/' . $newFileNameRAB);
-                $fileRABPath = 'uploads/' . $newFileNameRAB;
+                rename(public_path('uploads/kak') . '/' . $fileNameRABTemp, public_path('uploads/kak') . '/' . $newFileNameRAB);
             }
 
             $kak->file_kak = $newFileNameKAK;
@@ -178,10 +174,11 @@ class KAKController extends Controller
 
     public function update(Request $request, $id)
     {
+        dd($request->all());
         $validator = Validator::make($request->all(), [
             'file_kak' => 'file',
             'file_rab' => 'file',
-            'prokers' => 'required|array', // Validate "prokers" as an array
+            'prokers' => 'required|array|min:1', // Validate "prokers" as an array
         ]);
 
         if ($validator->fails()) {
@@ -198,13 +195,13 @@ class KAKController extends Controller
         if ($request->hasFile('file_kak')) {
             // Delete old file
             if ($kak->file_kak) {
-                unlink(public_path('uploads'),($kak->file_kak));
+                unlink(public_path('uploads/kak'),($kak->file_kak));
             }
 
             // Upload new file
             $fileKAK = $request->file('file_kak');
             $fileNameKAK = $id . '_' . $fileKAK->getClientOriginalName();
-            $fileKAK->move(public_path('uploads'), $fileNameKAK);
+            $fileKAK->move(public_path('uploads/kak'), $fileNameKAK);
             $kak->file_kak = $fileNameKAK;
         }
 
@@ -218,7 +215,7 @@ class KAKController extends Controller
             // Upload new file
             $fileRAB = $request->file('file_rab');
             $fileNameRAB = $id . '_' . $fileRAB->getClientOriginalName();
-            $fileRAB->move(public_path('uploads'), $fileNameRAB);
+            $fileRAB->move(public_path('uploads/kak'), $fileNameRAB);
             $kak->file_rab = $fileNameRAB;
         }
 
@@ -226,7 +223,7 @@ class KAKController extends Controller
         $id_kak = $kak->id_kak;
 
         // Update or create associated "proker" records
-        $prokers = [];
+        $new_prokers = [];
         if ($request->has('prokers')) {
             foreach ($request->input('prokers') as $prokerData) {
                 // Jika ID proker tidak ada, berarti ini merupakan proker baru.
@@ -235,8 +232,8 @@ class KAKController extends Controller
                     $prokerData['status'] = 'Diajukan';
                     $prokerData['catatan'] = '';
         
-                    $proker = Proker::create($prokerData);
-                    $prokers[] = $proker;
+                    $new_proker = Proker::create($prokerData);
+                    $new_prokers[] = $proker;
                 } else {
                     $proker = Proker::find($prokerData['id_proker']);
         
@@ -245,9 +242,9 @@ class KAKController extends Controller
                             'nama_kegiatan' => $prokerData['nama_kegiatan'],
                             'jenis_kegiatan' => $prokerData['jenis_kegiatan'],
                             'ketua_pelaksana' => $prokerData['ketua_pelaksana'],
-                            'deskrpisi_kegiatan' => $prokerData['deskrpisi_kegiatan'],
+                            'deskripsi_kegiatan' => $prokerData['deskripsi_kegiatan'],
                         ]);
-                        $prokers[] = $proker;
+                        $new_prokers[] = $proker;
                     } else {
                         return response()->json(['message' => 'Proker not found for ID: ' . $prokerData['id']], 404);
                     }
@@ -255,7 +252,7 @@ class KAKController extends Controller
             }
         }
 
-        return response()->json(['kak' => $kak, 'prokers' => $prokers], 200);
+        return response()->json(['kak' => $kak, 'prokers' => $new_prokers], 200);
     }
 
 
@@ -285,7 +282,7 @@ class KAKController extends Controller
     // Method for handling HTTP GET requests to show file
     public function getFile($filename)
     {
-        $path = public_path('uploads/'. $filename);
+        $path = public_path('uploads/kak/'. $filename);
 
         if (!File::exists($path)) {
             return response()->json(['message' => 'File not found'], 404);

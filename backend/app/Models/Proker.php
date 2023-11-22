@@ -24,7 +24,6 @@ class Proker extends Model
         'izin_submit',
         'jenis_kegiatan',
         'izin_submit',
-        'jenis_kegiatan',
     ];
 
     public function kak(){
