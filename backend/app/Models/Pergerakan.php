@@ -8,9 +8,12 @@ class Pergerakan extends Model
 {
     protected $table = 'pergerakan'; // Nama tabel database yang sesuai
     protected $primaryKey = 'id_pergerakan';
+    // public $incrementing = true;
     protected $fillable = [
-        'deskripsi_kegiatan',
+        'id_proker',
+        'id_kak',
         'nama_pergerakan',
+        'deskripsi_pergerakan',
     ];
 
     // Tambahkan properti-properitas atau metode-metode tambahan sesuai kebutuhan

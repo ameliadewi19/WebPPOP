@@ -36,7 +36,7 @@ class ProkerController extends Controller
     public function show($id)
     {
         $prokers = Proker::with('kak.ketua_ormawa.ormawa')
-                 ->where('id', $id) // Menambahkan kondisi where
+                 ->where('id_proker', $id) // Menambahkan kondisi where
                  ->get();
 
         if (!$prokers) {
