@@ -181,8 +181,9 @@ Route::group([
     Route::get('/', [ProkerController::class, 'index']);
     Route::get('/{id}', [ProkerController::class, 'show']);
     Route::post('/', [ProkerController::class, 'store']);
-    Route::put('/{id}', [ProkerController::class, 'update']);
+    Route::post('/{id}', [ProkerController::class, 'update']);
     Route::delete('/{id}', [ProkerController::class, 'destroy']);
+    Route::get('/file/{filename}', [ProkerController::class, 'getFile']);
     Route::put('/izin-submit/{id}', [ProkerController::class, 'ubahIzinSubmit']);
     Route::get('/getProker', [ProkerController::class, 'getTotalProkerTiapOrmawa']);
 });
@@ -216,6 +217,7 @@ Route::group([
     Route::put('/{id}', [LPJController::class, 'update']);
     Route::delete('/{id}', [LPJController::class, 'destroy']);
     Route::delete('pergerakan/{id}', [PergerakanController::class,'destroy']);
+    Route::get('/file/{filename}', [LPJController::class, 'getFile']);
 });
 
 // API routes for verifikasi Proker

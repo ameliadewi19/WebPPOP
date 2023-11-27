@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LPJ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class LPJController extends Controller
 {
@@ -33,7 +34,7 @@ class LPJController extends Controller
     // Method for handling HTTP GET requests to show a single product
     public function show($id)
     {
-        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')->where('id_lpj', $id)->get();
+        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')->where('id_proker', $id)->get();
 
         if (!$lpjs) {
             return response()->json(['message' => 'LPJ not found'], 404);
@@ -47,14 +48,37 @@ class LPJController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_proker' => 'required',
-            'file_lpj' => 'required'
+            'file_lpj' => 'required|file',
+            'file_rab_lpj' => 'required|file',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $lpj = LPJ::create($request->all());
+        $id_proker = $request->input('id_proker');
+
+        // Simpan file LPJ
+        if ($request->hasFile('file_lpj')) {
+            $fileLPJ = $request->file('file_lpj');
+            $fileNameLPJ  = $id_proker . '_' . $fileLPJ->getClientOriginalName();
+            $fileLPJ->move(public_path('uploads/lpj'), $fileNameLPJ);
+        }
+
+        // Simpan file RAB LPJ
+        if ($request->hasFile('file_rab_lpj')) {
+            $fileRAB = $request->file('file_rab_lpj');
+            $fileNameRAB  = $id_proker . '_' . $fileRAB->getClientOriginalName();
+            $fileRAB->move(public_path('uploads/lpj'), $fileNameRAB);
+        }
+
+        $lpj = LPJ::create([
+            'id_proker' => $id_proker,
+            'file_lpj' => $fileNameLPJ,
+            'file_rab_lpj' => $fileNameRAB,
+            'status' => $request->input('status'),
+            'catatan' => $request->input('catatan'),
+        ]);
         return response()->json($lpj, 201);
     }
 
@@ -85,5 +109,22 @@ class LPJController extends Controller
         }
         $lpj->delete();
         return response()->json(['message' => 'LPJ deleted successfully'], 200);
+    }
+
+    public function getFile($filename)
+    {
+        $path = public_path('uploads/lpj/'. $filename);
+
+        if (!File::exists($path)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        // $file = File::get($path);
+        // $type = File::mimeType($path);
+
+        // $response = response()->make($file, 200);
+        // $response->header('Content-Type', $type);
+
+        return response()->file($path, ['Content-Type' => 'application/pdf']);
     }
 }

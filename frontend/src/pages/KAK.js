@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
 import 'bootstrap/dist/js/bootstrap.bundle';
-import EditKAKModal from '../components/Modals/EditKAKModal';
 import FileKAKModal from '../components/Modals/FileKAKModal';
-import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { DataTable } from 'simple-datatables';
 import FileRABModal from '../components/Modals/FileRABModal';
@@ -98,7 +96,7 @@ const KAK = () => {
                 <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <h5 className="card-title">KAK</h5>
-                    <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
+                    <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={true || isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
@@ -119,13 +117,13 @@ const KAK = () => {
                                         <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
                                             Dokumen KAK
                                         </a>
-                                        <FileKAKModal pdfData={kak.file_kak} showModal={showModal} setShowModal={setShowModal} />
+                                        <FileKAKModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                                     </td>
                                     <td>
                                         <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
                                             Dokumen RAB
                                         </a>
-                                        <FileRABModal pdfData={kak.file_rab} showModal={showModal} setShowModal={setShowModal} />
+                                        <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                                     </td>
                                     <td>{kak.status}</td>
                                     <td>{kak.catatan}</td>
