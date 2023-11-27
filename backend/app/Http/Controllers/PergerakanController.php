@@ -37,9 +37,6 @@ class PergerakanController extends Controller
 
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        $pergerakan = Pergerakan::create($request->all());
-=======
         $this->validate($request, [
             'id_proker' => 'required',
             'id_kak' => 'required',
@@ -54,7 +51,6 @@ class PergerakanController extends Controller
         $pergerakan->deskripsi_pergerakan = $request->deskripsi_pergerakan;
         $pergerakan->save();
 
->>>>>>> 6635bf00d355141ceb449d090409241bf3f776eb
         return response()->json($pergerakan, 201);
     }
 
@@ -67,22 +63,16 @@ class PergerakanController extends Controller
         }
 
         $this->validate($request, [
-<<<<<<< HEAD
-=======
             'id_proker' => 'required',
             'id_kak' => 'required',
             'deskripsi_pergerakan' => 'required',
->>>>>>> 6635bf00d355141ceb449d090409241bf3f776eb
             'nama_pergerakan' => 'required',
-            'deskripsi_pergerakan' => 'required',
+            // 'deskripsi_pergerakan' => 'required',
         ]);
 
-<<<<<<< HEAD
-=======
         $pergerakan->id_proker = $request->id_proker;
         $pergerakan->id_kak = $request->id_kak;
         $pergerakan->deskripsi_pergerakan = $request->deskripsi_pergerakan;
->>>>>>> 6635bf00d355141ceb449d090409241bf3f776eb
         $pergerakan->nama_pergerakan = $request->nama_pergerakan;
         $pergerakan->deskripsi_pergerakan = $request->deskripsi_pergerakan;
         $pergerakan->save();
