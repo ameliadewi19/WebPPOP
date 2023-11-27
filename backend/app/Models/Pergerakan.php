@@ -10,12 +10,6 @@ class Pergerakan extends Model
     protected $primaryKey = 'id_pergerakan';
     // public $incrementing = true;
     protected $fillable = [
-<<<<<<< HEAD
-        'nama_pergerakan',
-        'deskripsi_pergerakan',
-    ];
-}
-=======
         'id_proker',
         'id_kak',
         'nama_pergerakan',
@@ -34,4 +28,3 @@ class Pergerakan extends Model
         return $this->belongsTo(Proker::class, 'id_proker');
     }
 }
->>>>>>> 6635bf00d355141ceb449d090409241bf3f776eb
