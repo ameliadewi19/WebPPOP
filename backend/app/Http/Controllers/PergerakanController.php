@@ -13,7 +13,7 @@ class PergerakanController extends Controller
     }
     public function index()
     {
-        $pergerakan = Pergerakan::all();
+        $pergerakan = Pergerakan::with('proker.kak.ketua_ormawa.ormawa')->get();
 
         if ($pergerakan->isEmpty()) {
             return response()->json(['message' => 'No KAKs found'], 404);
@@ -24,7 +24,9 @@ class PergerakanController extends Controller
 
     public function show($id)
     {
-        $pergerakan = Pergerakan::find($id);
+        $pergerakan = Pergerakan::with('proker.kak.ketua_ormawa.ormawa')
+                    ->where('id_pergerakan', $id)
+                    ->get();
 
         if (!$pergerakan) {
             return response()->json(['message' => 'Pergerakan not found'], 404);

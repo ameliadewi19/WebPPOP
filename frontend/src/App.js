@@ -9,6 +9,7 @@ import Footer from './components/Footer.js';
 
 import Login from './pages/Login.js';
 import Pergerakan from './pages/Pergerakan.js';
+import PergerakanAdmin from './pages/PergerakanAdmin.js';
 import Dashboard from './pages/Dashboard.js';
 import DashboardAdmin from './pages/DashboardAdmin.js';
 import KAK from './pages/KAK.js';
@@ -177,7 +178,7 @@ function App() {
               <Sidebar />
               <div className="main">
                 <Navbar />
-                <Pergerakan />
+                {userRole === 'ormawa' ? <Pergerakan /> : <PergerakanAdmin />}
                 <Footer />
               </div>
             </div>

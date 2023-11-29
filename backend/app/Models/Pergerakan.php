@@ -23,4 +23,8 @@ class Pergerakan extends Model
     {
         return $query->where('id_pergerakan', $id_pergerakan);
     }
+
+    public function proker(){
+        return $this->belongsTo(Proker::class, 'id_proker');
+    }
 }
