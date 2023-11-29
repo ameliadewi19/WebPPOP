@@ -5,6 +5,7 @@ import { DataTable } from 'simple-datatables';
 import UploadProposalModal from '../components/Modals/UploadProposalModal';
 import FileProposalModal from '../components/Modals/FileProposalModal';
 import FileRABProkerModal from '../components/Modals/FileRABProkerModal';
+import EditProposalModal from '../components/Modals/EditProposalModal';
 
 const ProgramKerja = () => {
     const location = useLocation();
@@ -46,7 +47,7 @@ const ProgramKerja = () => {
     };
 
     const handleEdit = (id) => {
-        navigate(`/proker/${id}`);
+      setSelectedProkerId(id);
     }
 
     const handleShowModal = (idProker) => {
@@ -128,13 +129,20 @@ const ProgramKerja = () => {
                                     <td>{proker.catatan}</td>
                                     <td>
                                       {proker.status === 'Diajukan' ?  
-                                        <button class="btn btn-primary mt-2" style={{ marginRight: '5px' }} onClick={() => handleShowModal(proker.id_proker)} data-bs-toggle="modal" data-bs-target="#uploadProposalModal"
-                                        disabled={proker.kak.status !== 'Acc tahap akhir'}><i className='bi-upload'></i> Proposal</button>
+                                          <button class="btn btn-primary mt-2" style={{ marginRight: '5px' }} onClick={() => handleShowModal(proker.id_proker)} data-bs-toggle="modal" data-bs-target="#uploadProposalModal"
+                                          disabled={proker.kak.status != 'Acc tahap akhir'}><i className='bi-upload'></i> Proposal</button>
                                         :
-                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.id_proker)} style={{marginRight: '5px'}}
-                                        disabled={proker.status === 'Acc tahap akhir'}><i className='bi-pencil-square'></i> Edit</button>
+                                          <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.id_proker)} style={{marginRight: '5px'}} data-bs-toggle="modal" data-bs-target="#editProposalModal"
+                                          disabled={proker.status === 'Acc tahap akhir'}>
+                                            {proker.status === 'Revisi tahap 1' || proker.status === 'Tolak tahap 1' ? (
+                                              <><i className='bi-upload'></i> Revisi</>
+                                            ) : (
+                                              <i className='bi-pencil-square'></i>
+                                            )}
+                                          </button>
                                       }
                                       <UploadProposalModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
+                                      <EditProposalModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
                                     </td>
                                 </tr>
                             ))}
