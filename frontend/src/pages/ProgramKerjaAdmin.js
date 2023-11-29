@@ -160,16 +160,32 @@ const ProgramKerjaAdmin = () => {
                                   <td>{proker.status}</td>
                                   <td>{proker.catatan}</td>
                                   <td>
+                                  {proker.status !== 'Diajukan' ? ( 
+                                    <>
                                     <a onClick={() => handleShowModal(proker.file_proposal)} data-bs-toggle="modal" data-bs-target="#FileProposalModal" href='#'>
                                     Dokumen Proposal
                                     </a>
                                     <FileProposalModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                    </>
+                                    ) : 
+                                    (
+                                      <p>-</p>
+                                    )
+                                  }
                                   </td>
                                   <td>
+                                  {proker.status !== 'Diajukan' ? ( 
+                                    <>
                                     <a onClick={() => handleShowModal(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
                                     Dokumen RAB
                                     </a>
                                     <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                    </>
+                                    ) : 
+                                    (
+                                      <p>-</p>
+                                    )
+                                  }
                                   </td>
 
                                   <td>

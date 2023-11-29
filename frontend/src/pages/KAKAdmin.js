@@ -175,7 +175,7 @@ const KAKAdmin = () => {
                             <td>
                                     {role === 'admin' ? (
                                         kak.status === 'Acc tahap akhir' ? 'kak selesai diproses' :
-                                        kak.status === 'Submit proposal' ||
+                                        kak.status === 'Diajukan' ||
                                         kak.status === 'Revisi tahap 1' ||
                                         kak.status === 'Tolak tahap 1' ?
                                         'Belum di acc oleh Sekumbem' :
