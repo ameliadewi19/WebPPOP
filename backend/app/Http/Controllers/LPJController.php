@@ -85,20 +85,56 @@ class LPJController extends Controller
     // Method for handling HTTP PUT/PATCH requests to update a product
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [// Your logic for updating a product with the given ID based on the request data
-            'id_lpj' => 'required',
+        $validator = Validator::make($request->all(), [
+            'file_lpj' => 'file',
+            'file_rab_lpj' => 'file',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-        $lpj = LPJ::find($id);
+
+        $lpj = LPJ::where('id_proker', $id)->first();
+
         if (!$lpj) {
             return response()->json(['message' => 'LPJ not found'], 404);
         }
-        $lpj->update($request->all());
+
+        // Simpan file LPJ
+        if ($request->hasFile('file_lpj')) {
+            $fileLPJ = $request->file('file_lpj');
+            $fileNameLPJ  = $id . '_' . $fileLPJ->getClientOriginalName();
+            $filePathLPJ = public_path('uploads/lpj') . '/' . $fileNameLPJ;
+
+            // Hapus file lama jika sudah ada
+            if (file_exists($filePathLPJ)) {
+                unlink($filePathLPJ);
+            }
+
+            $fileLPJ->move(public_path('uploads/lpj'), $fileNameLPJ);
+            $lpj->file_lpj = $fileNameLPJ;
+        }
+
+        // Simpan file RAB LPJ
+        if ($request->hasFile('file_rab_lpj')) {
+            $fileRAB = $request->file('file_rab_lpj');
+            $fileNameRAB  = $id . '_' . $fileRAB->getClientOriginalName();
+            $filePathRAB = public_path('uploads/lpj') . '/' . $fileNameRAB;
+
+            // Hapus file lama jika sudah ada
+            if (file_exists($filePathRAB)) {
+                unlink($filePathRAB);
+            }
+
+            $fileRAB->move(public_path('uploads/lpj'), $fileNameRAB);
+            $lpj->file_rab_lpj = $fileNameRAB;
+        }
+
+        $lpj->update($request->except(['id_proker','file_lpj', 'file_rab_lpj'])); // Update other fields
+
         return response()->json($lpj, 201);
     }
+
 
     // Method for handling HTTP DELETE requests to delete a product
     public function destroy($id)
