@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import feather from 'feather-icons';
 import AccProkerModal from '../components/Modals/AccProkerModal';
 import FileProposalModal from '../components/Modals/FileProposalModal';
-import FileRABModal from '../components/Modals/FileRABModal';
+import FileRABProkerModal from '../components/Modals/FileRABProkerModal';
 
 const ProgramKerjaAdmin = () => {
     const location = useLocation();
@@ -99,7 +99,7 @@ const ProgramKerjaAdmin = () => {
                       data-bs-target="#pesanModal"
                       onClick={() => handleShowAccModal(kak, "revisi")}
                   >
-                      <i className="bi-edit"></i> Revisi
+                      <i className="bi-pencil"></i> Revisi
                   </button>
                   <button
                       className="btn btn-danger mt-2"
@@ -176,10 +176,10 @@ const ProgramKerjaAdmin = () => {
                                   <td>
                                   {proker.status !== 'Diajukan' ? ( 
                                     <>
-                                    <a onClick={() => handleShowModal(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
-                                    Dokumen RAB
+                                    <a onClick={() => handleShowModal(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRabProposalModal" href='#'>
+                                    Dokumen RAB 
                                     </a>
-                                    <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                    <FileRABProkerModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                                     </>
                                     ) : 
                                     (
