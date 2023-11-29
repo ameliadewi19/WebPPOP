@@ -51,7 +51,7 @@ const EditKAK = () => {
 
     const handleAddProker = () => {
         let object = {
-            id_proker: null,
+            id_proker: 0,
             nama_kegiatan: '',
             ketua_pelaksana: '',
             jenis_kegiatan: '',
@@ -118,7 +118,7 @@ const EditKAK = () => {
 
         logFormData(formDataWithPath);
         try {
-            const response = await axios.put(`/api/kak/${kakId}`, formDataWithPath, {
+            const response = await axios.post(`/api/kak/${kakId}`, formDataWithPath, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -127,7 +127,7 @@ const EditKAK = () => {
             console.log("update", response.data); // Output respons dari backend
             Swal.fire({
                 icon: "success",
-                title: "KAK berhasil diupload",
+                title: "KAK berhasil diubah",
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {

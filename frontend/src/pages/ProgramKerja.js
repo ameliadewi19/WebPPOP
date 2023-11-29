@@ -93,18 +93,37 @@ const ProgramKerja = () => {
                                     <td>{proker.nama_kegiatan}</td>
                                     <td>{proker.tanggal_mulai}</td>
                                     <td>{proker.tanggal_akhir}</td>
-                                    <td>
-                                      <a onClick={() => handleShowFile(proker.file_proposal)} data-bs-toggle="modal" data-bs-target="#FileProposalModal" href='#'>
-                                        Proposal {proker.nama_kegiatan}
-                                      </a>
-                                      <FileProposalModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                    </td>
-                                    <td>
-                                      <a onClick={() => handleShowFile(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRabProposalModal" href='#'>
-                                        RAB {proker.nama_kegiatan}
-                                      </a>
-                                      <FileRABProkerModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                    </td>
+                                    {proker.file_proposal && (
+                                      <>
+                                        <td>
+                                          <a
+                                            onClick={() => handleShowFile(proker.file_proposal)}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#FileProposalModal"
+                                            href="#"
+                                          >
+                                            Proposal {proker.nama_kegiatan}
+                                          </a>
+                                          <FileProposalModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                        <td>
+                                          <a
+                                            onClick={() => handleShowFile(proker.file_rab)}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#FileRabProposalModal"
+                                            href="#"
+                                          >
+                                            RAB {proker.nama_kegiatan}
+                                          </a>
+                                          <FileRABProkerModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                      </>
+                                    ) || (
+                                      <>
+                                        <td></td>
+                                        <td></td>
+                                      </>
+                                    )}
                                     <td>{proker.status}</td>
                                     <td>{proker.catatan}</td>
                                     <td>

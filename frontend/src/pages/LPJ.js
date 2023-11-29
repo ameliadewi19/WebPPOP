@@ -157,18 +157,27 @@ const LPJ = () => {
                                     <td>{proker.nama_kegiatan}</td>
                                     <td>{proker.tanggal_mulai}</td>
                                     <td>{proker.tanggal_akhir}</td>
-                                    <td>
-                                      <a onClick={() => handleShowFile(proker.lpj.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
-                                        LPJ {proker.nama_kegiatan}
-                                      </a>
-                                      <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                    </td>
-                                    <td>
-                                      <a onClick={() => handleShowFile(proker.lpj.file_rab_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
-                                        RAB LPJ {proker.nama_kegiatan}
-                                      </a>
-                                      <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                    </td>
+                                    {proker.lpj.file_lpj && (
+                                      <>
+                                        <td>
+                                          <a onClick={() => handleShowFile(proker.lpj.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
+                                            LPJ {proker.nama_kegiatan}
+                                          </a>
+                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                        <td>
+                                          <a onClick={() => handleShowFile(proker.lpj.file_rab_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
+                                            RAB LPJ {proker.nama_kegiatan}
+                                          </a>
+                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                      </>
+                                    ) || (
+                                      <>
+                                        <td></td>
+                                        <td></td>
+                                      </>
+                                    )}
                                     <td>{proker.lpj.status}</td>
                                     <td>{proker.lpj.catatan}</td>
                                     <td>

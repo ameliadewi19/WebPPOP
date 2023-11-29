@@ -72,6 +72,7 @@ const UploadKAK = ({ }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("formData", formData);
 
         const formDataWithPath = new FormData();
         formDataWithPath.append('id_ketua', idKetua);

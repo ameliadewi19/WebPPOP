@@ -148,7 +148,7 @@ Route::group([
     Route::get('/', [KAKController::class, 'index']);
     Route::get('/{id}', [KAKController::class, 'show']);
     Route::post('/', [KAKController::class, 'store']);
-    Route::put('/{id}', [KAKController::class, 'update']);
+    Route::post('/{id}', [KAKController::class, 'update']);
     Route::delete('/{id}', [KAKController::class, 'destroy']);
     Route::get('/file/{filename}', [KAKController::class, 'getFile']);
     Route::get('/jumlah', [KAKController::class, 'jumlah']);
