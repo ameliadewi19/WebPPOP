@@ -83,6 +83,13 @@ class ProkerController extends Controller
         if ($request->hasFile('file_proposal')) {
             $fileProposal = $request->file('file_proposal');
             $fileNameProposal  = $id . '_' . $fileProposal->getClientOriginalName();
+            $filePathProposal = public_path('uploads/proposal') . '/' . $fileNameProposal;
+    
+            // Hapus file lama jika sudah ada
+            if (file_exists($filePathProposal)) {
+                unlink($filePathProposal);
+            }
+    
             $fileProposal->move(public_path('uploads/proposal'), $fileNameProposal);
 
         }
@@ -91,6 +98,13 @@ class ProkerController extends Controller
         if ($request->hasFile('file_rab')) {
             $fileRAB = $request->file('file_rab');
             $fileNameRAB  = $id . '_' . $fileRAB->getClientOriginalName();
+            $filePathRAB = public_path('uploads/proposal') . '/' . $fileNameRAB;
+    
+            // Hapus file lama jika sudah ada
+            if (file_exists($filePathRAB)) {
+                unlink($filePathRAB);
+            }
+    
             $fileRAB->move(public_path('uploads/proposal'), $fileNameRAB);
 
         }
