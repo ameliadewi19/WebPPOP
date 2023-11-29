@@ -248,4 +248,18 @@ class KAKController extends Controller
 
         return response()->file($path, ['Content-Type' => 'application/pdf']);
     }
+
+    // Method for handling http get request to get single data by id_ketua
+   
+    public function getByIdKetua($id_ketua)
+    {
+        $kaks = KAK::where('id_ketua', $id_ketua)->get();
+        
+        if ($kaks->isEmpty()) {
+            return response()->json(['message' => 'No KAKs found'], 404);
+        }
+        
+        return response()->json($kaks, 200);
+    }
+
 }

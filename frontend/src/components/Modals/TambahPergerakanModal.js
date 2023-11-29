@@ -7,28 +7,30 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
         id_kak: '',
         nama_pergerakan: '',
         deskripsi_pergerakan: '',
+        id_kak_input: '',
     });
     const [dataProker, setDataProker] = useState([]);
     const modalRef = useRef();
 
     useEffect(() => {
         const idUser = localStorage.getItem('idUser');
-        // fetchOrmawa(idUser);
+        fetchOrmawa(idUser);
         fetchDataProker();
     }, []);
 
-    // const fetchOrmawa = (id) => {
-    //     axios.get(`/api/auth/get-ketua/${id}`)
-    //         .then((res) => {
-    //             setFormData({
-    //                 ...formData,
-    //                 id_kak: res.data.data.id_ketua,
-    //             });
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }
+    const fetchOrmawa = async (id) => {
+        await axios.get(`/api/auth/get-ketua/${id}`)
+            .then((res) => {
+                setFormData({
+                    ...formData,
+                    id_kak: res.data.data.id_ketua,
+                });
+                console.log("id_kak ", formData.id_kak);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     const fetchDataProker = async () => {
         try {
@@ -89,12 +91,11 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
                                     value={formData.id_proker}
                                     onChange={handleInputChange}
                                 >
-                                    {dataProker.map((proker, index) => (
-                                        <option key={index} value={proker.id_proker}>
-                                            {proker.nama_kegiatan}
-                                        </option>
+                                    <option value="">Select Proker</option>
+                                    {dataProker.map((proker) => (
+                                        <option key={proker.id_proker} value={proker.id_proker}>{proker.nama_kegiatan}</option>
                                     ))}
-                                    <option value="lainnya">lainnya</option>
+                                    <option value="0">lainnya</option>
                                 </select>
                             </div>
                             <div className="mb-3">
