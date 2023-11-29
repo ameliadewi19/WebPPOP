@@ -30,7 +30,8 @@ const ProgramKerjaAdmin = () => {
           if (role === "sekumbem") {
               filteredProkers = response.data.filter(proker =>
                   proker.status === 'Diajukan' ||
-                  proker.status === 'Submit proposal' ||
+                  proker.status === 'Acc tahap 1' ||
+                  proker.status === 'Unggah proposal' ||
                   proker.status === 'Revisi tahap 1' ||
                   proker.status === 'Tolak tahap 1'
               );
@@ -181,8 +182,7 @@ const ProgramKerjaAdmin = () => {
                                         'Belum di acc oleh Sekumbem' :
                                         renderButton(proker.id_proker)
                                     ) : (
-                                        role === 'sekumbem' && proker.status === 'Diajukan' ?
-                                        'Belum submit proposal' :
+                                        role === 'sekumbem' && proker.status === 'Unggah proposal' && 
                                         renderButton(proker.id_proker)
                                     )}
                                   </td>

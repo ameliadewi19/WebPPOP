@@ -181,8 +181,7 @@ const KAKAdmin = () => {
                                         'Belum di acc oleh Sekumbem' :
                                         renderButton(kak.id_kak)
                                     ) : (
-                                        role === 'sekumbem' && kak.status === 'Diajukan' ?
-                                        'Belum submit proposal' :
+                                        role === 'sekumbem' && kak.status === 'Diajukan' &&
                                         renderButton(kak.id_kak)
                                     )}
                             </td>

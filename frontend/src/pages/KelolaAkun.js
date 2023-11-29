@@ -99,10 +99,14 @@ const KelolaAkun = () => {
                   <div className="card">
                   <div className="card-header d-flex justify-content-between align-items-center">
                       <h5 className="card-title mt-2">Kelola Akun</h5>
+                      { role === 'admin' &&
+                        <>
                           <button className="btn btn-primary" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addAkunModal">
                             <i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Akun</span>
                           </button>
                           <TambahAkunModal showModal={showModal} setShowModal={setShowModal} reloadData={fetchData} />
+                        </>
+                      }
                   </div>
                   <div className="card-body">
                       <div className="table-responsive">

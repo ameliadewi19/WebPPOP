@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import feather from 'feather-icons';
 
 const ProgramKerja = () => {
     const location = useLocation();
     
     useEffect(() => {
-        feather.replasce(); // Replace the icons after component mounts
     }, []);
 
     return (
