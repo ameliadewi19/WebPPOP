@@ -9,9 +9,12 @@ const KalenderAkademik = () => {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         fetchKalenderAkademik();
+        const role = localStorage.getItem('role');
+        setRole(role);
     }, []);
 
     const fetchKalenderAkademik = async () => {
@@ -80,12 +83,17 @@ const KalenderAkademik = () => {
                     <div className="col-xl-12">
                         <div className="card">
                             <div className="card-header d-flex justify-content-between align-items-center">
+                                 
                                 <h5 className="card-title">Kalender Akademik</h5>
+                                { role === 'admin' &&
+                                <>
                                 <button className="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addKalenderAkademikModal">
                                     <i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Kalender Akademik</span>
                                 </button>
                                 {/* Add your Tambah Kalender Akademik modal component here */}
                                 <TambahKalenderAkademikModal showModal={showModal} setShowModal={setShowModal} fetchKalenderAkademik={fetchKalenderAkademik}/>
+                                </>
+                            }    
                             </div>
                             <div className="card-body">
                                 <div className="table-responsive">
@@ -107,11 +115,16 @@ const KalenderAkademik = () => {
                                                     <td>{item.tanggal_mulai}</td>
                                                     <td>{item.tanggal_selesai}</td>
                                                     <td>{item.nama_kegiatan}</td>
+                                                    { role === 'admin' &&
                                                     <td>
-                                                        <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(item.id_kegiatan)} data-bs-toggle="modal" data-bs-target="#editKalenderAkademikModal">Update</button>
+                                                        <button className="btn btn-sm btn-primary me-2" onClick={() => handleUpdate(item.id_kegiatan)} data-bs-toggle="modal" data-bs-target="#editKalenderAkademikModal"><i className='bi bi-pencil'></i></button>
                                                         <EditKalenderAkademikModal showEditModal={showEditModal} setShowEditModal={setShowEditModal} selectedItemId={selectedItemId} fetchKalenderAkademik={fetchKalenderAkademik}/>
-                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_kegiatan)}>Delete</button>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_kegiatan)}><i className='bi bi-trash'></i></button>
                                                     </td>
+                                                    }
+                                                    { role !== 'admin' &&
+                                                        <td>-</td>
+                                                    }
                                                     {/* Add more table data cells as needed */}
                                                 </tr>
                                             ))}

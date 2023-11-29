@@ -142,12 +142,17 @@ const Timeline = () => {
                                             day: 'numeric',
                                         })}
                                     </td>
+                                    {role === 'admin' && 
                                     <td>
                                         {/* <button className="btn btn-sm btn-primary" onClick={handleEdit}>Edit</button> */}
                                         <button class="btn btn-sm btn-primary me-2" onClick={() => handleShowEditModal(item.id_timeline)} data-bs-toggle="modal" data-bs-target="#editUploadKAKModal"><i className='bi-pencil'></i></button>
                                         <EditKegiatanTimelineModal showModal={showEditModal} setShowModal={setShowEditModal} reloadData={fetchTimeline} timelineId={editTimelineId}/>
                                         <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_timeline)}><i className='bi-trash'></i></button>
                                     </td>
+                                    }
+                                    {role !== 'admin' && 
+                                      <td>-</td>
+                                    }
                                     {role === 'admin' && item.izin_submit === 'true' && <td><button
                                         className="btn btn-sm btn-primary"
                                         onClick={() => handleIzinSubmit(item.id_timeline)}

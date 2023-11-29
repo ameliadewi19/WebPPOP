@@ -215,7 +215,7 @@ Route::group([
     Route::get('/', [LPJController::class, 'index']);
     Route::get('/{id}', [LPJController::class, 'show']);
     Route::post('/', [LPJController::class, 'store']);
-    Route::put('/{id}', [LPJController::class, 'update']);
+    Route::post('/{id}', [LPJController::class, 'update']);
     Route::delete('/{id}', [LPJController::class, 'destroy']);
     Route::delete('pergerakan/{id}', [PergerakanController::class,'destroy']);
     Route::get('/file/{filename}', [LPJController::class, 'getFile']);

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import feather from 'feather-icons';
 import AccProkerModal from '../components/Modals/AccProkerModal';
 import FileProposalModal from '../components/Modals/FileProposalModal';
-import FileRABModal from '../components/Modals/FileRABModal';
+import FileRABProkerModal from '../components/Modals/FileRABProkerModal';
 
 const ProgramKerjaAdmin = () => {
     const location = useLocation();
@@ -30,7 +30,8 @@ const ProgramKerjaAdmin = () => {
           if (role === "sekumbem") {
               filteredProkers = response.data.filter(proker =>
                   proker.status === 'Diajukan' ||
-                  proker.status === 'Submit proposal' ||
+                  proker.status === 'Acc tahap 1' ||
+                  proker.status === 'Unggah proposal' ||
                   proker.status === 'Revisi tahap 1' ||
                   proker.status === 'Tolak tahap 1'
               );
@@ -98,7 +99,7 @@ const ProgramKerjaAdmin = () => {
                       data-bs-target="#pesanModal"
                       onClick={() => handleShowAccModal(kak, "revisi")}
                   >
-                      <i className="bi-edit"></i> Revisi
+                      <i className="bi-pencil"></i> Revisi
                   </button>
                   <button
                       className="btn btn-danger mt-2"
@@ -159,16 +160,32 @@ const ProgramKerjaAdmin = () => {
                                   <td>{proker.status}</td>
                                   <td>{proker.catatan}</td>
                                   <td>
+                                  {proker.status !== 'Diajukan' ? ( 
+                                    <>
                                     <a onClick={() => handleShowModal(proker.file_proposal)} data-bs-toggle="modal" data-bs-target="#FileProposalModal" href='#'>
                                     Dokumen Proposal
                                     </a>
                                     <FileProposalModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                    </>
+                                    ) : 
+                                    (
+                                      <p>-</p>
+                                    )
+                                  }
                                   </td>
                                   <td>
-                                    <a onClick={() => handleShowModal(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
-                                    Dokumen RAB
+                                  {proker.status !== 'Diajukan' ? ( 
+                                    <>
+                                    <a onClick={() => handleShowModal(proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRabProposalModal" href='#'>
+                                    Dokumen RAB 
                                     </a>
-                                    <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                    <FileRABProkerModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                    </>
+                                    ) : 
+                                    (
+                                      <p>-</p>
+                                    )
+                                  }
                                   </td>
 
                                   <td>
@@ -181,8 +198,7 @@ const ProgramKerjaAdmin = () => {
                                         'Belum di acc oleh Sekumbem' :
                                         renderButton(proker.id_proker)
                                     ) : (
-                                        role === 'sekumbem' && proker.status === 'Diajukan' ?
-                                        'Belum submit proposal' :
+                                        role === 'sekumbem' && proker.status === 'Unggah proposal' && 
                                         renderButton(proker.id_proker)
                                     )}
                                   </td>

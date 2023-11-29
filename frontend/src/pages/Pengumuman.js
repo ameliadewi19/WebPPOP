@@ -9,9 +9,12 @@ const Pengumuman = () => {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         fetchPengumuman();
+        const role = localStorage.getItem('role');
+        setRole(role);
     }, []);
 
     const fetchPengumuman = async () => {
@@ -82,11 +85,15 @@ const Pengumuman = () => {
                         <div className="card">
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h5 className="card-title">Pengumuman</h5>
+                                {role === 'admin' && 
+                                <>
                                 <button className="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addPengumumanModal">
                                     <i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Pengumuman</span>
                                 </button>
                                 {/* Add your Tambah Pengumuman modal component here */}
                                 <TambahPengumumanModal showModal={showModal} setShowModal={setShowModal} fetchPengumuman={fetchPengumuman}/>
+                                </>
+                                }
                             </div>
                             <div className="card-body">
                                 <div className="table-responsive">
@@ -118,11 +125,16 @@ const Pengumuman = () => {
                                                         day: 'numeric',
                                                     })}
                                                     </td>
+                                                    {role === 'admin' && 
                                                     <td>
-                                                        <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(item.id_pengumuman)} data-bs-toggle="modal" data-bs-target="#editPengumumanModal">Update</button>
+                                                        <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(item.id_pengumuman)} data-bs-toggle="modal" data-bs-target="#editPengumumanModal"><i className='bi bi-pencil'></i></button>
                                                         <EditPengumumanModal showEditModal={showEditModal} setShowEditModal={setShowEditModal} selectedItemId={selectedItemId} fetchPengumuman={fetchPengumuman}/>
-                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_pengumuman)}>Delete</button>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_pengumuman)}><i className='bi bi-trash'></i></button>
                                                     </td>
+                                                    }
+                                                    {role !== 'admin' && 
+                                                        <td>-</td>
+                                                    }
                                                     {/* Add more table data cells as needed */}
                                                 </tr>
                                             ))}

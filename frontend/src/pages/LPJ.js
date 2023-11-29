@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { DataTable } from 'simple-datatables';
 import UploadLPJModal from '../components/Modals/UploadLPJModal';
 import FileLpjModal from '../components/Modals/FileLPJModal';
+import EditLPJModal from '../components/Modals/EditLPJModal';
 
 const LPJ = () => {
     const location = useLocation();
@@ -71,6 +72,7 @@ const LPJ = () => {
             catatan: '',
           }
         })));
+        fetchDatalpj();
     } catch (error) {
         console.error('Error fetching proker data:', error);
     }
@@ -114,8 +116,9 @@ const LPJ = () => {
       setSelectedProkerId(idlpj);
     }
 
-    const handleEdit = (id) => {
-      navigate(`/lpj/${id}`);
+    const handleEdit = (idLpj, idproker) => {
+      setSelectedlpjId(idLpj);
+      setSelectedProkerId(idproker);
     }
 
     const handleShowFile = (file) => {
@@ -182,13 +185,20 @@ const LPJ = () => {
                                     <td>{proker.lpj.catatan}</td>
                                     <td>
                                       {proker.status === 'Acc tahap akhir' && proker.lpj.file_lpj === '' ? 
-                                      <button class="btn btn-primary mt-2" style={{ marginRight: '5px' }} onClick={() => handleShowModal(proker.id_proker)} data-bs-toggle="modal" data-bs-target="#uploadLPJModal"
-                                        disabled={proker.status !== 'Acc tahap akhir'}><i className='bi-upload'></i> LPJ</button>
+                                        <button class="btn btn-primary mt-2" style={{ marginRight: '5px' }} onClick={() => handleShowModal(proker.id_proker)} data-bs-toggle="modal" data-bs-target="#uploadLPJModal"
+                                          disabled={proker.status !== 'Acc tahap akhir'}><i className='bi-upload'></i> LPJ</button>
                                       :
-                                      <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.lpj.id_lpj)} style={{marginRight: '5px'}}
-                                      disabled={proker.lpj.status === 'Acc tahap akhir'}><i className='bi-pencil-square'></i> Edit</button>
+                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.lpj.id_lpj, proker.id_proker)} style={{marginRight: '5px'}} data-bs-toggle="modal" data-bs-target="#editLPJModal"
+                                        disabled={proker.lpj.status === 'Acc tahap akhir'}>
+                                          {proker.lpj.status === 'Revisi tahap 1' || proker.lpj.status === 'Tolak tahap 1' ? (
+                                              <><i className='bi-upload'></i> Revisi</>
+                                            ) : (
+                                              <i className='bi-pencil-square'></i>
+                                            )}
+                                        </button>
                                       }
                                       <UploadLPJModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
+                                      <EditLPJModal reloadData={fetchDataProker} selectedlpjId={selectedlpjId} selectedProkerId={selectedProkerId} />
                                     </td>
                                 </tr>
                             ))}

@@ -177,13 +177,18 @@ const LPJAdmin = () => {
                                     <FileLPJModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                                   </td>
                                 <td>
-                                {lpjItem.status === 'Acc tahap akhir' ? 'LPJ selesai diproses' :
-                                    lpjItem.status === 'Submit lpj' ||
-                                    lpjItem.status === 'Revisi tahap 1' ||
-                                    lpjItem.status === 'Tolak tahap 1' ?
-                                    'Belum di acc oleh Sekumbem' :
-                                    renderButton(lpjItem.id_lpj)
-                                }
+                                {role === 'admin' ? (
+                                        lpjItem.status === 'Acc tahap akhir' ? 'LPJ selesai diproses' :
+                                        lpjItem.status === 'Diajukan' ||
+                                        lpjItem.status === 'Submit lpj' ||
+                                        lpjItem.status === 'Revisi tahap 1' ||
+                                        lpjItem.status === 'Tolak tahap 1' ?
+                                        'Belum di acc oleh Sekumbem' :
+                                        renderButton(lpjItem.id_lpj)
+                                    ) : (
+                                        role === 'sekumbem' && lpjItem.status === 'Submit lpj' && 
+                                        renderButton(lpjItem.id_lpj)
+                                    )}
                                 </td>
                                 {role === 'admin' && lpjItem.proker.izin_submit === 'true' &&
                                     <td>

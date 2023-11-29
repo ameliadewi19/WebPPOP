@@ -128,7 +128,13 @@ const KAK = () => {
                                     <td>{kak.status}</td>
                                     <td>{kak.catatan}</td>
                                     <td>
-                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{marginRight: '5px'}}><i className='bi-pencil-square'></i></button>
+                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{marginRight: '5px'}} disabled={kak.status == "Acc tahap akhir"}>
+                                            {kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1' ? (
+                                                <><i className='bi-upload'></i> Revisi</>
+                                            ) : (
+                                                <i className='bi-pencil-square'></i>
+                                            )}
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
