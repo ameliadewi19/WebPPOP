@@ -51,7 +51,7 @@ const EditKAK = () => {
 
     const handleAddProker = () => {
         let object = {
-            id_proker: null,
+            id_proker: 0,
             nama_kegiatan: '',
             ketua_pelaksana: '',
             jenis_kegiatan: '',
@@ -92,8 +92,14 @@ const EditKAK = () => {
         
         console.log(formData);
         feather.replace();
-      };
+    };
 
+    const logFormData = (formData) => {
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+    };
+      
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -110,20 +116,18 @@ const EditKAK = () => {
             });
         });
 
-        console.log("submitFile", formDataWithPath.get('file_kak')); // Output formDataWithPath
-        console.log("submitProker", formDataWithPath.get('prokers')); // Output formDataWithPath
+        logFormData(formDataWithPath);
         try {
-            const response = await axios.put(`/api/kak/${kakId}`, formDataWithPath, {
+            const response = await axios.post(`/api/kak/${kakId}`, formDataWithPath, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-                processData: false,
             });
 
             console.log("update", response.data); // Output respons dari backend
             Swal.fire({
                 icon: "success",
-                title: "KAK berhasil diupload",
+                title: "KAK berhasil diubah",
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {

@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import TambahPergerakanModal from '../components/Modals/TambahPergerakanModal.js';
 import EditPergerakanModal from '../components/Modals/EditPergerakanModal.js';
 
-const Pergerakan = () => {
+const PergerakanAdmin = () => {
     const [role, setRole] = useState(null);
     const [pergerakan, setPergerakan] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -48,9 +48,9 @@ const Pergerakan = () => {
     const fetchPergerakan = async () => {
         try {
             const res = await axios.get('/api/pergerakan');
-            const data = res.data.filter((pergerakan) => pergerakan.proker.kak.id_ketua === idKetua);
-            setPergerakan(data);
-            console.log("pergerakan: ",data);
+            // const data = res.data.filter((pergerakan) => pergerakan.proker.kak.id_ketua === idKetua);
+            setPergerakan(res.data);
+            console.log("pergerakan: ",res.data);
         } catch (err) {
             console.log(err);
         }
@@ -133,7 +133,7 @@ const Pergerakan = () => {
                                     </button>
                                 )}
                                 {/* Add your Tambah Pergerakan modal component here */}
-                                {role === 'ormawa' && <TambahPergerakanModal showModal={showModal} setShowModal={setShowModal} fetchPergerakan={fetchPergerakan}/>}
+                                {/* {role === 'ormawa' && <TambahPergerakanModal showModal={showModal} setShowModal={setShowModal} fetchPergerakan={fetchPergerakan}/>} */}
                             </div>
                             <div className="card-body">
                                 <div className="table-responsive">
@@ -144,7 +144,7 @@ const Pergerakan = () => {
                                                 <th>Nama Proker</th>
                                                 <th>Nama Pergerakan</th>
                                                 <th>Deskripsi Pergerakan</th>
-                                                <th>Action</th>
+                                                {/* <th>Action</th> */}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -181,4 +181,4 @@ const Pergerakan = () => {
     );
 };
 
-export default Pergerakan;
+export default PergerakanAdmin;

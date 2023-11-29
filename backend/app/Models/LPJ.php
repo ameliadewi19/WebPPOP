@@ -11,9 +11,9 @@ class LPJ extends Model
     protected $fillable = [
         'id_proker', 
         'file_lpj',
+        'file_rab_lpj',
         'status',
         'catatan',
-        'file_lpj'
     ];
     public $incrementing = true;
     public $timestamps = true;

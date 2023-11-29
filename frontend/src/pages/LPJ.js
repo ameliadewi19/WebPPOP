@@ -1,124 +1,204 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { DataTable } from 'simple-datatables';
+import UploadLPJModal from '../components/Modals/UploadLPJModal';
+import FileLpjModal from '../components/Modals/FileLPJModal';
 
-// Using Arrow Function
 const LPJ = () => {
-    const history = useNavigate();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
 
+    const [idKetua, setIdKetua] = useState(null);
+    const [dataLpj, setDataLpj] = useState([]);
+    const [fileData, setFileData] = useState(null);
+    const [dataProker, setDataProker] = useState([
+      {
+        id_proker: '',
+        nama_kegiatan: '',
+        tanggal_mulai: '',
+        tanggal_akhir: '',
+        status: '',
+        lpj: {
+          id_lpj: '',
+          file_lpj: '',
+          file_rab_lpj: '',
+          status: '',
+          catatan: '',
+        }
+      }
+    ]);
+    const [selectedlpjId, setSelectedlpjId] = useState(null);
+    const [selectedProkerId, setSelectedProkerId] = useState(null);
+
+    useEffect(() => {
+      const idUser = localStorage.getItem('idUser');
+      fetchOrmawa(idUser);
+      fetchDataProker();
+      fetchDatalpj();
+      console.log("formData", dataProker);
+    }, [idKetua]);
+
+    const fetchOrmawa = (id) => {
+      console.log("idUser fetchormawa:", id);
+      axios.get(`/api/auth/get-ketua/${id}`)
+          .then((res) => {
+              setIdKetua(res.data.data.id_ketua);
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+      
+      console.log("idKetua ormawa:", idKetua);
+  }
+
+  const fetchDataProker = async () => {
+    try {
+        const response = await axios.get('/api/proker/');
+        const data = response.data.filter((proker) => proker.kak.id_ketua === idKetua && proker.status === 'Acc tahap akhir');
+        // const filteredDataProker = data.filter((proker) => proker.status === 'Acc tahap akhir');
+        
+        setDataProker(data);
+        setDataProker(data.map((proker) => ({
+          ...proker,
+          lpj: {
+            ...proker.lpj,
+            id_lpj: '',
+            file_lpj: '',
+            file_rab_lpj: '',
+            status: '',
+            catatan: '',
+          }
+        })));
+    } catch (error) {
+        console.error('Error fetching proker data:', error);
+    }
+  };
+
+    const fetchDatalpj = async () => {
+        try {
+            const response = await axios.get('/api/lpj/');
+            const lpjData = response.data;
+            
+            setDataProker((prevDataProker) => {
+              return prevDataProker.map((proker) => {
+                const matchingLPJ = lpjData.find((lpj) => lpj.id_proker === proker.id_proker);
+        
+                if (matchingLPJ) {
+                  // Update the LPJ data for the specific project
+                  return {
+                    ...proker,
+                    lpj: {
+                      id_lpj: matchingLPJ.id_lpj,
+                      file_lpj: matchingLPJ.file_lpj,
+                      file_rab_lpj: matchingLPJ.file_rab_lpj,
+                      status: matchingLPJ.status,
+                      catatan: matchingLPJ.catatan,
+                    },
+                  };
+                } else {
+                  return proker;
+                }
+              });
+            });
+        
+            // Log the updated dataProker inside the asynchronous function
+            console.log("lpjData", dataProker);
+        } catch (error) {
+            console.error('Error fetching lpj data:', error);
+        }
+    };
+
+    const handleShowModal = (idlpj) => {
+      setSelectedProkerId(idlpj);
+    }
+
+    const handleEdit = (id) => {
+      navigate(`/lpj/${id}`);
+    }
+
+    const handleShowFile = (file) => {
+      setFileData(file);
+    }
     return (
       <main class="content">
         <div class="container-fluid p-0">
 
           <h1 class="h3 mb-3"><strong>LPJ</strong></h1>
 
-          <div class="row">
-            <div class="col-xl-6 col-xxl-5 d-flex">
-              <div class="w-100">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Sales</h5>
-                          </div>
-
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="truck"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">2.382</h1>
-                        <div class="mb-0">
-                          <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Visitors</h5>
-                          </div>
-
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="users"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">14.212</h1>
-                        <div class="mb-0">
-                          <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Earnings</h5>
-                          </div>
-
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="dollar-sign"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">$21.300</h1>
-                        <div class="mb-0">
-                          <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Orders</h5>
-                          </div>
-
-                          <div class="col-auto">
-                            <div class="stat text-primary">
-                              <i class="align-middle" data-feather="shopping-cart"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">64</h1>
-                        <div class="mb-0">
-                          <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-                          <span class="text-muted">Since last week</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+          <div className="row">
+            <div className="col-xl-12">
+                <div className="card">
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    <h5 className="card-title">LPJ</h5>
+                    
                 </div>
-              </div>
-            </div>
-
-            <div class="col-xl-6 col-xxl-7">
-              <div class="card flex-fill w-100">
-                <div class="card-header">
-
-                  <h5 class="card-title mb-0">Recent Movement</h5>
+                <div className="card-body">
+                    <div className="table-responsive">
+                    <table className="table datatable table-striped">
+                        <thead>
+                        <tr>
+                            <th scope='col'>No</th>
+                            <th scope='col'>Nama Kegiatan</th>
+                            <th scope='col'>Tanggal Mulai</th>
+                            <th scope='col'>Tanggal Akhir</th>
+                            <th scope='col'>File LPJ</th>
+                            <th scope='col'>File RAB</th>
+                            <th scope='col'>Status</th>
+                            <th scope='col'>Catatan</th>
+                            <th scope='col'>Aksi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {dataProker.map((proker, index) =>(
+                                <tr key={proker.id_proker}>
+                                    <td>{index + 1}</td>
+                                    <td>{proker.nama_kegiatan}</td>
+                                    <td>{proker.tanggal_mulai}</td>
+                                    <td>{proker.tanggal_akhir}</td>
+                                    {proker.lpj.file_lpj && (
+                                      <>
+                                        <td>
+                                          <a onClick={() => handleShowFile(proker.lpj.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
+                                            LPJ {proker.nama_kegiatan}
+                                          </a>
+                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                        <td>
+                                          <a onClick={() => handleShowFile(proker.lpj.file_rab_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
+                                            RAB LPJ {proker.nama_kegiatan}
+                                          </a>
+                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                      </>
+                                    ) || (
+                                      <>
+                                        <td></td>
+                                        <td></td>
+                                      </>
+                                    )}
+                                    <td>{proker.lpj.status}</td>
+                                    <td>{proker.lpj.catatan}</td>
+                                    <td>
+                                      {proker.status === 'Acc tahap akhir' && proker.lpj.file_lpj === '' ? 
+                                      <button class="btn btn-primary mt-2" style={{ marginRight: '5px' }} onClick={() => handleShowModal(proker.id_proker)} data-bs-toggle="modal" data-bs-target="#uploadLPJModal"
+                                        disabled={proker.status !== 'Acc tahap akhir'}><i className='bi-upload'></i> LPJ</button>
+                                      :
+                                      <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.lpj.id_lpj)} style={{marginRight: '5px'}}
+                                      disabled={proker.lpj.status === 'Acc tahap akhir'}><i className='bi-pencil-square'></i> Edit</button>
+                                      }
+                                      <UploadLPJModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
-                <div class="card-body py-3">
-                  <div class="chart chart-sm">
-                    <canvas id="chartjs-dashboard-line"></canvas>
-                  </div>
                 </div>
-              </div>
             </div>
           </div>
-
         </div>
       </main>
     );
