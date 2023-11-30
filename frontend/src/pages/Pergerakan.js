@@ -151,7 +151,7 @@ const Pergerakan = () => {
                                             {pergerakan.map((item, index) => (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
-                                                    <td>{item.proker.nama_kegiatan}</td>
+                                                    <td>{item.proker ? item.proker.nama_kegiatan : 'No Proker'}</td>
                                                     <td>{item.nama_pergerakan}</td>
                                                     <td>{item.deskripsi_pergerakan}</td>
                                                     <td>
