@@ -65,12 +65,6 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
 
             console.log('Pergerakan added successfully:', response.data);
 
-            setFormData({
-                id_proker: '',
-                id_kak: '',
-                nama_pergerakan: '',
-                deskripsi_pergerakan: '',
-            });
             Swal.fire({
                 icon: "success",
                 title: "Pergerakan berhasil ditambahkan",
@@ -83,8 +77,8 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
             // Reset the form values
             setFormData({
                 id_proker: '',
-                nama_kegiatan: '',
-                file_lpj: null,
+                nama_pergerakan: '',
+                deskripsi_pergerakan: '',
             });
 
             modalRef.current.click();
@@ -102,7 +96,7 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
     };
 
     return (
-        <div className={`modal fade ${showModal ? 'show' : ''}`} id="addPergerakanModal" tabIndex="-1" aria-labelledby="addPergerakanModalLabel" aria-hidden={!showModal}>
+        <div className={`modal fade`} id="addPergerakanModal" tabIndex="-1" aria-labelledby="addPergerakanModalLabel" aria-hidden={!showModal}>
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
