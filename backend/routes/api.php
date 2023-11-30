@@ -152,6 +152,7 @@ Route::group([
     Route::delete('/{id}', [KAKController::class, 'destroy']);
     Route::get('/file/{filename}', [KAKController::class, 'getFile']);
     Route::get('/jumlah', [KAKController::class, 'jumlah']);
+    Route::get('/kakbyketua/{id}', [KAKController::class, 'getByIdKetua']);
 });
 
 // API routes for verifikasi KAK

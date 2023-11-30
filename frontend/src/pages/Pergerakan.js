@@ -129,7 +129,7 @@ const Pergerakan = () => {
                                 <h5 className="card-title">Pergerakan</h5>
                                 {role === 'ormawa' && (
                                     <button className="btn btn-primary mt-2" onClick={handleShowModal} data-bs-toggle="modal" data-bs-target="#addPergerakanModal">
-                                        <i className="align-middle" data-feather="plus"></i> <span className="align-middle">Tambah Pergerakan</span>
+                                        <i className="bi-plus"></i> <span className="align-middle">Tambah Pergerakan</span>
                                     </button>
                                 )}
                                 {/* Add your Tambah Pergerakan modal component here */}
@@ -140,7 +140,7 @@ const Pergerakan = () => {
                                     <table className="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Index</th>
+                                                <th>No</th>
                                                 <th>Nama Proker</th>
                                                 <th>Nama Pergerakan</th>
                                                 <th>Deskripsi Pergerakan</th>
@@ -151,18 +151,18 @@ const Pergerakan = () => {
                                             {pergerakan.map((item, index) => (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
-                                                    <td>{item.proker.nama_kegiatan}</td>
+                                                    <td>{item.proker ? item.proker.nama_kegiatan : 'No Proker'}</td>
                                                     <td>{item.nama_pergerakan}</td>
                                                     <td>{item.deskripsi_pergerakan}</td>
                                                     <td>
                                                       {role === 'ormawa' && (
                                                           <>
                                                               <button className="btn btn-sm btn-primary me-2" onClick={() => handleUpdate(item.id_pergerakan)} data-bs-toggle="modal" data-bs-target="#editPergerakanModal">
-                                                                  Update
+                                                                  <i className='bi-pencil-square'></i>
                                                               </button>
                                                               {/* <EditPergerakanModal showEditModal={showEditModal} setShowEditModal={setShowEditModal} selectedItemId={selectedItemId} fetchPergerakan={fetchPergerakan}/> */}
                                                               <button className="btn btn-sm btn-danger" onClick={() => handleDelete(item.id_pergerakan)}>
-                                                                  Delete
+                                                                  <i className='bi-trash-fill'></i>
                                                               </button>
                                                           </>
                                                       )}

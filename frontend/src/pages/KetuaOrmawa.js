@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import EditProfilModal from '../components/Modals/EditProfilModal.js';
+import EditKetuaOrmawaModal from '../components/Modals/EditKetuaOrmawaModal.js';
 import EditPasswordAdminModal from '../components/Modals/EditPasswordAdminModal.js';
 import Swal from 'sweetalert2';
 import TambahKetuaOrmawaModal from '../components/Modals/TambahKetuaOrmawaModal.js';
@@ -40,7 +41,7 @@ const KetuaOrmawa = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`/api/auth/users/${id_user}`)
+            .delete(`/api/ketua-ormawa/${id_user}`)
             .then((response) => {
               console.log(response.data.message);
               Swal.fire(
@@ -154,19 +155,19 @@ const KetuaOrmawa = () => {
                                     <>
                                     <button
                                         className="btn btn-sm btn-primary me-2"
-                                        onClick={() => handleShowEditModal(ketua.id_user)}
+                                        onClick={() => handleShowEditModal(ketua.id_ketua)}
                                         data-bs-toggle="modal"
-                                        data-bs-target="#editProfilModal"
+                                        data-bs-target="#editKetuaOrmawaModal"
                                         style={{borderRadius: "5px"}}
                                     >
                                         <span className="align-middle"><i className='bi-pencil'></i></span>
                                     </button>
-                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDelete(ketua.id_user)}><i className='bi-trash'></i></button>
-                                    <EditProfilModal
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDelete(ketua.id_ketua)}><i className='bi-trash'></i></button>
+                                    <EditKetuaOrmawaModal
                                         showModal={handleShowEditModal}
                                         setShowModal={setShowEditModal}
                                         reloadData={handleReloadData}
-                                        userId={IdUser}
+                                        userId={ketua.id_ketua}
                                     />
                                     </>
                                   )}

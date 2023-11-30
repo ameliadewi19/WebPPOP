@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
-const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
+const EditKetuaOrmawaModal = ({ showModal, setShowModal, reloadData, userId }) => {
   const [formData, setFormData] = useState({
     nim_ketua: '',
     nama_ketua: '',
@@ -11,6 +12,30 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
     id_ormawa: '',
   });
   const modalRef = useRef();
+  console.log("user id:", userId);
+
+  // Fetch user profile data when the component mounts
+  useEffect(() => {
+    if (userId) {
+      axios.get(`/api/ketua-ormawa/${userId}`)
+        .then(response => {
+          const fetchedData = response.data;
+          console.log("fetched data:", fetchedData);
+          // Update the formData state with the fetched data
+          setFormData({
+            nim_ketua: fetchedData.nim_ketua,
+            nama_ketua: fetchedData.nama_ketua,
+            tahun_jabatan: fetchedData.tahun_jabatan,
+            email_pengguna: fetchedData.email_pengguna,
+            id_pengguna: fetchedData.id_pengguna,
+            id_ormawa: fetchedData.id_ormawa,
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching ketua ormawa data:', error);
+        });
+    }
+  }, [userId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,16 +49,30 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('/api/ketua-ormawa', formData, {
+    axios.put(`/api/ketua-ormawa/${userId}`, formData, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((response) => {
         console.log(response);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Profil berhasil diubah!',
+          showConfirmButton: false,
+          timer: 1500, // Close alert after 1.5 seconds
+        });
+
       })
       .catch((error) => {
-        console.error('Error submitting acc:', error);
+        console.error('Error updating ketua ormawa profile:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Profil gagal diubah!',
+          showConfirmButton: false,
+          timer: 1500, // Close alert after 1.5 seconds
+        });
       });
 
     modalRef.current.click();
@@ -41,11 +80,11 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
   };
 
   return (
-    <div className={`modal fade`} id="addAkunModal" tabIndex="-1" aria-labelledby="addAkunModalLabel" aria-hidden={!showModal}>
+    <div className={`modal fade`} id="editKetuaOrmawaModal" tabIndex="-1" aria-labelledby="editKetuaOrmawaModalLabel" aria-hidden={!showModal}>
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="addAkunModalLabel">Tambah Ormawa</h5>
+            <h5 className="modal-title" id="editKetuaOrmawaModalLabel">Edit Profil Ketua Ormawa</h5>
             <button type="button" className="d-none" ref={modalRef} data-bs-dismiss="modal"></button>
           </div>
           <div className="modal-body">
@@ -87,14 +126,14 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="emailKetua" className="form-label">Email Ketua</label>
+                <label htmlFor="emailPengguna" className="form-label">Email Pengguna</label>
                 <input
-                  type="text"
+                  type="email"
                   className="form-control"
-                  id="emailKetua"
-                  name="email_ketua"
-                  placeholder="Email Ketua"
-                  value={formData.email_ketua}
+                  id="emailPengguna"
+                  name="email_pengguna"
+                  placeholder="Email Pengguna"
+                  value={formData.email_pengguna}
                   onChange={handleInputChange}
                 />
               </div>
@@ -134,4 +173,4 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
   );
 };
 
-export default TambahKetuaOrmawaModal;
+export default EditKetuaOrmawaModal;
