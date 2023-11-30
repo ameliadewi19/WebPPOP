@@ -6,6 +6,7 @@ import AccLPJModal from '../components/Modals/AccLPJModal';
 import FileProposalModal from '../components/Modals/FileProposalModal';
 import FileRABModal from '../components/Modals/FileRABModal';
 import FileLPJModal from '../components/Modals/FileLPJModal';
+import FileLpjModal from '../components/Modals/FileLPJModal';
 
 const LPJAdmin = () => {
     const location = useLocation();
@@ -29,11 +30,12 @@ const LPJAdmin = () => {
             let filteredLPJ = [];
       
             if (role === "sekumbem") {
-                filteredLPJ = response.data.filter(lpj =>
-                    lpj.status === 'Submit lpj' ||
-                    lpj.status === 'Revisi tahap 1' ||
-                    lpj.status === 'Tolak tahap 1'
-                );
+                filteredLPJ = response.data;
+                // filteredLPJ = response.data.filter(lpj =>
+                //     lpj.status === 'Submit lpj' ||
+                //     lpj.status === 'Revisi tahap 1' ||
+                //     lpj.status === 'Tolak tahap 1'
+                // );
             } else if (role === "admin") {
                 filteredLPJ = response.data;
                 // filteredLPJ = response.data.filter(lpj =>
@@ -139,9 +141,8 @@ const LPJAdmin = () => {
                             <th>Tanggal Akhir</th>
                             <th>Status</th>
                             <th>Catatan</th>
-                            <th>File Proposal</th>
-                            <th>File RAB</th>
                             <th>File LPJ</th>
+                            <th>File RAB</th>
                             <th>Aksi</th>
                             {role === 'admin' && <th>Izin Submit</th>}
                         </tr>
@@ -158,24 +159,27 @@ const LPJAdmin = () => {
                                 <td>{lpjItem.proker.tanggal_akhir}</td>
                                 <td>{lpjItem.status}</td>
                                 <td>{lpjItem.catatan}</td>
-                                <td>
-                                    <a onClick={() => handleShowModal(lpjItem.proker.file_proposal)} data-bs-toggle="modal" data-bs-target="#FileProposalModal" href='#'>
-                                    Dokumen Proposal
-                                    </a>
-                                    <FileProposalModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                  </td>
-                                  <td>
-                                    <a onClick={() => handleShowModal(lpjItem.proker.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
-                                    Dokumen RAB
-                                    </a>
-                                    <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                  </td>
-                                  <td>
-                                    <a onClick={() => handleShowModal(lpjItem.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLPJModal" href='#'>
-                                    Dokumen RAB
-                                    </a>
-                                    <FileLPJModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                  </td>
+                                {lpjItem.file_lpj && (
+                                      <>
+                                        <td>
+                                          <a onClick={() => handleShowModal(lpjItem.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
+                                            LPJ {lpjItem.proker.nama_kegiatan}
+                                          </a>
+                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                        <td>
+                                          <a onClick={() => handleShowModal(lpjItem.file_rab_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
+                                            RAB LPJ {lpjItem.proker.nama_kegiatan}
+                                          </a>
+                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                      </>
+                                    ) || (
+                                      <>
+                                        <td></td>
+                                        <td></td>
+                                      </>
+                                    )}
                                 <td>
                                 {role === 'admin' ? (
                                         lpjItem.status === 'Acc tahap akhir' ? 'LPJ selesai diproses' :
@@ -186,7 +190,7 @@ const LPJAdmin = () => {
                                         'Belum di acc oleh Sekumbem' :
                                         renderButton(lpjItem.id_lpj)
                                     ) : (
-                                        role === 'sekumbem' && lpjItem.status === 'Submit lpj' && 
+                                        role === 'sekumbem' && lpjItem.status === 'Submit LPJ' && 
                                         renderButton(lpjItem.id_lpj)
                                     )}
                                 </td>
@@ -200,7 +204,7 @@ const LPJAdmin = () => {
                                         </button>
                                     </td>
                                 }
-                                {role === 'admin' && lpjItem.proker.izin_submit === 'false' &&
+                                {role === 'admin' && lpjItem.proker.izin_submit === 'false' && lpjItem.status !== 'Acc tahap akhir' ? (
                                     <td>
                                         <button
                                             className="btn btn-danger mt-2"
@@ -208,7 +212,7 @@ const LPJAdmin = () => {
                                         >
                                             {lpjItem.proker.izin_submit}
                                         </button>
-                                    </td>
+                                    </td>) : ( <td>-</td>)
                                 }
                                 </tr>
                             ))}
