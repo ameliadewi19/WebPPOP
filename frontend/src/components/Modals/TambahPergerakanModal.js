@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import { Navigate } from 'react-router-dom';
 
 const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => {
     const [formData, setFormData] = useState({
@@ -7,25 +9,23 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
         id_kak: '',
         nama_pergerakan: '',
         deskripsi_pergerakan: '',
-        id_kak_input: '',
     });
     const [dataProker, setDataProker] = useState([]);
+    const [idKetua, setIdKetua] = useState(null);
+    const [idKak, setIdKak] = useState(null);
     const modalRef = useRef();
 
     useEffect(() => {
         const idUser = localStorage.getItem('idUser');
         fetchOrmawa(idUser);
         fetchDataProker();
-    }, []);
+    }, [idKetua, idKak]);
 
     const fetchOrmawa = async (id) => {
         await axios.get(`/api/auth/get-ketua/${id}`)
             .then((res) => {
-                setFormData({
-                    ...formData,
-                    id_kak: res.data.data.id_ketua,
-                });
-                console.log("id_kak ", formData.id_kak);
+                setIdKetua(res.data.data.id_ketua);
+                console.log("id_ketua ", res.data.data.id_ketua);
             })
             .catch((err) => {
                 console.log(err);
@@ -35,8 +35,14 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
     const fetchDataProker = async () => {
         try {
             const response = await axios.get('/api/proker');
-            const data = response.data.filter((proker) => proker.kak.id_ketua === formData.id_kak);
+            const data = response.data.filter((proker) => proker.kak.id_ketua === idKetua);
             setDataProker(data);
+            setIdKak(data[0].id_kak);
+            console.log("id_kak ", data[0].id_kak);
+            setFormData({
+                ...formData,
+                id_kak : idKak,
+            })
         } catch (error) {
             console.error('Error fetching proker data:', error);
         }
@@ -52,6 +58,8 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
     };
 
     const handleSubmit = async () => {
+        
+        console.log("formData", formData)
         try {
             const response = await axios.post('/api/pergerakan', formData);
 
@@ -63,12 +71,33 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
                 nama_pergerakan: '',
                 deskripsi_pergerakan: '',
             });
+            Swal.fire({
+                icon: "success",
+                title: "Pergerakan berhasil ditambahkan",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                fetchPergerakan();
+            });
+
+            // Reset the form values
+            setFormData({
+                id_proker: '',
+                nama_kegiatan: '',
+                file_lpj: null,
+            });
 
             modalRef.current.click();
 
             fetchPergerakan();
         } catch (error) {
             console.error('Error adding pergerakan:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Pergerakan gagal ditambahkan",
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     };
 
@@ -95,20 +124,20 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
                                     {dataProker.map((proker) => (
                                         <option key={proker.id_proker} value={proker.id_proker}>{proker.nama_kegiatan}</option>
                                     ))}
-                                    <option value="0">lainnya</option>
+                                    <option value="">lainnya</option>
                                 </select>
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label htmlFor="id_kak" className="form-label" disabled>Ketua Kegiatan</label>
                                 <input
                                     type="text"
                                     className="form-control"
                                     id="id_kak"
                                     name="id_kak"
-                                    value={formData.id_kak}
+                                    value={idKak}
                                     disabled
                                 />
-                            </div>
+                            </div> */}
                             <div className="mb-3">
                                 <label htmlFor="nama_pergerakan" className="form-label">Nama Pergerakan</label>
                                 <input
