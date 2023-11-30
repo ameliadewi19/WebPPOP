@@ -63,7 +63,7 @@ class PergerakanController extends Controller
         }
 
         $this->validate($request, [
-            'id_proker' => 'required',
+            'id_proker' => 'nullable',
             'id_kak' => 'required',
             'deskripsi_pergerakan' => 'required',
             'nama_pergerakan' => 'required',

@@ -118,7 +118,7 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
                                     {dataProker.map((proker) => (
                                         <option key={proker.id_proker} value={proker.id_proker}>{proker.nama_kegiatan}</option>
                                     ))}
-                                    <option value="">lainnya</option>
+                                    <option value=" ">lainnya</option>
                                 </select>
                             </div>
                             {/* <div className="mb-3">
