@@ -38,7 +38,7 @@ class PergerakanController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'id_proker' => 'required',
+            'id_proker' => 'nullable',
             'id_kak' => 'required',
             'nama_pergerakan' => 'required',
             'deskripsi_pergerakan' => 'required',
