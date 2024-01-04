@@ -22,6 +22,9 @@ const KAK = () => {
     const [idUser, setIdUser] = useState(null);
     const [idKetua, setIdKetua] = useState(null);
 
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
+
     useEffect(() => {
         feather.replace(); // Replace the icons after component mounts
         const role = localStorage.getItem('role');
@@ -63,10 +66,14 @@ const KAK = () => {
 
     useEffect(() => {
         if (dataKak.length > 0) {
-            const table = new DataTable('.datatable', {
-                columns : [
-                    { select : 4, sortable : false },
-                ]
+            datatable = new DataTable('.datatable', {
+                sortable: false,
+                searchable: false,
+                paging: false
+            });
+            datatable.on("datatable.init", () => {
+                setIsLoading(false);
+                datatable.refresh();
             });
         }
     }, [dataKak]);
@@ -96,50 +103,60 @@ const KAK = () => {
                 <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <h5 className="card-title">KAK</h5>
-                    <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
+                    {isLoading ? null : (
+                        <button class="btn btn-primary mt-2" onClick={handleUpload} disabled={isDataAvailable}><i className='bi-upload'></i> <span className="align-middle">Upload KAK</span></button>
+                    )}
                 </div>
                 <div className="card-body">
+                    {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                    )}
+                    
                     <div className="table-responsive">
-                    <table className="table datatable table-striped">
-                        <thead>
-                        <tr>
-                            <th scope='col'>Dokumen KAK</th>
-                            <th scope='col'>Dokumen RAB</th>
-                            <th scope='col'>Status</th>
-                            <th scope='col'>Catatan</th>
-                            <th scope='col'>Aksi</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {dataKak.map((kak) =>(
-                                <tr key={kak.id_kak}>
-                                    <td>
-                                        <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
-                                            Dokumen KAK
-                                        </a>
-                                        <FileKAKModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                    </td>
-                                    <td>
-                                        <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
-                                            Dokumen RAB
-                                        </a>
-                                        <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                    </td>
-                                    <td>{kak.status}</td>
-                                    <td>{kak.catatan}</td>
-                                    <td>
-                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{marginRight: '5px'}} disabled={kak.status == "Acc tahap akhir"}>
-                                            {kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1' ? (
-                                                <><i className='bi-upload'></i> Revisi</>
-                                            ) : (
-                                                <i className='bi-pencil-square'></i>
-                                            )}
-                                        </button>
-                                    </td>
+                        <table className="table datatable table-striped">
+                            {isLoading ? null : (
+                                <thead>
+                                <tr>
+                                    <th scope='col'>Dokumen KAK</th>
+                                    <th scope='col'>Dokumen RAB</th>
+                                    <th scope='col'>Status</th>
+                                    <th scope='col'>Catatan</th>
+                                    <th scope='col'>Aksi</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                </thead>
+                            )}
+                            <tbody>
+                                {dataKak.map((kak) =>(
+                                    <tr key={kak.id_kak}>
+                                        <td>
+                                            <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
+                                                Dokumen KAK
+                                            </a>
+                                            <FileKAKModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                        <td>
+                                            <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
+                                                Dokumen RAB
+                                            </a>
+                                            <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                        </td>
+                                        <td>{kak.status}</td>
+                                        <td>{kak.catatan}</td>
+                                        <td>
+                                            <button class="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{marginRight: '5px'}} disabled={kak.status == "Acc tahap akhir"}>
+                                                {kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1' ? (
+                                                    <><i className='bi-upload'></i> Revisi</>
+                                                ) : (
+                                                    <i className='bi-pencil-square'></i>
+                                                )}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 </div>

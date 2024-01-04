@@ -11,6 +11,9 @@ const LPJ = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
+
     const [idKetua, setIdKetua] = useState(null);
     const [dataLpj, setDataLpj] = useState([]);
     const [fileData, setFileData] = useState(null);
@@ -112,6 +115,20 @@ const LPJ = () => {
         }
     };
 
+    // useEffect(() => {
+    //   if (dataLpj.length > 0){
+    //     datatable = new DataTable('.table-lpj', {
+    //         sortable: false,
+    //         searchable: false,
+    //         paging: false
+    //     });
+    //     datatable.on("datatable.init", () => {
+    //       setIsLoading(false);
+    //       datatable.refresh();
+    //     })
+    //   }
+    // }, [dataProker])
+
     const handleShowModal = (idlpj) => {
       setSelectedProkerId(idlpj);
     }
@@ -138,8 +155,13 @@ const LPJ = () => {
                     
                 </div>
                 <div className="card-body">
+                    {/* {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                    )} */}
                     <div className="table-responsive">
-                    <table className="table datatable table-striped">
+                    <table className="table table-lpj table-striped">
                         <thead>
                         <tr>
                             <th scope='col'>No</th>

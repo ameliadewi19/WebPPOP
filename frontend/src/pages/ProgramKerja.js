@@ -15,6 +15,8 @@ const ProgramKerja = () => {
     const [dataProker, setDataProker] = useState([]);
     const [selectedProkerId, setSelectedProkerId] = useState(null);
     const [fileData, setFileData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
 
     useEffect(() => {
       const idUser = localStorage.getItem('idUser');
@@ -46,6 +48,20 @@ const ProgramKerja = () => {
         }
     };
 
+    useEffect(() => {
+      if (dataProker.length > 0){
+        datatable = new DataTable('.table-proker', {
+            sortable: false,
+            searchable: false,
+            paging: false
+        });
+        datatable.on("datatable.init", () => {
+          setIsLoading(false);
+          datatable.refresh();
+        })
+      }
+    })
+
     const handleEdit = (id) => {
       setSelectedProkerId(id);
     }
@@ -72,8 +88,14 @@ const ProgramKerja = () => {
                     
                 </div>
                 <div className="card-body">
+                    {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                    )}
                     <div className="table-responsive">
-                    <table className="table datatable table-striped">
+                    <table className="table table-proker table-striped">
+                      {isLoading ? null : (
                         <thead>
                         <tr>
                             <th scope='col'>No</th>
@@ -87,6 +109,7 @@ const ProgramKerja = () => {
                             <th scope='col'>Aksi</th>
                         </tr>
                         </thead>
+                      )}
                         <tbody>
                             {dataProker.map((proker, index) =>(
                                 <tr key={proker.id_proker}>
