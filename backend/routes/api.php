@@ -20,6 +20,10 @@ use App\Http\Controllers\VerifikasiKAKController;
 use App\Http\Controllers\VerifikasiProkerController;
 use App\Http\Controllers\VerifikasiLPJController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\SarprasController;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\DetailPeminjamanController;
 
 use App\Http\Middleware\CheckRole;
 
@@ -82,6 +86,7 @@ Route::group([
     Route::put('/{id}', [KetuaOrmawaController::class, 'update']);
     Route::delete('/{id}', [KetuaOrmawaController::class, 'destroy']);
     Route::get('/user/{id}', [KetuaOrmawaController::class, 'getUser']);
+    Route::get('/user_id/{id}', [KetuaOrmawaController::class, 'getByUserId']);
 });
 
 // KALENDER AKADEMIK
@@ -153,6 +158,7 @@ Route::group([
     Route::get('/file/{filename}', [KAKController::class, 'getFile']);
     Route::get('/jumlah', [KAKController::class, 'jumlah']);
     Route::get('/kakbyketua/{id}', [KAKController::class, 'getByIdKetua']);
+    Route::get('/ketua/{id}', [KAKController::class, 'getByKetuaId']);
 });
 
 // API routes for verifikasi KAK
@@ -187,6 +193,7 @@ Route::group([
     Route::get('/file/{filename}', [ProkerController::class, 'getFile']);
     Route::put('/izin-submit/{id}', [ProkerController::class, 'ubahIzinSubmit']);
     Route::get('/getProker', [ProkerController::class, 'getTotalProkerTiapOrmawa']);
+    Route::get('/kak/{id}', [ProkerController::class, 'getByKakId']);
 });
 
 // Detail proker
@@ -242,4 +249,55 @@ Route::group([
     Route::post('/', [TimelineController::class, 'store']);
     Route::put('/{id}', [TimelineController::class, 'update']);
     Route::delete('/{id}', [TimelineController::class, 'destroy']);
+});
+
+// SARPRAS
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'sarpras'
+], function () {
+    Route::get('/', [SarprasController::class, 'index']); 
+    Route::get('/{id}', [SarprasController::class, 'show']);
+    Route::post('/', [SarprasController::class, 'store']); 
+    Route::patch('/{id}', [SarprasController::class, 'update']); 
+    Route::delete('/{id}', [SarprasController::class, 'destroy']); 
+    Route::get('/tersedia/show', [SarprasController::class, 'getAvailable']); 
+});
+
+// INVENTARIS
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'inventaris'
+], function () {
+    Route::get('/', [InventarisController::class, 'index']); 
+    Route::get('/{id}', [InventarisController::class, 'show']);
+    Route::post('/{id}', [InventarisController::class, 'store']); 
+    Route::patch('/{id}', [InventarisController::class, 'update']); 
+    Route::delete('/{id}', [InventarisController::class, 'destroy']); 
+    Route::get('/sarpras/{id}', [InventarisController::class, 'getBySarpras']);
+});
+
+// PEMINJAMAN
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'peminjaman'
+], function () {
+    Route::get('/', [PeminjamanController::class, 'index']); 
+    Route::get('/{id}', [PeminjamanController::class, 'show']);
+    Route::post('/', [PeminjamanController::class, 'store']); 
+    Route::patch('/{id}', [PeminjamanController::class, 'update']); 
+    Route::delete('/{id}', [PeminjamanController::class, 'destroy']); 
+});
+
+// DETAIL PEMINJAMAN
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'detail-peminjaman'
+], function () {
+    Route::get('/', [DetailPeminjamanController::class, 'index']); 
+    Route::get('/{id}', [DetailPeminjamanController::class, 'show']);
+    Route::get('/peminjaman/{id}', [DetailPeminjamanController::class, 'getByPeminjaman']);
+    Route::post('/', [DetailPeminjamanController::class, 'store']); 
+    Route::patch('/{id}', [DetailPeminjamanController::class, 'update']); 
+    Route::delete('/{id}', [DetailPeminjamanController::class, 'destroy']); 
 });

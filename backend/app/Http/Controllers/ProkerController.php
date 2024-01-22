@@ -163,4 +163,21 @@ class ProkerController extends Controller
 
         return response()->file($path, ['Content-Type' => 'application/pdf']);
     }
+
+    /**
+     * Get proker by KAK ID
+     *
+     * @param  int  $id_kak
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getByKakId($id_kak)
+    {
+        $prokers = Proker::where('id_kak', $id_kak)->get();
+
+        if ($prokers->isEmpty()) {
+            return response()->json(['message' => 'No Prokers found for the given KAK ID'], 404);
+        }
+
+        return response()->json($prokers, 200);
+    }
 }

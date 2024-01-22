@@ -104,4 +104,21 @@ class KetuaOrmawaController extends Controller
 
         return response()->json(['data' => $User], 200);
     }
+
+    /**
+     * Get ketua ormawa by user id
+     *
+     * @param  int  $id_pengguna
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getByUserId($id_pengguna)
+    {
+        $ketuaOrmawa = KetuaOrmawa::where('id_pengguna', $id_pengguna)->first();
+
+        if (!$ketuaOrmawa) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        return response()->json(['data' => $ketuaOrmawa], 200);
+    }
 }

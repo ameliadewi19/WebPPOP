@@ -278,4 +278,21 @@ class KAKController extends Controller
         return response()->json($kaks, 200);
     }
 
+    /**
+     * Get KAK by ketua's ID
+     *
+     * @param  int  $id_ketua
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getByKetuaId($id_ketua)
+    {
+        $kak = KAK::where('id_ketua', $id_ketua)->with('prokers')->get();
+
+        if ($kak->isEmpty()) {
+            return response()->json(['message' => 'No KAKs found for the given ketua ID'], 404);
+        }
+
+        return response()->json($kak, 200);
+    }
+
 }

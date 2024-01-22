@@ -55,6 +55,12 @@ const Sidebar = () => {
                         </a>
                     </li>
 
+                    <li className={`sidebar-item ${location.pathname === '/peminjaman-sarpras' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/list-pengajuan">
+                            <i className="bi-building"></i> <span className="align-middle">Peminjaman SarPras</span>
+                        </a>
+                    </li>
+
                     {role && role !== 'ormawa' && 
                     <>
 
@@ -67,12 +73,6 @@ const Sidebar = () => {
                     <li className={`sidebar-item ${location.pathname === '/ketua-ormawa' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/ketua-ormawa">
                             <i className="bi-person-badge"></i> <span className="align-middle">Ketua Ormawa</span>
-                        </a>
-                    </li>
-
-                    <li className={`sidebar-item ${location.pathname === '/peminjaman-sarpras' ? 'active' : ''}`}>
-                        <a className="sidebar-link" href="/peminjaman-sarpras">
-                            <i className="bi-building"></i> <span className="align-middle">Peminjaman SarPras</span>
                         </a>
                     </li>
 
@@ -103,6 +103,19 @@ const Sidebar = () => {
                     </>
                     
                     }
+
+                    {role && role === 'sarpras' && 
+                    <>
+
+                    <li className={`sidebar-item ${location.pathname === '/pengelolaan-sarana-prasarana' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/pengelolaan-sarana-prasarana">
+                        <i class="bi bi-building-fill-gear"></i> <span className="align-middle">Pengelolaan SarPras</span>
+                        </a>
+                    </li>
+
+                    </>
+                    
+                    }   
                 </ul>
             </div>
         // </nav>

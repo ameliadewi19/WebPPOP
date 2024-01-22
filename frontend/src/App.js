@@ -16,7 +16,6 @@ import KAK from './pages/KAK.js';
 import KAKAdmin from './pages/KAKAdmin.js';
 import ProgramKerja from './pages/ProgramKerja.js';
 import ProgramKerjaAdmin from './pages/ProgramKerjaAdmin.js';
-import PeminjamanSarpras from './pages/PeminjamanSarpras.js';
 import Timeline from './pages/Timeline.js';
 import Pengumuman from './pages/Pengumuman.js';
 import KalenderAkademik from './pages/KalenderAkademik.js';
@@ -30,6 +29,12 @@ import Profil from './pages/Profil.js';
 import EditKAK from './components/SubMenu/EditKAK.js';
 import Landing from './pages/Landing.js';
 import MorePengumuman from './pages/MorePengumuman.js';
+
+import PeminjamanSarpras from './pages/PeminjamanSarpras.js';
+import PengelolaanSarpras from './pages/PengelolaanSarpras.js';
+import ListPengajuan from './pages/ListPengajuan.js';
+import PengajuanSarpras from './components/SubMenu/PengajuanSarpras.js';
+import ReviewPengajuan from './components/SubMenu/ReviewPengajuan.js';
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -199,20 +204,6 @@ function App() {
             </div>
           </ProtectedRoute>
         }/>
-        <Route path="/peminjaman-sarpras" element={
-          <ProtectedRoute>
-            <div className="wrapper">
-              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
-                <Sidebar />
-              </nav>
-              <div className="main">
-                <Navbar toggleSidebar={toggleSidebar}/>
-                <PeminjamanSarpras />
-                <Footer />
-              </div>
-            </div>
-          </ProtectedRoute>
-        }/>
         <Route path="/timeline" element={
           <div className="wrapper">
             <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
@@ -323,6 +314,81 @@ function App() {
             </div>
           </div>
         }/>
+
+<Route path="/peminjaman-sarpras" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
+              <div className="main">
+                <Navbar toggleSidebar={toggleSidebar}/>
+                <PeminjamanSarpras />
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+      }/>
+
+      <Route path="/pengelolaan-sarana-prasarana" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
+              <div className="main">
+                <Navbar toggleSidebar={toggleSidebar}/>
+                <PengelolaanSarpras />
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+      }/>
+
+      <Route path="/peminjaman-sarpras-pengajuan" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
+              <div className="main">
+                <Navbar toggleSidebar={toggleSidebar}/>
+                <PengajuanSarpras />
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+      }/>
+
+      <Route path="/review-pengajuan" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
+              <div className="main">
+                <Navbar toggleSidebar={toggleSidebar}/>
+                <ReviewPengajuan />
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+      }/>
+
+      <Route path="/list-pengajuan" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
+              <div className="main">
+                <Navbar toggleSidebar={toggleSidebar}/>
+                <ListPengajuan />
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+      }/>
         
       </Routes>
     </BrowserRouter>
