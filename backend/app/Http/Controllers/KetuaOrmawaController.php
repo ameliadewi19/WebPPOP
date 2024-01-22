@@ -69,7 +69,12 @@ class KetuaOrmawaController extends Controller
         }
 
         $ketua->nama_ketua = $request->input('nama_ketua');
-        // Update properti lainnya sesuai kebutuhan
+        $ketua->nim_ketua = $request->input('nim_ketua');
+        $ketua->tahun_jabatan = $request->input('tahun_jabatan');
+        $ketua->email_ketua = $request->input('email_pengguna');
+        $ketua->id_pengguna = $request->input('id_pengguna');
+        $ketua->id_ormawa = $request->input('id_ormawa');
+        // Update other properties as needed
 
         $ketua->save();
 

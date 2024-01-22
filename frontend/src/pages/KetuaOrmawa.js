@@ -159,6 +159,7 @@ const KetuaOrmawa = () => {
                               <th>ORMAWA</th>
                               <th>NIM</th>
                               <th>Nama</th>
+                              <th>Email</th>
                               <th>Tahun Jabatan</th>
                               {role === 'admin' && (
                                 <th>Aksi</th>
@@ -173,6 +174,7 @@ const KetuaOrmawa = () => {
                                 <td>{ketua.nama_ormawa}</td>
                                 <td>{ketua.nim_ketua}</td>
                                 <td>{ketua.nama_ketua}</td>
+                                <td>{ketua.email_ketua}</td>
                                 <td>{ketua.tahun_jabatan}</td>
                                 <td>
                                   {role === 'admin' && (
@@ -191,7 +193,7 @@ const KetuaOrmawa = () => {
                                         showModal={handleShowEditModal}
                                         setShowModal={setShowEditModal}
                                         reloadData={handleReloadData}
-                                        userId={ketua.id_ketua}
+                                        userId={IdUser}
                                     />
                                     </>
                                   )}

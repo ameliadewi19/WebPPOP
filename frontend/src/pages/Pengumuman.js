@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import TambahPengumumanModal from '../components/Modals/TambahPengumumanModal.js';
 import EditPengumumanModal from '../components/Modals/EditPengumumanModal.js';
 import { DataTable } from 'simple-datatables';
+import './css/style.css';
 
 const Pengumuman = () => {
     const [pengumuman, setPengumuman] = useState([]);
@@ -11,6 +12,7 @@ const Pengumuman = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [role, setRole] = useState(null);
+    const [expandedRows, setExpandedRows] = useState([]); // show more
 
     const [isLoading, setIsLoading] = useState(true);
     let datatable;
@@ -90,7 +92,20 @@ const Pengumuman = () => {
           Swal.fire('Error', 'Failed to delete pengumuman.', 'error');
       }
     };
-  
+    
+    // show more
+    const handleToggleRow = (index) => {
+        setExpandedRows((prev) =>
+          prev.includes(index)
+            ? prev.filter((item) => item !== index)
+            : [...prev, index]
+        );
+    };
+    
+    const handleReadLess = (index) => {
+        // Function to hide the expanded content
+        setExpandedRows((prev) => prev.filter((item) => item !== index));
+    };     
 
     return (
         <main className="content">
@@ -142,7 +157,33 @@ const Pengumuman = () => {
                                                     <td>{index + 1}</td>
                                                     <td>{item.slug}</td>
                                                     <td>{item.judul_konten}</td>
-                                                    <td>{item.isi_konten}</td>
+                                                    <td className="truncated-text">
+                                                        {expandedRows.includes(index) ? (
+                                                            // Expanded content with "Read Less" button
+                                                            <>
+                                                            <span style={{ whiteSpace: 'pre-line' }}>{item.isi_konten}</span>
+                                                            <button
+                                                                className="btn btn-link btn-sm"
+                                                                onClick={() => handleReadLess(index)}
+                                                            >
+                                                                Show Less
+                                                            </button>
+                                                            </>
+                                                        ) : (
+                                                            // Truncated content with "Read More" link
+                                                            <>
+                                                            <span style={{ whiteSpace: 'pre-line' }}>{item.isi_konten.length > 50
+                                                                ? `${item.isi_konten.substring(0, 50)}... `
+                                                                : item.isi_konten}</span>
+                                                            <button
+                                                                className="btn btn-link btn-sm"
+                                                                onClick={() => handleToggleRow(index)}
+                                                            >
+                                                                Show More
+                                                            </button>
+                                                            </>
+                                                        )}
+                                                    </td>
                                                     <td>{item.gambar}</td>
                                                     <td>{new Date(item.tanggal).toLocaleDateString('id-ID', {
                                                         weekday: 'long',

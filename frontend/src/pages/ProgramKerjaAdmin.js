@@ -15,7 +15,7 @@ const ProgramKerjaAdmin = () => {
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [fileData, setFileData] = useState(null);
-
+    const [expandedRows, setExpandedRows] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     let datatable;
 
@@ -98,7 +98,20 @@ const ProgramKerjaAdmin = () => {
       setShowModal(true);
     };
 
-    const renderButton = (kak) => {
+    const handleToggleRow = (index) => {
+      setExpandedRows((prev) =>
+        prev.includes(index)
+          ? prev.filter((proker) => proker !== index)
+          : [...prev, index]
+      );
+    };
+    
+    const handleReadLess = (index) => {
+        // Function to hide the expanded content
+        setExpandedRows((prev) => prev.filter((proker) => proker !== index));
+    };
+
+    const renderButton = (proker) => {
           return (
               <div>
                   <button
@@ -106,7 +119,7 @@ const ProgramKerjaAdmin = () => {
                       style={{ marginRight: '5px' }}
                       data-bs-toggle="modal"
                       data-bs-target="#pesanModal"
-                      onClick={() => handleShowAccModal(kak, "acc")}
+                      onClick={() => handleShowAccModal(proker, "acc")}
                   >
                       <i className="bi-check2"></i> Acc
                   </button>
@@ -115,7 +128,7 @@ const ProgramKerjaAdmin = () => {
                       style={{ marginRight: '5px' }}
                       data-bs-toggle="modal"
                       data-bs-target="#pesanModal"
-                      onClick={() => handleShowAccModal(kak, "revisi")}
+                      onClick={() => handleShowAccModal(proker, "revisi")}
                   >
                       <i className="bi-pencil"></i> Revisi
                   </button>
@@ -124,7 +137,7 @@ const ProgramKerjaAdmin = () => {
                       style={{ marginRight: '5px' }}
                       data-bs-toggle="modal"
                       data-bs-target="#pesanModal"
-                      onClick={() => handleShowAccModal(kak, "tolak")}
+                      onClick={() => handleShowAccModal(proker, "tolak")}
                   >
                       <i className="bi-trash"></i> Tolak
                   </button>
@@ -183,7 +196,35 @@ const ProgramKerjaAdmin = () => {
                                   <td>{proker.tanggal_mulai}</td>
                                   <td>{proker.tanggal_akhir}</td>
                                   <td>{proker.status}</td>
-                                  <td>{proker.catatan}</td>
+                                  <td className="truncated-text">
+                                    {proker.catatan && (
+                                        expandedRows.includes(index) ? (
+                                            // Expanded content with "Read Less" button
+                                            <>
+                                                <span style={{ whiteSpace: 'pre-line' }}>{proker.catatan}</span>
+                                                <button
+                                                    className="btn btn-link btn-sm"
+                                                    onClick={() => handleReadLess(index)}
+                                                >
+                                                    Show Less
+                                                </button>
+                                            </>
+                                        ) : (
+                                            // Truncated content with "Read More" link
+                                            <>
+                                                <span style={{ whiteSpace: 'pre-line' }}>{proker.catatan.length > 50
+                                                    ? `${proker.catatan.substring(0, 50)}... `
+                                                    : proker.catatan}</span>
+                                                <button
+                                                    className="btn btn-link btn-sm"
+                                                    onClick={() => handleToggleRow(index)}
+                                                >
+                                                    Show More
+                                                </button>
+                                            </>
+                                        )
+                                    )}
+                                  </td>
                                   <td>
                                   {proker.status !== 'Diajukan' ? ( 
                                     <>

@@ -95,12 +95,12 @@ function MorePengumuman() {
             <div className="row">
               {pengumumanData.map((pengumuman) => (
                 <div key={pengumuman.id_pengumuman} className="col-12 col-md-12 col-lg-4">
-                  <div className="card text-light text-center bg-white pb-2">
+                  <div className="card text-light bg-white pb-2">
                     <div className="card-body text-dark">
                       <div className="img-area mb-4">
                         <img src={`http://localhost:8000/${pengumuman.gambar}`} className="img-fluid" alt={pengumuman.judul_konten} />
                       </div>
-                      <h3 className="lead" style={{fontWeight: 'bold'}}>{pengumuman.judul_konten}</h3>
+                      <h3 className="lead text-center mb-4" style={{fontWeight: 'bold'}}>{pengumuman.judul_konten}</h3>
                       <h3 className="lead" style={{ whiteSpace: 'pre-line' }}>{pengumuman.isi_konten}</h3>
                       {/* <button className="btn bg-primary text-white">Learn More</button> */}
                     </div>

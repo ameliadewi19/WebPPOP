@@ -19,6 +19,7 @@ const KAKAdmin = () => {
     const [showModal, setShowModal] = useState(false);
     const [fileData, setFileData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [expandedRows, setExpandedRows] = useState([]);
     let datatable;
 
     const role = localStorage.getItem('role');
@@ -59,8 +60,6 @@ const KAKAdmin = () => {
         .catch(error => {
             console.error('Error fetching KAK data:', error);
         });
-
-        
       };
 
     useEffect(() => {
@@ -115,6 +114,53 @@ const KAKAdmin = () => {
                 </div>
             );
     }
+
+    const handleToggleRow = (index) => {
+        setExpandedRows((prev) =>
+          prev.includes(index)
+            ? prev.filter((kak) => kak !== index)
+            : [...prev, index]
+        );
+    };
+    
+    const handleReadLess = (index) => {
+        // Function to hide the expanded content
+        setExpandedRows((prev) => prev.filter((kak) => kak !== index));
+    };
+
+    const handleToggleProkerRow = (index) => {
+        setExpandedRows((prev) =>
+            prev.includes(index)
+            ? prev.filter((item) => item !== index)
+            : [...prev, index]
+        );
+    };
+
+    const renderProker = (prokers, index) => {
+        return (
+            <div key={index}>
+                {prokers.slice(0, expandedRows.includes(index) ? prokers.length : 1).map((proker, prokerIndex) => (
+                    <div key={prokerIndex}>
+                        Nama Kegiatan: {proker.nama_kegiatan}<br />
+                        Ketua Pelaksana: {proker.ketua_pelaksana}<br />
+                        Deskripsi Kegiatan: {proker.deskripsi_kegiatan}<br />
+                        Tanggal Mulai: {proker.tanggal_mulai}<br />
+                        Tanggal Akhir: {proker.tanggal_akhir}<br />
+                        Status: {proker.status}<br />
+                        Catatan: {proker.catatan}<br /><br />
+                    </div>
+                ))}
+                {prokers.length > 1 && (
+                    <button
+                        className="btn btn-link btn-sm"
+                        onClick={() => handleToggleProkerRow(index)}
+                    >
+                        {expandedRows.includes(index) ? 'Show Less' : 'Show More'}
+                    </button>
+                )}
+            </div>
+        );
+    };    
 
     return (
       <main class="content">
@@ -185,19 +231,39 @@ const KAKAdmin = () => {
                                 <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                             </td>
                             <td>{kak.status}</td>
-                            <td>{kak.catatan}</td>
+                            <td className="truncated-text">
+                                {kak.catatan && (
+                                    expandedRows.includes(index) ? (
+                                        // Expanded content with "Read Less" button
+                                        <>
+                                            <span style={{ whiteSpace: 'pre-line' }}>{kak.catatan}</span>
+                                            <button
+                                                className="btn btn-link btn-sm"
+                                                onClick={() => handleReadLess(index)}
+                                            >
+                                                Show Less
+                                            </button>
+                                        </>
+                                    ) : (
+                                        // Truncated content with "Read More" link
+                                        <>
+                                            <span style={{ whiteSpace: 'pre-line' }}>{kak.catatan.length > 50
+                                                ? `${kak.catatan.substring(0, 50)}... `
+                                                : kak.catatan}</span>
+                                            <button
+                                                className="btn btn-link btn-sm"
+                                                onClick={() => handleToggleRow(index)}
+                                            >
+                                                Show More
+                                            </button>
+                                        </>
+                                    )
+                                )}
+                            </td>
                             <td>
-                                {kak.prokers.map(proker => (
-                                <div key={proker.id_proker}>
-                                    Nama Kegiatan: {proker.nama_kegiatan}<br />
-                                    Ketua Pelaksana: {proker.ketua_pelaksana}<br />
-                                    Deskripsi Kegiatan: {proker.deskripsi_kegiatan}<br />
-                                    Tanggal Mulai: {proker.tanggal_mulai}<br />
-                                    Tanggal Akhir: {proker.tanggal_akhir}<br />
-                                    Status: {proker.status}<br />
-                                    Catatan: {proker.catatan}<br /><br />
-                                </div>
-                                ))}
+                            {kak.prokers.length > 0 &&
+                                renderProker(kak.prokers, index)
+                            }
                             </td>
                             <td>
                                     {role === 'admin' ? (

@@ -25,12 +25,12 @@ class KetuaOrmawa extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id_user', 'id_pengguna');
+        return $this->belongsTo(User::class, 'id_user', 'id_pengguna');
     }
 
     public function ormawa()
     {
-        return $this->hasOne(Ormawa::class, 'id_ormawa', 'id_ormawa');
+        return $this->belongsTo(Ormawa::class, 'id_ormawa', 'id_ormawa');
     }
 
     public function kak(){

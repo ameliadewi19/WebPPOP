@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
@@ -10,7 +10,35 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
     id_pengguna: '',
     id_ormawa: '',
   });
+
+  const [allUsers, setAllUsers] = useState([]);
+  const [allOrmawas, setAllOrmawas] = useState([]);
   const modalRef = useRef();
+
+  useEffect(() => {
+    fetchAllUsers();
+    fetchAllOrmawas();
+  }, []);
+
+  const fetchAllUsers = async () => {
+    try {
+      const response = await axios.get('/api/auth/get-ketua');
+      console.log(response.data); // Log the response to check its structure
+      setAllUsers(response.data.ormawa_users);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  
+  const fetchAllOrmawas = async () => {
+    try {
+      const response = await axios.get('/api/ormawa');
+      console.log(response.data); // Log the response to check its structure
+      setAllOrmawas(response.data);
+    } catch (error) {
+      console.error('Error fetching Ormawa data:', error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +73,7 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="addAkunModalLabel">Tambah Ormawa</h5>
+            <h5 className="modal-title" id="addAkunModalLabel">Tambah Ketua Ormawa</h5>
             <button type="button" className="d-none" ref={modalRef} data-bs-dismiss="modal"></button>
           </div>
           <div className="modal-body">
@@ -99,28 +127,44 @@ const TambahKetuaOrmawaModal = ({ showModal, setShowModal, reloadData }) => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="idPengguna" className="form-label">ID Pengguna</label>
-                <input
-                  type="text"
-                  className="form-control"
+                <label htmlFor="idPengguna" className="form-label">
+                  ID Pengguna
+                </label>
+                <select
+                  className="form-select"
                   id="idPengguna"
                   name="id_pengguna"
-                  placeholder="ID Pengguna"
                   value={formData.id_pengguna}
                   onChange={handleInputChange}
-                />
+                >
+                  <option value="" disabled>
+                    Select Pengguna
+                  </option>
+                  {allUsers.map((user) => (
+                    <option key={user.id_user} value={user.id_user}>
+                      {user.nama}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="idOrmawa" className="form-label">ID Ormawa</label>
-                <input
-                  type="text"
-                  className="form-control"
+                <select
+                  className="form-select"
                   id="idOrmawa"
                   name="id_ormawa"
-                  placeholder="ID Ormawa"
                   value={formData.id_ormawa}
                   onChange={handleInputChange}
-                />
+                >
+                  <option value="" disabled>
+                    Select Ormawa
+                  </option>
+                  {allOrmawas.map((ormawa) => (
+                    <option key={ormawa.id_ormawa} value={ormawa.id_ormawa}>
+                      {ormawa.nama_ormawa}
+                    </option>
+                  ))}
+                </select>
               </div>
             </form>
           </div>

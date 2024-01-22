@@ -25,17 +25,6 @@ const KAK = () => {
     const [isLoading, setIsLoading] = useState(true);
     let datatable;
 
-    useEffect(() => {
-        feather.replace(); // Replace the icons after component mounts
-        const role = localStorage.getItem('role');
-        const idUser = localStorage.getItem('idUser');
-        setIdUser(idUser);
-        console.log("idUser:", idUser);
-        setRole(role);
-        fetchOrmawa(idUser);
-        fetchDataKAK();
-    }, [idKetua]);
-
     const fetchOrmawa = (id) => {
         console.log("idUser fetchormawa:", id);
         axios.get(`/api/auth/get-ketua/${id}`)
@@ -49,21 +38,42 @@ const KAK = () => {
         console.log("idKetua ormawa:", idKetua);
     }
 
-    const fetchDataKAK = () => {
+    const fetchDataKAK = async () => {
+        const currentYear = new Date().getFullYear();
+    
         console.log("idKetua:", idKetua);
-        axios.get(`/api/kak/`)
-        .then((res) => {
-            const data = res.data.filter((kak) => kak.id_ketua === idKetua);
+        try {
+            setIsLoading(true);
+            const res = await axios.get(`/api/kak/`);
+            console.log("API Response:", res.data); // Cek response API
+            // Filter data hanya untuk tahun saat ini
+            const data = res.data.filter((kak) => {
+                const uploadYear = new Date(kak.updated_at).getFullYear();
+                return kak.id_ketua === idKetua && uploadYear === currentYear;
+            });
+    
             setDataKak(data);
-            console.log(data);
             setIsDataAvailable(data.length > 0);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-        console.log(dataKak);
+        } catch (err) {
+            console.error("API Error:", err);
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 1000);
+        }
     }
 
+    useEffect(() => {
+        feather.replace(); // Replace the icons after component mounts
+        const role = localStorage.getItem('role');
+        const idUser = localStorage.getItem('idUser');
+        setIdUser(idUser);
+        console.log("idUser:", idUser);
+        setRole(role);
+        fetchOrmawa(idUser);
+        fetchDataKAK();
+    }, [idKetua]);
+    
     useEffect(() => {
         if (dataKak.length > 0) {
             datatable = new DataTable('.datatable', {
@@ -113,51 +123,61 @@ const KAK = () => {
                          Loading ...
                         </div>
                     )}
-                    
-                    <div className="table-responsive">
-                        <table className="table datatable table-striped">
-                            {isLoading ? null : (
-                                <thead>
-                                <tr>
-                                    <th scope='col'>Dokumen KAK</th>
-                                    <th scope='col'>Dokumen RAB</th>
-                                    <th scope='col'>Status</th>
-                                    <th scope='col'>Catatan</th>
-                                    <th scope='col'>Aksi</th>
-                                </tr>
-                                </thead>
+
+                    {!isLoading && (
+                        <>
+                            {isDataAvailable && (
+                                <div className="table-responsive">
+                                    <table className="table datatable table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope='col'>Dokumen KAK</th>
+                                                <th scope='col'>Dokumen RAB</th>
+                                                <th scope='col'>Status</th>
+                                                <th scope='col'>Catatan</th>
+                                                <th scope='col'>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {dataKak.map((kak) => (
+                                                <tr key={kak.id_kak}>
+                                                    <td>
+                                                        <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
+                                                            Dokumen KAK
+                                                        </a>
+                                                        <FileKAKModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                                    </td>
+                                                    <td>
+                                                        <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
+                                                            Dokumen RAB
+                                                        </a>
+                                                        <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                                    </td>
+                                                    <td>{kak.status}</td>
+                                                    <td>{kak.catatan}</td>
+                                                    <td>
+                                                        <button className="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{ marginRight: '5px' }} disabled={kak.status === "Acc tahap akhir"}>
+                                                            {kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1' ? (
+                                                                <><i className='bi-upload'></i> Revisi</>
+                                                            ) : (
+                                                                <i className='bi-pencil-square'></i>
+                                                            )}
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             )}
-                            <tbody>
-                                {dataKak.map((kak) =>(
-                                    <tr key={kak.id_kak}>
-                                        <td>
-                                            <a onClick={() => handleShowModal(kak.file_kak)} data-bs-toggle="modal" data-bs-target="#FileKAKModal" href='#'>
-                                                Dokumen KAK
-                                            </a>
-                                            <FileKAKModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                        </td>
-                                        <td>
-                                            <a onClick={() => handleShowModal(kak.file_rab)} data-bs-toggle="modal" data-bs-target="#FileRABModal" href='#'>
-                                                Dokumen RAB
-                                            </a>
-                                            <FileRABModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                        </td>
-                                        <td>{kak.status}</td>
-                                        <td>{kak.catatan}</td>
-                                        <td>
-                                            <button class="btn btn-primary mt-2" onClick={() => handleEdit(kak.id_kak)} style={{marginRight: '5px'}} disabled={kak.status == "Acc tahap akhir"}>
-                                                {kak.status === 'Revisi tahap 1' || kak.status === 'Tolak tahap 1' ? (
-                                                    <><i className='bi-upload'></i> Revisi</>
-                                                ) : (
-                                                    <i className='bi-pencil-square'></i>
-                                                )}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+
+                            {!isDataAvailable && (
+                                <div className="text-center justify-center">
+                                    Tidak ada data yang ditemukan.
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
                 </div>
             </div>

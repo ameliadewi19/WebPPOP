@@ -50,12 +50,12 @@ const TambahPergerakanModal = ({ showModal, setShowModal, fetchPergerakan }) => 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
+    
         setFormData({
             ...formData,
-            [name]: value,
+            [name]: name === 'id_proker' && value === ' ' ? 0 : value,
         });
-    };
+    }
 
     const handleSubmit = async () => {
         
