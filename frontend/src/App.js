@@ -63,6 +63,11 @@ function App() {
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true); // New state to track loading
   const [token, setToken] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  }
   
   // const refreshAuthToken = async (e) => {
   //   try {  
@@ -127,9 +132,11 @@ function App() {
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <div className="wrapper">
-              <Sidebar />
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
               <div className="main">
-                <Navbar />
+                <Navbar toggleSidebar={toggleSidebar}/>
                 {userRole === 'ormawa' ? <Dashboard /> : <DashboardAdmin />}
                 <Footer />
               </div>
@@ -139,9 +146,11 @@ function App() {
         <Route path="/kak" element={
           <ProtectedRoute>
             <div className="wrapper">
-              <Sidebar />
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
               <div className="main">
-                <Navbar />
+                <Navbar toggleSidebar={toggleSidebar}/>
                 {userRole === 'ormawa' ? <KAK /> : <KAKAdmin />}
                 <Footer />
               </div>
@@ -151,9 +160,11 @@ function App() {
         <Route path="/program-kerja" element={
           <ProtectedRoute>
             <div className="wrapper">
-              <Sidebar />
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
               <div className="main">
-                <Navbar />
+                <Navbar toggleSidebar={toggleSidebar}/>
                 {userRole === 'ormawa' ? <ProgramKerja /> : <ProgramKerjaAdmin />}
                 <Footer />
               </div>
@@ -163,9 +174,11 @@ function App() {
         <Route path="/lpj" element={
           <ProtectedRoute>
             <div className="wrapper">
-              <Sidebar />
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
               <div className="main">
-                <Navbar />
+                <Navbar toggleSidebar={toggleSidebar}/>
                 {userRole === 'ormawa' ? <LPJ /> : <LPJAdmin />}
                 <Footer />
               </div>
@@ -175,9 +188,11 @@ function App() {
         <Route path="/pergerakan" element={
           <ProtectedRoute>
             <div className="wrapper">
-              <Sidebar />
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
               <div className="main">
-                <Navbar />
+                <Navbar toggleSidebar={toggleSidebar}/>
                 {userRole === 'ormawa' ? <Pergerakan /> : <PergerakanAdmin />}
                 <Footer />
               </div>
@@ -187,9 +202,11 @@ function App() {
         <Route path="/peminjaman-sarpras" element={
           <ProtectedRoute>
             <div className="wrapper">
-              <Sidebar />
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
               <div className="main">
-                <Navbar />
+                <Navbar toggleSidebar={toggleSidebar}/>
                 <PeminjamanSarpras />
                 <Footer />
               </div>
@@ -198,9 +215,11 @@ function App() {
         }/>
         <Route path="/timeline" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <Timeline />
               <Footer />
             </div>
@@ -208,9 +227,11 @@ function App() {
         }/>
         <Route path="/pengumuman" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <Pengumuman />
               <Footer />
             </div>
@@ -218,9 +239,11 @@ function App() {
         }/>
         <Route path="/kalender-akademik" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <KalenderAkademik />
               <Footer />
             </div>
@@ -228,9 +251,11 @@ function App() {
         }/>
         <Route path="/ormawa" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <Ormawa />
               <Footer />
             </div>
@@ -238,9 +263,11 @@ function App() {
         }/>
         <Route path="/upload-kak" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <UploadKAK />
               <Footer />
             </div>
@@ -248,9 +275,11 @@ function App() {
         }/>
         <Route path="/kelola-akun" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <KelolaAkun />
               <Footer />
             </div>
@@ -258,9 +287,11 @@ function App() {
         }/>
         <Route path="/profil" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <Profil />
               <Footer />
             </div>
@@ -269,9 +300,11 @@ function App() {
         
         <Route path="/edit-kak/:kakId" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <EditKAK />
               <Footer />
             </div>
@@ -280,9 +313,11 @@ function App() {
 
         <Route path="/ketua-ormawa" element={
           <div className="wrapper">
-            <Sidebar />
+            <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+              <Sidebar />
+            </nav>
             <div className="main">
-              <Navbar />
+              <Navbar toggleSidebar={toggleSidebar}/>
               <KetuaOrmawa />
               <Footer />
             </div>

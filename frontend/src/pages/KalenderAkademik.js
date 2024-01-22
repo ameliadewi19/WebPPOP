@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import TambahKalenderAkademikModal from '../components/Modals/TambahKalenderAkademikModal';
 import EditKalenderAkademikModal from '../components/Modals/EditKalenderAkademikModal';
+import { DataTable } from 'simple-datatables';
 
 const KalenderAkademik = () => {
     const [kalenderAkademik, setKalenderAkademik] = useState([]);
@@ -10,12 +11,28 @@ const KalenderAkademik = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [role, setRole] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
 
     useEffect(() => {
         fetchKalenderAkademik();
         const role = localStorage.getItem('role');
         setRole(role);
     }, []);
+
+    useEffect(() => {
+        if (kalenderAkademik.length > 0) {
+            datatable = new DataTable('.datatable', {
+                sortable: false,
+                searchable: false,
+                paging: false
+            });
+            datatable.on("datatable.init", () => {
+                setIsLoading(false);
+                datatable.refresh();
+            });
+        }
+    }, [kalenderAkademik]);
 
     const fetchKalenderAkademik = async () => {
         try {
@@ -97,7 +114,13 @@ const KalenderAkademik = () => {
                             </div>
                             <div className="card-body">
                                 <div className="table-responsive">
-                                    <table className="table table-striped">
+                                {isLoading && (
+                                    <div className="text-center justify-center">
+                                    Loading ...
+                                    </div>
+                                )}
+                                    <table className="table datatable table-striped">
+                                    {isLoading ? null : (
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -108,6 +131,7 @@ const KalenderAkademik = () => {
                                                 {/* Add more table headers as needed */}
                                             </tr>
                                         </thead>
+                                    )}
                                         <tbody>
                                             {kalenderAkademik.map((item, index) => (
                                                 <tr key={index}>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import TambahPergerakanModal from '../components/Modals/TambahPergerakanModal.js';
 import EditPergerakanModal from '../components/Modals/EditPergerakanModal.js';
+import { DataTable } from 'simple-datatables';
 
 const PergerakanAdmin = () => {
     const [role, setRole] = useState(null);
@@ -12,6 +13,10 @@ const PergerakanAdmin = () => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [idKetua, setIdKetua] = useState(null);
     const [dataProker, setDataProker] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
+
     useEffect(() => {
       const idUser = localStorage.getItem('idUser');
       const role = localStorage.getItem('role');
@@ -20,6 +25,20 @@ const PergerakanAdmin = () => {
       fetchDataProker();
       fetchPergerakan();
     }, [idKetua]);
+
+    useEffect(() => {
+        if (pergerakan.length > 0) {
+            datatable = new DataTable('.datatable', {
+                sortable: false,
+                searchable: false,
+                paging: false
+            });
+            datatable.on("datatable.init", () => {
+                setIsLoading(false);
+                datatable.refresh();
+            });
+        }
+    }, [pergerakan]);
 
     const fetchOrmawa = (id) => {
       console.log("idUser fetchormawa:", id);
@@ -136,8 +155,14 @@ const PergerakanAdmin = () => {
                                 {/* {role === 'ormawa' && <TambahPergerakanModal showModal={showModal} setShowModal={setShowModal} fetchPergerakan={fetchPergerakan}/>} */}
                             </div>
                             <div className="card-body">
+                                {isLoading && (
+                                    <div className="text-center justify-center">
+                                    Loading ...
+                                    </div>
+                                )}
                                 <div className="table-responsive">
-                                    <table className="table table-striped">
+                                    <table className="table datatable table-striped">
+                                      {isLoading ? null : (
                                         <thead>
                                             <tr>
                                                 <th>Index</th>
@@ -147,6 +172,7 @@ const PergerakanAdmin = () => {
                                                 {/* <th>Action</th> */}
                                             </tr>
                                         </thead>
+                                      )}
                                         <tbody>
                                             {pergerakan.map((item, index) => (
                                                 <tr key={index}>

@@ -7,6 +7,7 @@ import FileProposalModal from '../components/Modals/FileProposalModal';
 import FileRABModal from '../components/Modals/FileRABModal';
 import FileLPJModal from '../components/Modals/FileLPJModal';
 import FileLpjModal from '../components/Modals/FileLPJModal';
+import { DataTable } from 'simple-datatables';
 
 const LPJAdmin = () => {
     const location = useLocation();
@@ -19,10 +20,27 @@ const LPJAdmin = () => {
 
     const role = localStorage.getItem('role');
 
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
+
     useEffect(() => {
       fetchData();
       feather.replace();
     }, [role]);
+
+    useEffect(() => {
+      if (lpj.length > 0) {
+          datatable = new DataTable('.datatable', {
+              sortable: false,
+              searchable: false,
+              paging: false
+          });
+          datatable.on("datatable.init", () => {
+              setIsLoading(false);
+              datatable.refresh();
+          });
+      }
+    }, [lpj]);
 
     const fetchData = async () => {
         try {
@@ -128,8 +146,14 @@ const LPJAdmin = () => {
                     <h5 className="card-title mt-1">Laporan Pertanggung Jawaban Program Kerja</h5>
                 </div>
                 <div className="card-body">
+                    {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                    )}
                     <div className="table-responsive">
-                    <table className="table table-striped">
+                    <table className="table datatable table-striped">
+                      {isLoading ? null : (
                         <thead>
                         <tr>
                             <th>No</th>
@@ -144,14 +168,14 @@ const LPJAdmin = () => {
                             <th>File LPJ</th>
                             <th>File RAB</th>
                             <th>Aksi</th>
-                            {role === 'admin' && <th>Izin Submit</th>}
                         </tr>
                         </thead>
+                      )}
                         <tbody>
                             {lpj.map((lpjItem, index) => (
                                 <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{lpjItem.proker.kak.ketua_ormawa.ormawa.nama_ormawa}</td>
+                                <td>{lpjItem.proker.kak?.ketua_ormawa?.ormawa?.nama_ormawa}</td>
                                 <td>{lpjItem.proker.nama_kegiatan}</td>
                                 <td>{lpjItem.proker.ketua_pelaksana}</td>
                                 <td>{lpjItem.proker.deskripsi_kegiatan}</td>
@@ -194,26 +218,7 @@ const LPJAdmin = () => {
                                         renderButton(lpjItem.id_lpj)
                                     )}
                                 </td>
-                                {role === 'admin' && lpjItem.proker.izin_submit === 'true' &&
-                                    <td>
-                                        <button
-                                            className="btn btn-primary mt-2"
-                                            onClick={() => handleIzinSubmit(lpjItem.id_lpj)}
-                                        >
-                                            {lpjItem.proker.izin_submit}
-                                        </button>
-                                    </td>
-                                }
-                                {role === 'admin' && lpjItem.proker.izin_submit === 'false' && lpjItem.status !== 'Acc tahap akhir' ? (
-                                    <td>
-                                        <button
-                                            className="btn btn-danger mt-2"
-                                                onClick={() => handleIzinSubmit(lpjItem.id_lpj)}
-                                        >
-                                            {lpjItem.proker.izin_submit}
-                                        </button>
-                                    </td>) : ( <td>-</td>)
-                                }
+                                
                                 </tr>
                             ))}
                         </tbody>

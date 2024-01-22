@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import TambahPengumumanModal from '../components/Modals/TambahPengumumanModal.js';
 import EditPengumumanModal from '../components/Modals/EditPengumumanModal.js';
+import { DataTable } from 'simple-datatables';
 
 const Pengumuman = () => {
     const [pengumuman, setPengumuman] = useState([]);
@@ -11,11 +12,28 @@ const Pengumuman = () => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [role, setRole] = useState(null);
 
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
+
     useEffect(() => {
         fetchPengumuman();
         const role = localStorage.getItem('role');
         setRole(role);
     }, []);
+
+    useEffect(() => {
+        if (pengumuman.length > 0) {
+            datatable = new DataTable('.datatable', {
+                sortable: false,
+                searchable: false,
+                paging: false
+            });
+            datatable.on("datatable.init", () => {
+                setIsLoading(false);
+                datatable.refresh();
+            });
+        }
+    }, [pengumuman]);
 
     const fetchPengumuman = async () => {
         try {
@@ -97,7 +115,14 @@ const Pengumuman = () => {
                             </div>
                             <div className="card-body">
                                 <div className="table-responsive">
-                                    <table className="table table-striped">
+                                    {isLoading ? (
+                                    <div className="text-center justify-center">
+                                        Loading ...
+                                    </div>
+                                    ) : null}
+
+                                    <table className="table datatable table-striped">
+                                    {isLoading ? null : (
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -110,6 +135,7 @@ const Pengumuman = () => {
                                                 {/* Add more table headers as needed */}
                                             </tr>
                                         </thead>
+                                    )}
                                         <tbody>
                                             {pengumuman.map((item, index) => (
                                                 <tr key={index}>

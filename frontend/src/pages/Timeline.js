@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import TambahKegiatanTimelineModal from '../components/Modals/TambahKegiatanTimelineModal.js';
 import EditKegiatanTimelineModal from '../components/Modals/EditKegiatanTimelineModal.js';
 import Swal from 'sweetalert2';
+import { DataTable } from 'simple-datatables';
 
 const Timeline = () => {
     const [role, setRole] = useState(null);
@@ -13,6 +14,8 @@ const Timeline = () => {
     const [editTimelineId, setEditTimelineId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [timeline, setTimeline] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
 
     useEffect(() => {
         // feather.replace(); // Replace the icons after component mounts
@@ -21,6 +24,20 @@ const Timeline = () => {
         fetchTimeline();
         // console.log("test");
     }, []);
+
+    useEffect(() => {
+      if (timeline.length > 0) {
+          datatable = new DataTable('.datatable', {
+              sortable: false,
+              searchable: false,
+              paging: false
+          });
+          datatable.on("datatable.init", () => {
+              setIsLoading(false);
+              datatable.refresh();
+          });
+      }
+    }, [timeline]);
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -110,7 +127,13 @@ const Timeline = () => {
                   </div>
                   <div className="card-body">
                       <div className="table-responsive">
-                      <table className="table table-striped">
+                      {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                      )}
+                      <table className="table datatable table-striped">
+                        {isLoading ? null : (
                           <thead>
                           <tr>
                               <th>No</th>
@@ -123,6 +146,7 @@ const Timeline = () => {
                               }
                           </tr>
                           </thead>
+                        )}
                           <tbody>
                             {timeline.map((item, index) => (
                                 <tr key={index}>

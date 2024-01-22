@@ -6,6 +6,7 @@ import TambahAkunModal from '../components/Modals/TambahAkunModal.js';
 import EditProfilModal from '../components/Modals/EditProfilModal.js';
 import EditPasswordAdminModal from '../components/Modals/EditPasswordAdminModal.js';
 import Swal from 'sweetalert2';
+import { DataTable } from 'simple-datatables';
 
 const KelolaAkun = () => {
     const [role, setRole] = useState(null);
@@ -15,6 +16,8 @@ const KelolaAkun = () => {
     const [IdUser, setIdUser] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
 
     useEffect(() => {
       // feather.replace(); // Replace the icons after component mounts
@@ -23,7 +26,21 @@ const KelolaAkun = () => {
       fetchData();
       // console.log("test");
     }, []);
-  
+    
+    useEffect(() => {
+      if (users.length > 0) {
+          datatable = new DataTable('.datatable', {
+              sortable: false,
+              searchable: false,
+              paging: false
+          });
+          datatable.on("datatable.init", () => {
+              setIsLoading(false);
+              datatable.refresh();
+          });
+      }
+    }, [users]);
+
     const handleShowModal = () => {
       setShowModal(true);
     };
@@ -110,7 +127,13 @@ const KelolaAkun = () => {
                   </div>
                   <div className="card-body">
                       <div className="table-responsive">
-                      <table className="table table-striped">
+                      {isLoading && (
+                        <div className="text-center justify-center">
+                          Loading ...
+                        </div>
+                      )}
+                      <table className="table datatable table-striped">
+                        {isLoading ? null : (
                           <thead>
                           <tr>
                               <th>No</th>
@@ -121,6 +144,7 @@ const KelolaAkun = () => {
                               <th>Aksi</th>
                           </tr>
                           </thead>
+                        )}
                           <tbody>
                             {users.map((user, index) => (
                               <tr key={index}>

@@ -14,7 +14,7 @@ const Sidebar = () => {
     }, []);
 
     return (
-        <nav id="sidebar" className="sidebar js-sidebar">
+        // <nav id="sidebar" className="sidebar js-sidebar">
             <div className="sidebar-content js-simplebar">
                 <a className="sidebar-brand text-decoration-none" href="/dashboard">
                     <span className="align-middle">SipProkerOK</span>
@@ -105,7 +105,7 @@ const Sidebar = () => {
                     }
                 </ul>
             </div>
-        </nav>
+        // </nav>
     );
 };
 

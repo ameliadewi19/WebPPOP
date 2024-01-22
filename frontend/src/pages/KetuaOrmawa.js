@@ -6,6 +6,7 @@ import EditKetuaOrmawaModal from '../components/Modals/EditKetuaOrmawaModal.js';
 import EditPasswordAdminModal from '../components/Modals/EditPasswordAdminModal.js';
 import Swal from 'sweetalert2';
 import TambahKetuaOrmawaModal from '../components/Modals/TambahKetuaOrmawaModal.js';
+import { DataTable } from 'simple-datatables';
 
 const KetuaOrmawa = () => {
     const [role, setRole] = useState(null);
@@ -17,6 +18,8 @@ const KetuaOrmawa = () => {
     const [showPasswordModal, setShowPasswordModal] = useState(false);
 
     const [ketuaOrmawas, setKetuaOrmawas] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
 
     useEffect(() => {
       // feather.replace(); // Replace the icons after component mounts
@@ -24,6 +27,20 @@ const KetuaOrmawa = () => {
       setRole(role);
       fetchData();
     }, []);
+
+    useEffect(() => {
+      if (ketuaOrmawas.length > 0) {
+          datatable = new DataTable('.datatable', {
+              sortable: false,
+              searchable: false,
+              paging: false
+          });
+          datatable.on("datatable.init", () => {
+              setIsLoading(false);
+              datatable.refresh();
+          });
+      }
+  }, [ketuaOrmawas]);
   
     const handleShowModal = () => {
       setShowModal(true);
@@ -129,7 +146,13 @@ const KetuaOrmawa = () => {
                   </div>
                   <div className="card-body">
                       <div className="table-responsive">
-                      <table className="table table-striped">
+                      {isLoading && (
+                        <div className="text-center justify-center">
+                          Loading ...
+                        </div>
+                      )}
+                      <table className="table datatable table-striped">
+                        {isLoading ? null : (
                           <thead>
                           <tr>
                               <th>No</th>
@@ -142,6 +165,7 @@ const KetuaOrmawa = () => {
                               )}
                           </tr>
                           </thead>
+                        )}
                           <tbody>
                             {ketuaOrmawas.map((ketua, index) => (
                               <tr key={index}>

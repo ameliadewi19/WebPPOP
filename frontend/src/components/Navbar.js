@@ -5,7 +5,7 @@ import feather from 'feather-icons';
 
 // ...
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
 	const [id, setID] = useState('');
@@ -50,7 +50,7 @@ const Navbar = () => {
 
     return (
         <nav className="navbar navbar-expand navbar-light navbar-bg">
-            <a className="sidebar-toggle js-sidebar-toggle">
+            <a className="sidebar-toggle d-flex mr-2" onClick={() => toggleSidebar()}>
                 <i className="hamburger align-self-center ms-2"></i>
             </a>
 

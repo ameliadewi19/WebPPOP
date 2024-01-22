@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import FileKAKModal from '../components/Modals/FileKAKModal';
 import FileRABModal from '../components/Modals/FileRABModal';
+import { DataTable } from 'simple-datatables';
 
 // Using Arrow Function
 const KAKAdmin = () => {
@@ -17,6 +18,8 @@ const KAKAdmin = () => {
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [fileData, setFileData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
 
     const role = localStorage.getItem('role');
 
@@ -38,6 +41,7 @@ const KAKAdmin = () => {
     }
 
     const fetchData = () => {
+        
         axios.get('/api/kak')
         .then(response => {
             if (role === "sekumbem"){
@@ -55,12 +59,28 @@ const KAKAdmin = () => {
         .catch(error => {
             console.error('Error fetching KAK data:', error);
         });
+
+        
       };
 
     useEffect(() => {
         fetchData();
         feather.replace();
     }, []);
+
+    useEffect(() => {
+        if (kaks.length > 0) {
+            datatable = new DataTable('.datatable', {
+                sortable: false,
+                searchable: false,
+                paging: false
+            });
+            datatable.on("datatable.init", () => {
+                setIsLoading(false);
+                datatable.refresh();
+            });
+        }
+    }, [kaks]);
 
     const renderButton = (kak) => {
             return (
@@ -109,8 +129,14 @@ const KAKAdmin = () => {
                     <h5 className="card-title mt-1">KAK</h5>
                 </div>
                 <div className="card-body">
+                    {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                    )}
                     <div className="table-responsive">
-                    <table className="table table-striped">
+                    <table className="table datatable table-striped">
+                    {isLoading ? null : (
                         <thead>
                         <tr>
                             <th>No</th>
@@ -124,6 +150,7 @@ const KAKAdmin = () => {
                             <th>Aksi</th>
                         </tr>
                         </thead>
+                    )}
                         <tbody>
                         {kaks.map((kak, index) => (
                             <tr key={index}>

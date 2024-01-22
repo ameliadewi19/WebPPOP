@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import TambahOrmawaModal from '../components/Modals/TambahOrmawaModal.js';
 import EditOrmawaModal from '../components/Modals/EditOrmawaModal.js';
 import Swal from 'sweetalert2';
+import { DataTable } from 'simple-datatables';
 
 const Ormawa = () => {
   const history = useNavigate();
@@ -12,6 +13,9 @@ const Ormawa = () => {
   const [showModal, setShowModal] = useState(false);
   const [IdOrmawa, setIdOrmawa] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
+  let datatable;
   
   useEffect(() => {
     const role = localStorage.getItem('role');
@@ -30,6 +34,20 @@ const Ormawa = () => {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    if (ormawas.length > 0) {
+        datatable = new DataTable('.datatable', {
+            sortable: false,
+            searchable: false,
+            paging: false
+        });
+        datatable.on("datatable.init", () => {
+            setIsLoading(false);
+            datatable.refresh();
+        });
+    }
+  }, [ormawas]);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -96,7 +114,13 @@ const Ormawa = () => {
               </div>
               <div className="card-body">
                 <div className="table-responsive">
-                  <table className="table table-striped">
+                  {isLoading && (
+                    <div className="text-center justify-center">
+                      Loading ...
+                    </div>
+                  )}
+                  <table className="table datatable table-striped">
+                  {isLoading ? null : (
                     <thead>
                       <tr>
                         <th>ID</th>
@@ -106,6 +130,7 @@ const Ormawa = () => {
                         {/* Add more columns as needed */}
                       </tr>
                     </thead>
+                  )}
                     <tbody>
                       {ormawas.map((ormawa, index) => (
                         <tr key={index}>

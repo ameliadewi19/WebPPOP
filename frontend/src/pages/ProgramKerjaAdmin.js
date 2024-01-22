@@ -5,6 +5,7 @@ import feather from 'feather-icons';
 import AccProkerModal from '../components/Modals/AccProkerModal';
 import FileProposalModal from '../components/Modals/FileProposalModal';
 import FileRABProkerModal from '../components/Modals/FileRABProkerModal';
+import { DataTable } from 'simple-datatables';
 
 const ProgramKerjaAdmin = () => {
     const location = useLocation();
@@ -15,12 +16,29 @@ const ProgramKerjaAdmin = () => {
     const [showModal, setShowModal] = useState(false);
     const [fileData, setFileData] = useState(null);
 
+    const [isLoading, setIsLoading] = useState(true);
+    let datatable;
+
     const role = localStorage.getItem('role');
 
     useEffect(() => {
       fetchData();
       feather.replace();
     }, [role]);
+
+    useEffect(() => {
+      if (prokers.length > 0) {
+          datatable = new DataTable('.datatable', {
+              sortable: false,
+              searchable: false,
+              paging: false
+          });
+          datatable.on("datatable.init", () => {
+              setIsLoading(false);
+              datatable.refresh();
+          });
+      }
+  }, [prokers]);
 
     const fetchData = async () => {
       try {
@@ -127,8 +145,14 @@ const ProgramKerjaAdmin = () => {
                     <h5 className="card-title mt-1">Program Kerja</h5>
                 </div>
                 <div className="card-body">
+                    {isLoading && (
+                        <div className="text-center justify-center">
+                         Loading ...
+                        </div>
+                    )}
                     <div className="table-responsive">
-                    <table className="table table-striped">
+                    <table className="table datatable table-striped">
+                    {isLoading ? null : (
                         <thead>
                         <tr>
                             <th>No</th>
@@ -143,9 +167,10 @@ const ProgramKerjaAdmin = () => {
                             <th>File Proposal</th>
                             <th>File RAB</th>
                             <th>Aksi</th>
-                            {/* {role === 'admin' && <th>Izin Submit</th>} */}
+                            {role === 'admin' && <th>Izin Submit</th>}
                         </tr>
                         </thead>
+                    )}
                         <tbody>
                           {prokers.map((proker, index) => (
                               <tr key={index}>
@@ -203,7 +228,7 @@ const ProgramKerjaAdmin = () => {
                                     )}
                                   </td>
                                   {/* <td>{renderButton(proker.id_proker)}</td> */}
-                                  {/* {role === 'admin' && proker.izin_submit === 'true' && <td><button
+                                  {role === 'admin' && proker.izin_submit === 'true' && <td><button
                                         className="btn btn-primary mt-2"
                                         onClick={() => handleIzinSubmit(proker.id_proker)}
                                     >
@@ -216,7 +241,7 @@ const ProgramKerjaAdmin = () => {
                                     >
                                         {proker.izin_submit}
                                     </button></td>
-                                  } */}
+                                  }
                               </tr>
                           ))}
                       </tbody>
