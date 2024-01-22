@@ -141,6 +141,18 @@ const LPJ = () => {
     const handleShowFile = (file) => {
       setFileData(file);
     }
+
+    const isUploadDisabled = (tanggal_akhir) => {
+      // Menghitung selisih hari antara tanggal akhir dan tanggal saat ini
+      const today = new Date();
+      const differenceInMilliseconds = today - new Date(tanggal_akhir);
+      const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    
+
+      // Menonaktifkan tombol jika selisih hari lebih dari 14
+      console.log("diffdaylpj: ", differenceInDays)
+      return differenceInDays > 14;
+    };
     return (
       <main class="content">
         <div class="container-fluid p-0">
@@ -207,8 +219,12 @@ const LPJ = () => {
                                     <td>{proker.lpj.catatan}</td>
                                     <td>
                                       {proker.status === 'Acc tahap akhir' && proker.lpj.file_lpj === '' ? 
-                                        <button class="btn btn-primary mt-2" style={{ marginRight: '5px' }} onClick={() => handleShowModal(proker.id_proker)} data-bs-toggle="modal" data-bs-target="#uploadLPJModal"
-                                          disabled={proker.status !== 'Acc tahap akhir'}><i className='bi-upload'></i> LPJ</button>
+                                        <button class="btn btn-primary mt-2"
+                                          style={{ marginRight: '5px' }}
+                                          onClick={() => handleShowModal(proker.id_proker)}
+                                          data-bs-toggle="modal" data-bs-target="#uploadLPJModal"
+                                          disabled={isUploadDisabled(proker.tanggal_akhir)}
+                                          title={'Upload LPJ'}><i className='bi-upload'></i> LPJ</button>
                                       :
                                         <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.lpj.id_lpj, proker.id_proker)} style={{marginRight: '5px'}} data-bs-toggle="modal" data-bs-target="#editLPJModal"
                                         disabled={proker.lpj.status === 'Acc tahap akhir'}>
@@ -219,6 +235,7 @@ const LPJ = () => {
                                             )}
                                         </button>
                                       }
+                                      {console.log("tanggal_akhir: ", proker.tanggal_akhir)}
                                       <UploadLPJModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
                                       <EditLPJModal reloadData={fetchDataProker} selectedlpjId={selectedlpjId} selectedProkerId={selectedProkerId} />
                                     </td>
