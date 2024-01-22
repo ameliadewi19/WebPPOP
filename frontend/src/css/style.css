@@ -1,0 +1,7 @@
+/* Add this to your CSS file */
+.truncated-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  

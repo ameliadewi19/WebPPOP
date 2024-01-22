@@ -17,7 +17,7 @@ const LPJAdmin = () => {
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [fileData, setFileData] = useState(null);
-
+    const [expandedRows, setExpandedRows] = useState([]);
     const role = localStorage.getItem('role');
 
     const [isLoading, setIsLoading] = useState(true);
@@ -97,6 +97,19 @@ const LPJAdmin = () => {
         setFileData(file);
         console.log("fileData: ", file);
         setShowModal(true);
+    };
+
+    const handleToggleRow = (index) => {
+      setExpandedRows((prev) =>
+        prev.includes(index)
+          ? prev.filter((lpjItem) => lpjItem !== index)
+          : [...prev, index]
+      );
+    };
+    
+    const handleReadLess = (index) => {
+        // Function to hide the expanded content
+        setExpandedRows((prev) => prev.filter((lpjItem) => lpjItem !== index));
     };
 
     const renderButton = (kak) => {
@@ -182,7 +195,35 @@ const LPJAdmin = () => {
                                 <td>{lpjItem.proker.tanggal_mulai}</td>
                                 <td>{lpjItem.proker.tanggal_akhir}</td>
                                 <td>{lpjItem.status}</td>
-                                <td>{lpjItem.catatan}</td>
+                                <td className="truncated-text">
+                                    {lpjItem.catatan && (
+                                        expandedRows.includes(index) ? (
+                                            // Expanded content with "Read Less" button
+                                            <>
+                                                <span style={{ whiteSpace: 'pre-line' }}>{lpjItem.catatan}</span>
+                                                <button
+                                                    className="btn btn-link btn-sm"
+                                                    onClick={() => handleReadLess(index)}
+                                                >
+                                                    Show Less
+                                                </button>
+                                            </>
+                                        ) : (
+                                            // Truncated content with "Read More" link
+                                            <>
+                                                <span style={{ whiteSpace: 'pre-line' }}>{lpjItem.catatan.length > 50
+                                                    ? `${lpjItem.catatan.substring(0, 50)}... `
+                                                    : lpjItem.catatan}</span>
+                                                <button
+                                                    className="btn btn-link btn-sm"
+                                                    onClick={() => handleToggleRow(index)}
+                                                >
+                                                    Show More
+                                                </button>
+                                            </>
+                                        )
+                                    )}
+                                </td>
                                 {lpjItem.file_lpj && (
                                       <>
                                         <td>
