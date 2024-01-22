@@ -68,6 +68,7 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']);     
+    Route::get('/get-ketua', [AuthController::class, 'getAllOrmawaUsers']); 
 });
 
 // KETUA ORMAWA

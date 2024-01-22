@@ -14,40 +14,88 @@ const EditKetuaOrmawaModal = ({ showModal, setShowModal, reloadData, userId }) =
   const modalRef = useRef();
   console.log("user id:", userId);
 
-  // Fetch user profile data when the component mounts
+  const [allUsers, setAllUsers] = useState([]);
+  const [allOrmawas, setAllOrmawas] = useState([]);
+
   useEffect(() => {
+    fetchAllUsers();
+    fetchAllOrmawas();
+  }, []);
+  
+  const fetchAllUsers = async () => {
+    try {
+      const response = await axios.get('/api/auth/get-ketua');
+      setAllUsers(response.data.ormawa_users);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  
+  const fetchAllOrmawas = async () => {
+    try {
+      const response = await axios.get('/api/ormawa');
+      setAllOrmawas(response.data);
+    } catch (error) {
+      console.error('Error fetching Ormawa data:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/ketua-ormawa/${userId}`);
+        const fetchedData = response.data.data;
+        console.log("fetched data:", fetchedData.data);
+  
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          nim_ketua: fetchedData.nim_ketua,
+          nama_ketua: fetchedData.nama_ketua,
+          tahun_jabatan: fetchedData.tahun_jabatan,
+          email_pengguna: fetchedData.email_ketua,
+          id_pengguna: fetchedData.id_pengguna,
+          id_ormawa: fetchedData.id_ormawa,
+        }));
+      } catch (error) {
+        console.error('Error fetching ketua ormawa data:', error);
+      }
+    };
+  
     if (userId) {
-      axios.get(`/api/ketua-ormawa/${userId}`)
-        .then(response => {
-          const fetchedData = response.data;
-          console.log("fetched data:", fetchedData);
-          // Update the formData state with the fetched data
-          setFormData({
-            nim_ketua: fetchedData.nim_ketua,
-            nama_ketua: fetchedData.nama_ketua,
-            tahun_jabatan: fetchedData.tahun_jabatan,
-            email_pengguna: fetchedData.email_pengguna,
-            id_pengguna: fetchedData.id_pengguna,
-            id_ormawa: fetchedData.id_ormawa,
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching ketua ormawa data:', error);
-        });
+      fetchData();
     }
   }, [userId]);
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
+  
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
+  
+  const handleIdPenggunaChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      id_pengguna: parseInt(value, 10)
+    }));
+  };
+  
+  const handleIdOrmawaChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      id_ormawa: parseInt(value, 10)
+    }));
+  };  
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    console.log("form data:", formData);
 
     axios.put(`/api/ketua-ormawa/${userId}`, formData, {
       headers: {
@@ -139,28 +187,43 @@ const EditKetuaOrmawaModal = ({ showModal, setShowModal, reloadData, userId }) =
               </div>
               <div className="mb-3">
                 <label htmlFor="idPengguna" className="form-label">ID Pengguna</label>
-                <input
-                  type="text"
-                  className="form-control"
+                <select
+                  className="form-select"
                   id="idPengguna"
                   name="id_pengguna"
-                  placeholder="ID Pengguna"
                   value={formData.id_pengguna}
-                  onChange={handleInputChange}
-                />
+                  onChange={handleIdPenggunaChange}
+                >
+                  <option value="" disabled>
+                    Select Pengguna
+                  </option>
+                  {allUsers.map((user) => (
+                    <option key={user.id_user} value={user.id_user}>
+                      {user.nama}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="idOrmawa" className="form-label">ID Ormawa</label>
-                <input
-                  type="text"
-                  className="form-control"
+                <select
+                  className="form-select"
                   id="idOrmawa"
                   name="id_ormawa"
-                  placeholder="ID Ormawa"
                   value={formData.id_ormawa}
-                  onChange={handleInputChange}
-                />
+                  onChange={handleIdOrmawaChange}
+                >
+                  <option value="" disabled>
+                    Select Ormawa
+                  </option>
+                  {allOrmawas.map((ormawa) => (
+                    <option key={ormawa.id_ormawa} value={ormawa.id_ormawa}>
+                      {ormawa.nama_ormawa}
+                    </option>
+                  ))}
+                </select>
               </div>
+
             </form>
           </div>
           <div className="modal-footer">

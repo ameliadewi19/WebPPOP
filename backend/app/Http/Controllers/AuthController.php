@@ -77,10 +77,11 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getKetuaOrmawa($id) {
-        $KetuaOrmawa = KetuaOrmawa::where('id_pengguna', $id)->first();
-        $id_ormawa = $KetuaOrmawa->ormawa->id_ormawa;
-        $Ormawa = Ormawa::where('id_ormawa', $id_ormawa)->first();
+    public function getKetuaOrmawa($id)
+    {
+        $KetuaOrmawa = KetuaOrmawa::where('id_pengguna', $id)
+            ->with('user', 'ormawa', 'kak') // Eager load related models
+            ->first();
 
         if (!$KetuaOrmawa) {
             return response()->json(['message' => 'Data not found'], 404);
@@ -266,4 +267,18 @@ class AuthController extends Controller
         return response()->json(['message' => 'User successfully updated', 'user' => $user], 200);
     }
     
+    /**
+     * Get all user data.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllOrmawaUsers()
+    {
+        try {
+            $ormawaUsers = User::where('role', 'ormawa')->get();
+            return response()->json(['ormawa_users' => $ormawaUsers], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to retrieve ormawa users'], 500);
+        }
+    }
 }
