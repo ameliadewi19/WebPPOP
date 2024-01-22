@@ -173,12 +173,18 @@ class KAKController extends Controller
 
         // Update or create associated "proker" records
         $new_prokers = [];
-        if ($request->has('prokers')) {
-            foreach ($request->input('prokers') as $prokerData) {
-                // Jika ID proker tidak ada atau null, berarti ini merupakan proker baru.
-                if ($prokerData['id_proker']) {
-                    $proker = Proker::find($prokerData['id_proker']);
 
+        if ($request->has('prokers')) {
+            $frontend_proker_ids = collect($request->input('prokers'))->pluck('id_proker')->toArray();
+        
+            // Find existing Prokers in the database
+            $existing_prokers = Proker::where('id_kak', $id_kak)->get();
+        
+            foreach ($request->input('prokers') as $prokerData) {
+                if ($prokerData['id_proker']) {
+                    // Existing Proker - Update
+                    $proker = $existing_prokers->where('id_proker', $prokerData['id_proker'])->first();
+        
                     if ($proker) {
                         $proker->update([
                             'nama_kegiatan' => $prokerData['nama_kegiatan'],
@@ -186,23 +192,33 @@ class KAKController extends Controller
                             'ketua_pelaksana' => $prokerData['ketua_pelaksana'],
                             'deskripsi_kegiatan' => $prokerData['deskripsi_kegiatan'],
                         ]);
+        
                         $new_prokers[] = $proker;
                     } else {
                         return response()->json(['message' => 'Proker not found for ID: ' . $prokerData['id_proker']], 404);
                     }
                 } else {
+                    // New Proker - Create
                     $prokerData['id_kak'] = $id_kak;
                     $prokerData['status'] = 'Diajukan';
                     $prokerData['catatan'] = '';
-
+        
                     $new_proker = Proker::create($prokerData);
                     $new_prokers[] = $new_proker;
                 }
             }
+        
+            // Collect all existing Proker IDs
+            $all_existing_proker_ids = $existing_prokers->pluck('id_proker')->toArray();
+        
+            // Find IDs of Prokers to delete (those that exist in the database but not in frontend data)
+            $prokers_to_delete_ids = array_diff($all_existing_proker_ids, $frontend_proker_ids);
+        
+            // Delete Prokers that are not in the frontend data
+            Proker::whereIn('id_proker', $prokers_to_delete_ids)->where('id_kak', $id_kak)->delete();
         }
 
-        // Setelah semua proker ditambahkan, kirim respons
-        return response()->json(['kak' => $kak, 'prokers' => $new_prokers], 200);
+        return response()->json(['new_prokers' => $new_prokers], 200);
 
     }
 
