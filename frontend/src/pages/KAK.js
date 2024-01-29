@@ -39,27 +39,20 @@ const KAK = () => {
     }
 
     const fetchDataKAK = async () => {
-        const currentYear = new Date().getFullYear();
-    
         console.log("idKetua:", idKetua);
         try {
             setIsLoading(true);
             const res = await axios.get(`/api/kak/`);
             console.log("API Response:", res.data); // Cek response API
-            // Filter data hanya untuk tahun saat ini
-            const data = res.data.filter((kak) => {
-                const uploadYear = new Date(kak.updated_at).getFullYear();
-                return kak.id_ketua === idKetua && uploadYear === currentYear;
-            });
-    
+            // Filter data hanya untuk id_ketua yang sedang login
+            const data = res.data.filter((kak) => kak.id_ketua === idKetua);
             setDataKak(data);
             setIsDataAvailable(data.length > 0);
         } catch (err) {
             console.error("API Error:", err);
+            setIsDataAvailable(false)
         } finally {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 1000);
+            setIsLoading(false)
         }
     }
 
