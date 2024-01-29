@@ -165,7 +165,7 @@ const PergerakanAdmin = () => {
                                       {isLoading ? null : (
                                         <thead>
                                             <tr>
-                                                <th>Index</th>
+                                                <th>No.</th>
                                                 <th>Nama Proker</th>
                                                 <th>Nama Pergerakan</th>
                                                 <th>Deskripsi Pergerakan</th>
@@ -177,7 +177,21 @@ const PergerakanAdmin = () => {
                                             {pergerakan.map((item, index) => (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
-                                                    <td>{item.proker.nama_kegiatan}</td>
+                                                    <td>
+                                                        {role === 'admin' ? (
+                                                            item.status === 'Acc tahap akhir' ? 'Proker selesai diproses' :
+                                                            item.status === 'Diajukan' ||
+                                                            item.status === 'Submit proposal' ||
+                                                            item.status === 'Revisi tahap 1' ||
+                                                            item.status === 'Tolak tahap 1' ?
+                                                            'Belum di acc oleh Sekumbem' :
+                                                            (item.id_proker === 0 || !item.proker ? "No Proker" : item.proker.nama_kegiatan)
+                                                        ) : (
+                                                            role === 'sekumbem' && item.status === 'Unggah proposal' && 
+                                                            (item.id_proker === 0 || !item.proker ? "No Proker" : item.proker.nama_kegiatan)
+                                                        )}
+                                                    </td>
+
                                                     <td>{item.nama_pergerakan}</td>
                                                     <td>{item.deskripsi_pergerakan}</td>
                                                     <td>

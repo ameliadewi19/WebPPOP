@@ -16,10 +16,13 @@ const Dashboard = () => {
       const capitalizedRole = role.charAt(0).toUpperCase() + role.slice(1);
       setRoleCapital(capitalizedRole);
       getDetail();
+      
     }, []);
 
     const getDetail = () => {
-      const id = "1"; // Set jenis based on your requirement
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user){
+      const id = user.id_user;
 
       axios.post('/api/kak/detail/ormawa', { id })
           .then(response => {
@@ -33,6 +36,7 @@ const Dashboard = () => {
           .catch(error => {
               console.error('Error fetching KAK data:', error);
           });
+        }
     };
 
     // Function to determine the Bootstrap class based on the status

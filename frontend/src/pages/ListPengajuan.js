@@ -72,6 +72,8 @@
                             return null; // Handle the case where data is not available
                         }
 
+                        console.log("respon proker : ", responseProker)
+
                         const nama_kegiatan = Array.isArray(responseProker.data)
                         ? responseProker.data[0].nama_kegiatan
                         : responseProker.data.nama_kegiatan;

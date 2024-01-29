@@ -158,9 +158,6 @@ const EditPergerakanModal = ({ showEditModal, setShowEditModal, selectedItemId, 
                         <form>
                         <div className="mb-3">
                                 <label htmlFor="id_proker" className="form-label">Proker</label>
-                                {
-                                    formData.id_proker
-                                }
                                 <select
                                     className="form-control"
                                     id="id_proker"
