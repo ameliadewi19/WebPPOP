@@ -13,7 +13,13 @@ class PergerakanController extends Controller
     }
     public function index()
     {
-        $pergerakan = Pergerakan::with('proker.kak.ketua_ormawa.ormawa')->get();
+        $tahunSaatIni = date('Y');
+        $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
+
+        $pergerakan = Pergerakan::with('proker.kak.ketua_ormawa.ormawa')
+            ->whereHas('proker.kak.ketua_ormawa', function ($query) use ($tahunJabatan) {
+            $query->where('tahun_jabatan', $tahunJabatan);
+        })->get();
 
         if ($pergerakan->isEmpty()) {
             return response()->json(['message' => 'No KAKs found'], 404);

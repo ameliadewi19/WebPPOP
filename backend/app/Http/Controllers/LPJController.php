@@ -22,12 +22,18 @@ class LPJController extends Controller
     // Method for handling HTTP GET requests
     public function index()
     {
-        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')->get();
+        $tahunSaatIni = date('Y');
+        $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
 
-        if (!$lpjs) {
+        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')
+            ->whereHas('proker.kak.ketua_ormawa', function ($query) use ($tahunJabatan) {
+                $query->where('tahun_jabatan', $tahunJabatan);
+            })->get();
+
+        if ($lpjs->isEmpty()) {
             return response()->json(['message' => 'LPJ not found'], 404);
         }
-
+        
         return response()->json($lpjs, 200);
     }
 

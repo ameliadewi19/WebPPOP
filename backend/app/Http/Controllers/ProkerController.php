@@ -23,8 +23,16 @@ class ProkerController extends Controller
     
     // Method for handling HTTP GET requests
     public function index()
-    {
-        $prokers = Proker::with('kak.ketua_ormawa.ormawa')->get();
+    {   
+        $tahunSaatIni = date('Y');
+        $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
+
+        // Filter prokers where ketua_ormawa.tahun_jabatan is equal to tahunJabatan
+        $prokers = Proker::with('kak.ketua_ormawa.ormawa')
+                    ->whereHas('kak.ketua_ormawa', function ($query) use ($tahunJabatan) {
+                        $query->where('tahun_jabatan', $tahunJabatan);
+                    })
+                    ->get();
 
         if ($prokers->isEmpty()) {
             return response()->json(['message' => 'No Prokers found'], 404);

@@ -70,8 +70,13 @@ const PergerakanAdmin = () => {
             // const data = res.data.filter((pergerakan) => pergerakan.proker.kak.id_ketua === idKetua);
             setPergerakan(res.data);
             console.log("pergerakan: ",res.data);
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error('Error fetching KAK data:', error);
+            setIsLoading(false);
+            // Optionally, handle 404 or other HTTP errors specifically
+            if (error.response && error.response.status === 404) {
+                // Specific actions for 404 error, if needed
+            }
         }
     };
 
@@ -160,6 +165,12 @@ const PergerakanAdmin = () => {
                                     Loading ...
                                     </div>
                                 )}
+
+                                {pergerakan.length === 0 && !isLoading ? (
+                                    <div className="text-center">
+                                        <p>Belum ada pergerakan</p>
+                                    </div>
+                                ) : (
                                 <div className="table-responsive">
                                     <table className="table datatable table-striped">
                                       {isLoading ? null : (
@@ -212,6 +223,7 @@ const PergerakanAdmin = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                                )}
                             </div>
                         </div>
                     </div>

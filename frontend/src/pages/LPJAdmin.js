@@ -66,7 +66,12 @@ const LPJAdmin = () => {
             setLPJ(filteredLPJ); // Mengatur data LPJ ke state LPJ
             console.log(filteredLPJ);
         } catch (error) {
-            console.error('Error fetching lpj data:', error); // Mengubah pesan error untuk mencerminkan perubahan
+          console.error('Error fetching KAK data:', error);
+          setIsLoading(false);
+          // Optionally, handle 404 or other HTTP errors specifically
+          if (error.response && error.response.status === 404) {
+              // Specific actions for 404 error, if needed
+          }
         }
       };
       
@@ -164,6 +169,12 @@ const LPJAdmin = () => {
                          Loading ...
                         </div>
                     )}
+
+                    {lpj.length === 0 && !isLoading ? (
+                        <div className="text-center">
+                            <p>Belum ada LPJ</p>
+                        </div>
+                    ) : (
                     <div className="table-responsive">
                     <table className="table datatable table-striped">
                       {isLoading ? null : (
@@ -265,6 +276,7 @@ const LPJAdmin = () => {
                         </tbody>
                     </table>
                     </div>
+                    )}
                 </div>
                 </div>
             </div>
