@@ -38,27 +38,21 @@ const ProgramKerja = () => {
       console.log("idKetua ormawa:", idKetua);
   }
 
-  const currentYear = new Date().getFullYear(); // Mendapatkan tahun saat ini
   const fetchDataProker = async () => {
-      try {
-          console.log("idKetua dataproker: ", idKetua)
-          const response = await axios.get('/api/proker');
-          const data = response.data.filter((proker) => {
-              // Periksa keberadaan objek kak, properti updated_at, dan sesuai dengan tahun saat ini
-              const kak = proker.kak;
-              const uploadYear = kak && kak.updated_at ? new Date(kak.updated_at).getFullYear() : null;
-              return kak && kak.id_ketua === idKetua && uploadYear === currentYear;
-          });
-          setDataProker(data);
-          setIsDataAvailable(data.length > 0);
-          console.log(data);
-          console.log("idKetua dataproker: ", idKetua)
-      } catch (error) {
-          console.error('Error fetching proker data:', error);
-      } finally{
-        setIsLoading(false);
-      }
-  };
+    try {
+        setIsLoading(true)
+        const response = await axios.get('/api/proker');
+        const data = response.data.filter((proker) => proker.kak && proker.kak.id_ketua === idKetua);
+        setDataProker(data);
+        console.log(data);
+        setIsDataAvailable(data.length > 0)
+    } catch (error) {
+        console.error('Error fetching proker data:', error);
+        setIsDataAvailable(false)
+    } finally{
+      setIsLoading(false)
+    }
+  };  
 
 
     useEffect(() => {
