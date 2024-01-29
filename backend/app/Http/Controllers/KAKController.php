@@ -23,10 +23,17 @@ class KAKController extends Controller
     // Method for handling HTTP GET requests to show one data
     public function index()
     {
-        $kaks = KAK::with('prokers','ketua_ormawa.ormawa')->get();
+        $tahunSaatIni = date('Y');
+        $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
+
+        // Retrieve KAKs with ketua_ormawa where tahun_jabatan matches $tahunJabatan
+        $kaks = KAK::with('prokers', 'ketua_ormawa.ormawa')
+                    ->whereHas('ketua_ormawa', function($query) use ($tahunJabatan) {
+                        $query->where('tahun_jabatan', $tahunJabatan);
+                    })->get();
 
         if ($kaks->isEmpty()) {
-            return response()->json(['message' => 'No KAKs found'], 404);
+            return response()->json(['message' => 'No KAKs found for the current tenure year'], 404);
         }
 
         return response()->json($kaks, 200);

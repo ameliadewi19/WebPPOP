@@ -82,14 +82,31 @@ class KAKDetailController extends Controller
         $tahunSaatIni = date('Y');
         $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
 
-        // Retrieve KAK data with the specified conditions and count of associated proker
         $kak = KAK::whereHas('ketua_ormawa', function ($query) use ($id_ketua, $tahunJabatan) {
             $query->where('tahun_jabatan', $tahunJabatan)
                 ->where('id_ketua', $id_ketua);
-        })->withCount('prokers')->first(); // Use first() instead of get()
+        })->withCount('prokers')->first();
 
-        // Return the response with the extracted statuses and count_proker
-        return response()->json(['status' => $kak->status, 'count_proker' => $kak->prokers_count], 200);
+        $kakExists = KAK::whereHas('ketua_ormawa', function ($query) use ($id_ketua, $tahunJabatan) {
+            $query->where('tahun_jabatan', $tahunJabatan)
+                  ->where('id_ketua', $id_ketua);
+        })->exists();
+
+        // Check if $kak is null and set default values accordingly
+        if ($kak) {
+            $count_proker = $kak->prokers_count;
+        } else {
+            $count_proker = 0;
+        }
+
+        if ($kakExists) {
+            $status = $kak->status;
+        } else {
+            $status = "Belum Unggah";
+        }
+
+        return response()->json(['status' => $status, 'count_proker' => $count_proker], 200);        
     }
+
 
 }
