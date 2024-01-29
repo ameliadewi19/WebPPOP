@@ -55,19 +55,23 @@ const ProgramKerja = () => {
   };  
 
 
-    useEffect(() => {
-      if (dataProker.length > 0){
-        datatable = new DataTable('.table-proker', {
-            sortable: false,
-            searchable: false,
-            paging: false
-        });
-        datatable.on("datatable.init", () => {
-          setIsLoading(false);
-          datatable.refresh();
-        })
-      }
-    })
+  useEffect(() => {
+    if (dataProker.length > 0 && datatable) {
+      datatable.destroy(); // Hancurkan instance DataTable jika sudah ada
+    }
+  
+    if (dataProker.length > 0) {
+      datatable = new DataTable('.table-proker', {
+        sortable: false,
+        searchable: false,
+        paging: false
+      });
+      datatable.on("datatable.init", () => {
+        setIsLoading(false);
+        datatable.refresh();
+      })
+    }
+  }, []); // Perhatikan perubahan dalam dependensi  
 
     const handleEdit = (id) => {
       setSelectedProkerId(id);
