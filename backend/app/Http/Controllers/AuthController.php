@@ -81,6 +81,7 @@ class AuthController extends Controller
     {
         $KetuaOrmawa = KetuaOrmawa::where('id_pengguna', $id)
             ->with('user', 'ormawa', 'kak') // Eager load related models
+            ->latest()
             ->first();
 
         if (!$KetuaOrmawa) {
