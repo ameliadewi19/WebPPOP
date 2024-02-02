@@ -48,12 +48,12 @@ const KAK = () => {
             const data = res.data.filter((kak) => kak.id_ketua === idKetua);
             setDataKak(data);
             setIsDataAvailable(data.length > 0);
+            setIsLoading(false)
         } catch (err) {
             console.error("API Error:", err);
             setIsDataAvailable(false)
-        } finally {
             setIsLoading(false)
-        }
+        } 
     }
 
     useEffect(() => {

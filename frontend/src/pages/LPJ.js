@@ -24,6 +24,7 @@ const LPJ = () => {
         id_proker: '',
         nama_kegiatan: '',
         tanggal_mulai: '',
+        
         tanggal_akhir: '',
         status: '',
         lpj: {
@@ -61,24 +62,27 @@ const LPJ = () => {
 
   const fetchDataProker = async () => {
     try {
-        const response = await axios.get('/api/proker/');
-        const prokerData = response.data.filter((proker) => proker.kak.id_ketua === idKetua && proker.status === 'Acc tahap akhir');
+        const prokerResponse = axios.get('/api/proker/');
+        const lpjResponse = axios.get('/api/lpj/');
 
-        setDataProker(prokerData);
-        fetchDatalpj(prokerData);
+        const [prokerRes, lpjRes] = await Promise.all([prokerResponse, lpjResponse]);
+        const prokerData = prokerRes.data.filter((proker) => proker.kak.id_ketua === idKetua && proker.status === 'Acc tahap akhir');
+
+        if (prokerData.length > 0) {
+            fetchDatalpj(prokerData, lpjRes.data);
+        } else {
+            setIsLoading(false);
+            setIsDataAvailable(false);
+        }
     } catch (error) {
         console.error('Error fetching proker data:', error);
-        setIsDataAvailable(false)
-    } finally{
-      setIsLoading(false)
+        setIsDataAvailable(false);
+        setIsLoading(false);
     }
   };
 
-  const fetchDatalpj = async (prokerData) => {
+  const fetchDatalpj = async (prokerData, lpjData) => {
       try {
-          const response = await axios.get('/api/lpj/');
-          const lpjData = response.data;
-
           const updatedDataProker = prokerData.map((proker) => {
               const matchingLPJ = lpjData.find((lpj) => lpj.id_proker === proker.id_proker);
 
@@ -94,23 +98,25 @@ const LPJ = () => {
                       },
                   };
               } else {
-                  return proker;
+                  return {
+                      ...proker,
+                      lpj: null,
+                  };
               }
           });
 
-          // Update data state with the latest data
           setData(updatedDataProker);
-          setIsDataAvailable(updatedDataProker.length > 0)
-          // Log the updated dataProker
+          setIsDataAvailable(updatedDataProker.length > 0);
+          setIsLoading(false);
           console.log("Updated Data:", updatedDataProker);
       } catch (error) {
           console.error('Error fetching lpj data:', error);
-          setIsDataAvailable(false)
-      } finally {
-        setIsLoading(false)
+          setIsDataAvailable(false);
+          setIsLoading(false);
       }
   };
 
+  
 
     // useEffect(() => {
     //   if (dataLpj.length > 0){
@@ -175,19 +181,21 @@ const LPJ = () => {
                         {isDataAvailable && (
                           <div className="table-responsive">
                             <table className="table table-lpj table-striped">
+                              {isLoading ? null: (
                                 <thead>
-                                <tr>
-                                    <th scope='col'>No</th>
-                                    <th scope='col'>Nama Kegiatan</th>
-                                    <th scope='col'>Tanggal Mulai</th>
-                                    <th scope='col'>Tanggal Akhir</th>
-                                    <th scope='col'>File LPJ</th>
-                                    <th scope='col'>File RAB</th>
-                                    <th scope='col'>Status</th>
-                                    <th scope='col'>Catatan</th>
-                                    <th scope='col'>Aksi</th>
-                                </tr>
+                                  <tr>
+                                      <th scope='col'>No</th>
+                                      <th scope='col'>Nama Kegiatan</th>
+                                      <th scope='col'>Tanggal Mulai</th>
+                                      <th scope='col'>Tanggal Akhir</th>
+                                      <th scope='col'>File LPJ</th>
+                                      <th scope='col'>File RAB</th>
+                                      <th scope='col'>Status</th>
+                                      <th scope='col'>Catatan</th>
+                                      <th scope='col'>Aksi</th>
+                                  </tr>
                                 </thead>
+                              )}
                                 <tbody>
                                     {data.map((proker, index) =>(
                                         <tr key={proker.id_proker}>
@@ -195,7 +203,7 @@ const LPJ = () => {
                                             <td>{proker.nama_kegiatan}</td>
                                             <td>{proker.tanggal_mulai}</td>
                                             <td>{proker.tanggal_akhir}</td>
-                                            {proker.lpj.file_lpj && (
+                                            {proker.lpj ? (
                                               <>
                                                 <td>
                                                   <a onClick={() => handleShowFile(proker.lpj.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
@@ -210,7 +218,7 @@ const LPJ = () => {
                                                   <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
                                                 </td>
                                               </>
-                                            ) || (
+                                            ) : (
                                               <>
                                                 <td></td>
                                                 <td></td>
