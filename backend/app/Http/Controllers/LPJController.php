@@ -49,6 +49,16 @@ class LPJController extends Controller
         return response()->json($lpjs, 200);
     }
 
+    public function getByProkerId($idProker)
+    {
+        try {
+            $lpj = LPJ::where('id_proker', $idProker)->get();
+            return response()->json($lpj, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed fetch LPJ data'], 500);
+        }
+    }
+
     // Method for handling HTTP POST requests to create a new product
     public function store(Request $request)
     {

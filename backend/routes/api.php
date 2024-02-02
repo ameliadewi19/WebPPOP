@@ -210,6 +210,7 @@ Route::group([
 ], function () {
     Route::get('/', [LPJController::class, 'index']);
     Route::get('/{id}', [LPJController::class, 'show']);
+    Route::get('/proker/{idProker}', [LPJController::class, 'getByProkerId']);
     Route::post('/', [LPJController::class, 'store']);
     Route::post('/{id}', [LPJController::class, 'update']);
     Route::delete('/{id}', [LPJController::class, 'destroy']);
