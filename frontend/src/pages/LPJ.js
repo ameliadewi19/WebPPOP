@@ -12,27 +12,31 @@ const LPJ = () => {
     const [showModal, setShowModal] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isDataAvailable, setIsDataAvailable] = useState(true);
     let datatable;
 
     const [idKetua, setIdKetua] = useState(null);
     const [dataLpj, setDataLpj] = useState([]);
     const [fileData, setFileData] = useState(null);
-    const [dataProker, setDataProker] = useState([
-      {
-        id_proker: '',
-        nama_kegiatan: '',
-        tanggal_mulai: '',
-        tanggal_akhir: '',
-        status: '',
-        lpj: {
-          id_lpj: '',
-          file_lpj: '',
-          file_rab_lpj: '',
-          status: '',
-          catatan: '',
-        }
-      }
-    ]);
+    const [data, setData] = useState([])
+    // const [dataProker, setDataProker] = useState([
+    //   {
+    //     id_proker: '',
+    //     nama_kegiatan: '',
+    //     tanggal_mulai: '',
+        
+    //     tanggal_akhir: '',
+    //     status: '',
+    //     lpj: {
+    //       id_lpj: '',
+    //       file_lpj: '',
+    //       file_rab_lpj: '',
+    //       status: '',
+    //       catatan: '',
+    //     }
+    //   }
+    // ]);
+    const [dataProker, setDataProker] = useState([])
     const [selectedlpjId, setSelectedlpjId] = useState(null);
     const [selectedProkerId, setSelectedProkerId] = useState(null);
 
@@ -40,8 +44,9 @@ const LPJ = () => {
       const idUser = localStorage.getItem('idUser');
       fetchOrmawa(idUser);
       fetchDataProker();
-      fetchDatalpj();
-      console.log("formData", dataProker);
+      // fetchDatalpj();
+      // console.log("formData", dataProker);
+        console.log('Data Proker lpj: ', dataProker)
     }, [idKetua]);
 
     const fetchOrmawa = (id) => {
@@ -57,63 +62,61 @@ const LPJ = () => {
       console.log("idKetua ormawa:", idKetua);
   }
 
-  const fetchDataProker = async () => {
-    try {
-        const response = await axios.get('/api/proker/');
-        const data = response.data.filter((proker) => proker.kak.id_ketua === idKetua && proker.status === 'Acc tahap akhir');
-        // const filteredDataProker = data.filter((proker) => proker.status === 'Acc tahap akhir');
-        
-        setDataProker(data);
-        setDataProker(data.map((proker) => ({
-          ...proker,
-          lpj: {
-            ...proker.lpj,
-            id_lpj: '',
-            file_lpj: '',
-            file_rab_lpj: '',
-            status: '',
-            catatan: '',
-          }
-        })));
-        fetchDatalpj();
-    } catch (error) {
-        console.error('Error fetching proker data:', error);
-    }
-  };
+  // const fetchDataProker = async () => {
+  //   try {
+  //       const prokerResponse = axios.get('/api/proker/');
+  //       const lpjResponse = axios.get('/api/lpj/');
 
-    const fetchDatalpj = async () => {
-        try {
-            const response = await axios.get('/api/lpj/');
-            const lpjData = response.data;
-            
-            setDataProker((prevDataProker) => {
-              return prevDataProker.map((proker) => {
-                const matchingLPJ = lpjData.find((lpj) => lpj.id_proker === proker.id_proker);
-        
-                if (matchingLPJ) {
-                  // Update the LPJ data for the specific project
-                  return {
-                    ...proker,
-                    lpj: {
-                      id_lpj: matchingLPJ.id_lpj,
-                      file_lpj: matchingLPJ.file_lpj,
-                      file_rab_lpj: matchingLPJ.file_rab_lpj,
-                      status: matchingLPJ.status,
-                      catatan: matchingLPJ.catatan,
-                    },
-                  };
-                } else {
-                  return proker;
-                }
-              });
-            });
-        
-            // Log the updated dataProker inside the asynchronous function
-            console.log("lpjData", dataProker);
-        } catch (error) {
-            console.error('Error fetching lpj data:', error);
-        }
-    };
+  //       const [prokerRes, lpjRes] = await Promise.all([prokerResponse, lpjResponse]);
+  //       const prokerData = prokerRes.data.filter((proker) => proker.kak.id_ketua === idKetua && proker.status === 'Acc tahap akhir');
+
+  //       if (prokerData.length > 0) {
+  //           fetchDatalpj(prokerData, lpjRes.data);
+  //       } else {
+  //           setIsLoading(false);
+  //           setIsDataAvailable(false);
+  //       }
+  //   } catch (error) {
+  //       console.error('Error fetching proker data:', error);
+  //       setIsDataAvailable(false);
+  //       setIsLoading(false);
+  //   }
+  // };
+
+  // const fetchDatalpj = async (prokerData, lpjData) => {
+  //     try {
+  //         const updatedDataProker = prokerData.map((proker) => {
+  //             const matchingLPJ = lpjData.find((lpj) => lpj.id_proker === proker.id_proker);
+
+  //             if (matchingLPJ) {
+  //                 return {
+  //                     ...proker,
+  //                     lpj: {
+  //                         id_lpj: matchingLPJ.id_lpj,
+  //                         file_lpj: matchingLPJ.file_lpj,
+  //                         file_rab_lpj: matchingLPJ.file_rab_lpj,
+  //                         status: matchingLPJ.status,
+  //                         catatan: matchingLPJ.catatan,
+  //                     },
+  //                 };
+  //             } else {
+  //                 return {
+  //                     ...proker,
+  //                     lpj: null,
+  //                 };
+  //             }
+  //         });
+
+  //         setData(updatedDataProker);
+  //         setIsDataAvailable(updatedDataProker.length > 0);
+  //         setIsLoading(false);
+  //         console.log("Updated Data:", updatedDataProker);
+  //     } catch (error) {
+  //         console.error('Error fetching lpj data:', error);
+  //         setIsDataAvailable(false);
+  //         setIsLoading(false);
+  //     }
+  // };
 
     // useEffect(() => {
     //   if (dataLpj.length > 0){
@@ -128,6 +131,35 @@ const LPJ = () => {
     //     })
     //   }
     // }, [dataProker])
+  
+    const fetchDataProker = async () => {
+      try {
+        setIsLoading(true);
+        console.log('idKetua in fetchproker:', idKetua)
+        const responseProker = await axios.get('/api/proker');
+        const prokerData = responseProker.data.filter((proker) => proker.kak.id_ketua === idKetua && proker.status === 'Acc tahap akhir');
+        
+        const prokerWithLPJData = await Promise.all(prokerData.map(async (proker) => {
+          try {
+            const responseLPJ = await axios.get(`/api/lpj/proker/${proker.id_proker}`);
+            proker.lpjData = responseLPJ.data;
+            return proker;
+          } catch (error) {
+            console.error('Error fetching LPJ data:', error);
+            return proker;
+          }
+        }));
+        
+        setDataProker(prokerWithLPJData);
+        setIsDataAvailable(prokerWithLPJData.length > 0);
+      } catch (error) {
+        console.error('Error fetching data proker:', error);
+        setIsDataAvailable(false);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
 
     const handleShowModal = (idlpj) => {
       setSelectedProkerId(idlpj);
@@ -167,83 +199,121 @@ const LPJ = () => {
                     
                 </div>
                 <div className="card-body">
-                    {/* {isLoading && (
+                    {isLoading && (
                         <div className="text-center justify-center">
                          Loading ...
                         </div>
-                    )} */}
-                    <div className="table-responsive">
-                    <table className="table table-lpj table-striped">
-                        <thead>
-                        <tr>
-                            <th scope='col'>No</th>
-                            <th scope='col'>Nama Kegiatan</th>
-                            <th scope='col'>Tanggal Mulai</th>
-                            <th scope='col'>Tanggal Akhir</th>
-                            <th scope='col'>File LPJ</th>
-                            <th scope='col'>File RAB</th>
-                            <th scope='col'>Status</th>
-                            <th scope='col'>Catatan</th>
-                            <th scope='col'>Aksi</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {dataProker.map((proker, index) =>(
-                                <tr key={proker.id_proker}>
-                                    <td>{index + 1}</td>
-                                    <td>{proker.nama_kegiatan}</td>
-                                    <td>{proker.tanggal_mulai}</td>
-                                    <td>{proker.tanggal_akhir}</td>
-                                    {proker.lpj.file_lpj && (
-                                      <>
-                                        <td>
-                                          <a onClick={() => handleShowFile(proker.lpj.file_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
-                                            LPJ {proker.nama_kegiatan}
-                                          </a>
-                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                        </td>
-                                        <td>
-                                          <a onClick={() => handleShowFile(proker.lpj.file_rab_lpj)} data-bs-toggle="modal" data-bs-target="#FileLpjModal" href='#'>
-                                            RAB LPJ {proker.nama_kegiatan}
-                                          </a>
-                                          <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
-                                        </td>
-                                      </>
-                                    ) || (
-                                      <>
-                                        <td></td>
-                                        <td></td>
-                                      </>
-                                    )}
-                                    <td>{proker.lpj.status}</td>
-                                    <td>{proker.lpj.catatan}</td>
-                                    <td>
-                                      {proker.status === 'Acc tahap akhir' && proker.lpj.file_lpj === '' ? 
-                                        <button class="btn btn-primary mt-2"
-                                          style={{ marginRight: '5px' }}
-                                          onClick={() => handleShowModal(proker.id_proker)}
-                                          data-bs-toggle="modal" data-bs-target="#uploadLPJModal"
-                                          disabled={isUploadDisabled(proker.tanggal_akhir)}
-                                          title={'Upload LPJ'}><i className='bi-upload'></i> LPJ</button>
-                                      :
-                                        <button class="btn btn-primary mt-2" onClick={() => handleEdit(proker.lpj.id_lpj, proker.id_proker)} style={{marginRight: '5px'}} data-bs-toggle="modal" data-bs-target="#editLPJModal"
-                                        disabled={proker.lpj.status === 'Acc tahap akhir'}>
-                                          {proker.lpj.status === 'Revisi tahap 1' || proker.lpj.status === 'Tolak tahap 1' ? (
-                                              <><i className='bi-upload'></i> Revisi</>
+                    )}
+
+                    {!isLoading && (
+                      <>
+                        {isDataAvailable && (
+                          <div className="table-responsive">
+                            <table className="table table-lpj table-striped">
+                              {isLoading ? null: (
+                                <thead>
+                                  <tr>
+                                      <th scope='col'>No</th>
+                                      <th scope='col'>Nama Kegiatan</th>
+                                      <th scope='col'>Tanggal Mulai</th>
+                                      <th scope='col'>Tanggal Akhir</th>
+                                      <th scope='col'>File LPJ</th>
+                                      <th scope='col'>File RAB</th>
+                                      <th scope='col'>Status</th>
+                                      <th scope='col'>Catatan</th>
+                                      <th scope='col'>Aksi</th>
+                                  </tr>
+                                </thead>
+                              )}
+                                <tbody>
+                                  {dataProker.map((proker, index) => (
+                                    <tr key={proker.id_proker}>
+                                      <td>{index + 1}</td>
+                                      <td>{proker.nama_kegiatan}</td>
+                                      <td>{proker.tanggal_mulai}</td>
+                                      <td>{proker.tanggal_akhir}</td>
+                                      {proker.lpjData.length > 0 ? ( // Menggunakan lpjData yang diambil dari fetchDataProker
+                                        <>
+                                          <td>
+                                            <a
+                                              onClick={() => handleShowFile(proker.lpjData[0].file_lpj)}
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#FileLpjModal"
+                                              href="#"
+                                            >
+                                              LPJ {proker.nama_kegiatan}
+                                            </a>
+                                            <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                          </td>
+                                          <td>
+                                            <a
+                                              onClick={() => handleShowFile(proker.lpjData[0].file_rab_lpj)}
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#FileLpjModal"
+                                              href="#"
+                                            >
+                                              RAB LPJ {proker.nama_kegiatan}
+                                            </a>
+                                            <FileLpjModal pdfData={fileData} showModal={showModal} setShowModal={setShowModal} />
+                                          </td>
+                                          <td>{proker.lpjData[0].status}</td>
+                                          <td>{proker.lpjData[0].catatan}</td>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                        </>
+                                      )}
+                                      <td>
+                                        {proker.lpjData.length === 0 ? (
+                                          <button
+                                            className="btn btn-primary mt-2"
+                                            style={{ marginRight: '5px' }}
+                                            onClick={() => handleShowModal(proker.id_proker)}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#uploadLPJModal"
+                                            disabled={isUploadDisabled(proker.tanggal_akhir)}
+                                            title={'Upload LPJ'}
+                                          >
+                                            <i className="bi-upload"></i> LPJ
+                                          </button>
+                                        ) : (
+                                          <button
+                                            className="btn btn-primary mt-2"
+                                            onClick={() => handleEdit(proker.lpjData ? proker.lpjData.id_lpj : null, proker.id_proker)}
+                                            style={{ marginRight: '5px' }}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editLPJModal"
+                                            disabled={(proker.lpjData[0].status === 'Acc tahap akhir')}
+                                          >
+                                            {(proker.lpjData[0].status === 'Revisi tahap 1' || proker.lpjData[0].status === 'Tolak tahap 1') ? (
+                                              <> <i className="bi-upload"></i> Revisi </>
                                             ) : (
-                                              <i className='bi-pencil-square'></i>
+                                              <i className="bi-pencil-square"></i>
                                             )}
-                                        </button>
-                                      }
-                                      {console.log("tanggal_akhir: ", proker.tanggal_akhir)}
-                                      <UploadLPJModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
-                                      <EditLPJModal reloadData={fetchDataProker} selectedlpjId={selectedlpjId} selectedProkerId={selectedProkerId} />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    </div>
+                                          </button>
+                                        )}
+                                        <UploadLPJModal reloadData={fetchDataProker} selectedProkerId={selectedProkerId} />
+                                        <EditLPJModal reloadData={fetchDataProker} selectedlpjId={proker.lpjData.id_lpj} selectedProkerId={selectedProkerId} />
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+
+                            </table>
+                          </div>
+                        )}
+
+                        {!isDataAvailable && (
+                            <div className="text-center justify-center">
+                                Tidak ada data yang ditemukan.
+                            </div>
+                        )}
+                      </>
+                    )}
                 </div>
                 </div>
             </div>

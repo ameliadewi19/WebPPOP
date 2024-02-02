@@ -81,6 +81,7 @@ class AuthController extends Controller
     {
         $KetuaOrmawa = KetuaOrmawa::where('id_pengguna', $id)
             ->with('user', 'ormawa', 'kak') // Eager load related models
+            ->latest()
             ->first();
 
         if (!$KetuaOrmawa) {
@@ -281,4 +282,21 @@ class AuthController extends Controller
             return response()->json(['error' => 'Failed to retrieve ormawa users'], 500);
         }
     }
+    
+    public function getDataKetuaOrmawa($id)
+    {
+        $KetuaOrmawa = KetuaOrmawa::where('id_pengguna', $id)
+            ->latest()
+            ->first();
+
+        if (!$KetuaOrmawa) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        // Extracting the id_ketua field
+        $idKetua = $KetuaOrmawa->id_ketua;
+
+        return response()->json(['data' => $KetuaOrmawa], 200);
+    }
+
 }

@@ -22,12 +22,18 @@ class LPJController extends Controller
     // Method for handling HTTP GET requests
     public function index()
     {
-        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')->get();
+        $tahunSaatIni = date('Y');
+        $tahunJabatan = $tahunSaatIni . '/' . ($tahunSaatIni + 1);
 
-        if (!$lpjs) {
+        $lpjs = LPJ::with('proker.kak.ketua_ormawa.ormawa')
+            ->whereHas('proker.kak.ketua_ormawa', function ($query) use ($tahunJabatan) {
+                $query->where('tahun_jabatan', $tahunJabatan);
+            })->get();
+
+        if ($lpjs->isEmpty()) {
             return response()->json(['message' => 'LPJ not found'], 404);
         }
-
+        
         return response()->json($lpjs, 200);
     }
 
@@ -41,6 +47,16 @@ class LPJController extends Controller
         }
 
         return response()->json($lpjs, 200);
+    }
+
+    public function getByProkerId($idProker)
+    {
+        try {
+            $lpj = LPJ::where('id_proker', $idProker)->get();
+            return response()->json($lpj, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed fetch LPJ data'], 500);
+        }
     }
 
     // Method for handling HTTP POST requests to create a new product

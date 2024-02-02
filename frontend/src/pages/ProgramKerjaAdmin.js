@@ -66,7 +66,12 @@ const ProgramKerjaAdmin = () => {
 
           console.log(response.data);
       } catch (error) {
-          console.error('Error fetching proker data:', error);
+        console.error('Error fetching KAK data:', error);
+        setIsLoading(false);
+        // Optionally, handle 404 or other HTTP errors specifically
+        if (error.response && error.response.status === 404) {
+            // Specific actions for 404 error, if needed
+        }
       }
   };
 
@@ -163,6 +168,12 @@ const ProgramKerjaAdmin = () => {
                          Loading ...
                         </div>
                     )}
+
+                    {prokers.length === 0 && !isLoading ? (
+                        <div className="text-center">
+                            <p>Belum ada Proker</p>
+                        </div>
+                    ) : (
                     <div className="table-responsive">
                     <table className="table datatable table-striped">
                     {isLoading ? null : (
@@ -288,6 +299,7 @@ const ProgramKerjaAdmin = () => {
                       </tbody>
                     </table>
                     </div>
+                    )}
                 </div>
                 </div>
             </div>

@@ -58,8 +58,13 @@ const KAKAdmin = () => {
 
         })
         .catch(error => {
-            console.error('Error fetching KAK data:', error);
-        });
+        console.error('Error fetching KAK data:', error);
+        setIsLoading(false);
+        // Optionally, handle 404 or other HTTP errors specifically
+        if (error.response && error.response.status === 404) {
+            // Specific actions for 404 error, if needed
+        }
+    });
       };
 
     useEffect(() => {
@@ -180,6 +185,12 @@ const KAKAdmin = () => {
                          Loading ...
                         </div>
                     )}
+
+                    {kaks.length === 0 && !isLoading ? (
+                        <div className="text-center">
+                            <p>Belum ada KAK</p>
+                        </div>
+                    ) : (
                     <div className="table-responsive">
                     <table className="table datatable table-striped">
                     {isLoading ? null : (
@@ -291,6 +302,7 @@ const KAKAdmin = () => {
                         </tbody>
                     </table>
                     </div>
+                    )}
                 </div>
                 </div>
             </div>

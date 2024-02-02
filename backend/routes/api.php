@@ -51,7 +51,9 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile/{id}', [AuthController::class, 'userData']);
-    Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']); 
+    Route::get('/get-data-ketua/{id}', [AuthController::class, 'getDataKetuaOrmawa']); 
+    Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']);
+    Route::get('/get-ketua', [AuthController::class, 'getAllOrmawaUsers']); 
     Route::get('/users', [AuthController::class, 'getAllUsers']); 
     Route::delete('/users/{id}', [AuthController::class, 'deleteAccount']);
     Route::put('/users/{id}', [AuthController::class, 'editAccount']);
@@ -60,20 +62,6 @@ Route::group([
     Route::put('/ubah-password-admin/{id}', [AuthController::class, 'ubahPasswordAdmin']);
 });
 
-
-// KELOLA AKUN
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'auth'
-], function ($router) {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
-    Route::get('/get-ketua/{id}', [AuthController::class, 'getKetuaOrmawa']);     
-    Route::get('/get-ketua', [AuthController::class, 'getAllOrmawaUsers']); 
-});
 
 // KETUA ORMAWA
 
@@ -223,6 +211,7 @@ Route::group([
 ], function () {
     Route::get('/', [LPJController::class, 'index']);
     Route::get('/{id}', [LPJController::class, 'show']);
+    Route::get('/proker/{idProker}', [LPJController::class, 'getByProkerId']);
     Route::post('/', [LPJController::class, 'store']);
     Route::post('/{id}', [LPJController::class, 'update']);
     Route::delete('/{id}', [LPJController::class, 'destroy']);
