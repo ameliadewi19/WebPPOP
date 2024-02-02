@@ -21,24 +21,37 @@ const Dashboard = () => {
 
     const getDetail = () => {
       const user = JSON.parse(localStorage.getItem('user'));
-      if (user){
-      const id = user.id_user;
-
-      axios.post('/api/kak/detail/ormawa', { id })
+      if (user) {
+        const id = user.id_user;
+        let id_ketua = ''; // changed from const to let
+    
+        axios.get(`/api/auth/get-data-ketua/${id}`)
           .then(response => {
-              console.log(response.data);
-  
-              setStatus(response.data.status);
-              setProker(response.data.count_proker);
-
-              // Perform actions with the received data
+            console.log("data ketua", response.data);
+            id_ketua = response.data.data.id_ketua;
+    
+            console.log("id ketua", id_ketua);
+    
+            if (id_ketua) {
+              return axios.post('/api/kak/detail/ormawa', { id: id_ketua }); // return the promise for chaining
+            } else {
+              throw new Error('No id_ketua found');
+            }
+          })
+          .then(response => {
+            console.log(response.data);
+    
+            setStatus(response.data.status);
+            setProker(response.data.count_proker);
+    
+            // Perform actions with the received data
           })
           .catch(error => {
-              console.error('Error fetching KAK data:', error);
+            console.error('Error:', error);
           });
-        }
+      }
     };
-
+    
     // Function to determine the Bootstrap class based on the status
     const getStatusClass = () => {
       if (status.includes('Acc')) {

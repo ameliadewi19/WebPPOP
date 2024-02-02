@@ -105,7 +105,7 @@ class KAKDetailController extends Controller
             $status = "Belum Unggah";
         }
 
-        return response()->json(['status' => $status, 'count_proker' => $count_proker], 200);        
+        return response()->json(['status' => $status, 'count_proker' => $count_proker,'id_ketua' => $id_ketua], 200);        
     }
 
 
