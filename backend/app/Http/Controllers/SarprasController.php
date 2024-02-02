@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sarpras;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class SarprasController extends Controller
 {
@@ -87,6 +88,10 @@ class SarprasController extends Controller
             $sarpras->daya_tampung = $request->input('daya_tampung');
         }
 
+        if ($request->has('status_peminjaman')) {
+            $sarpras->status_peminjaman = $request->input('status_peminjaman');
+        }
+
         if ($request->hasFile('gambar_sarpras')) {
             // Hapus nilai yang ada di kolom link_gambar jika ada
             if ($sarpras->gambar_sarpras) {
@@ -135,6 +140,16 @@ class SarprasController extends Controller
     
         return response()->json($sarpras, 200);
     }
+
+    public function getNotInSarprasByPeminjaman($id_sarpras)
+    {
+        $array_id_sarpras = explode(',', $id_sarpras);
+        $array_id_sarpras = array_map('intval', $array_id_sarpras);
+
+        $sarpras = Sarpras::whereNotIn('id_sarpras', $array_id_sarpras)
+        ->select('id_sarpras')->get();
+        return response()->json($sarpras, 200);
+    } 
     
     
 }

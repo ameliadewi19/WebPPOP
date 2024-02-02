@@ -35,6 +35,7 @@ import PengelolaanSarpras from './pages/PengelolaanSarpras.js';
 import ListPengajuan from './pages/ListPengajuan.js';
 import PengajuanSarpras from './components/SubMenu/PengajuanSarpras.js';
 import ReviewPengajuan from './components/SubMenu/ReviewPengajuan.js';
+import Sarpras from './pages/CardSarpras.js'
 
 function checkAuthorization() {
   const token = localStorage.getItem('token');
@@ -384,6 +385,21 @@ function App() {
               <div className="main">
                 <Navbar toggleSidebar={toggleSidebar}/>
                 <ListPengajuan />
+                <Footer />
+              </div>
+            </div>
+          </ProtectedRoute>
+      }/>
+
+      <Route path="/sarpras" element={
+          <ProtectedRoute>
+            <div className="wrapper">
+              <nav id="sidebar" className={`${sidebarOpen ? 'sidebar js-sidebar' : 'sidebar js-sidebar collapsed'}`}>
+                <Sidebar />
+              </nav>
+              <div className="main">
+                <Navbar toggleSidebar={toggleSidebar}/>
+                <Sarpras />
                 <Footer />
               </div>
             </div>

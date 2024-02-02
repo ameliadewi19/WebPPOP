@@ -291,6 +291,9 @@ const ReviewPengajuan = () => {
     formDataObject.append('id_proker', id_proker);
     formDataObject.append('surat_peminjaman', surat_peminjaman);
     formDataObject.append('status_peminjaman', status_peminjaman);
+
+    console.log("File name:", formDataObject.get('surat_peminjaman').name);
+    console.log("File type:", formDataObject.get('surat_peminjaman').type);   
   
     try {
       const responsePeminjaman = await axios.post('http://localhost:8000/api/peminjaman/', formDataObject, {

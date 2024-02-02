@@ -180,4 +180,42 @@ class ProkerController extends Controller
 
         return response()->json($prokers, 200);
     }
+
+    /**
+     * Get proker by KAK ID
+     *
+     * @param  int  $id_kak
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getByTanggal($tanggal)
+    {
+        $prokers = Proker::where('tanggal_mulai', $tanggal)
+        ->where('status', 'Acc Tahap 1')
+        ->get();
+
+        if ($prokers->isEmpty()) {
+            return response()->json(['message' => 'No Prokers found'], 404);
+        }
+
+        return response()->json($prokers, 200);
+    }
+
+    /**
+     * Get KAK Id
+     *
+     * @param  int  $id_kak
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getKAK($id)
+    {
+        $prokers = Proker::where('id_proker', $id)
+        ->select('id_kak')
+        ->get();
+
+        if ($prokers->isEmpty()) {
+            return response()->json(['message' => 'No Prokers found'], 404);
+        }
+
+        return response()->json($prokers, 200);
+    }
 }

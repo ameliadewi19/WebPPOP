@@ -114,11 +114,23 @@ class DetailPeminjamanController extends Controller
             return response()->json(['message' => 'Detail Peminjaman not found'], 404);
         }
 
-        // Delete associated records (if any)
-        // ...
-
-        // Delete Sarpras
+        // Delete detail sarpras
         $detail_peminjaman->delete();
+        return response()->json(['message' => 'Detail Peminjaman deleted successfully'], 200);
+    }
+
+    // Method for handling HTTP DELETE requests to delete a detail peminjaman by id of peminjaman
+    public function destroyByPeminjaman($id)
+    {
+        $detail_peminjaman = DetailPeminjaman::where('id_peminjaman', $id)->get();
+        if (!$detail_peminjaman) {
+            return response()->json(['message' => 'Detail Peminjaman not found'], 404);
+        }
+
+        // Delete detail sarpras
+        foreach ($detail_peminjaman as $detail) {
+            $detail->delete();
+        }
         return response()->json(['message' => 'Detail Peminjaman deleted successfully'], 200);
     }
 
@@ -127,6 +139,20 @@ class DetailPeminjamanController extends Controller
         $detail_peminjaman = DetailPeminjaman::where('id_peminjaman', $id)->get();
         return response()->json($detail_peminjaman, 200);
     }
-    
+
+    public function getSarprasByPeminjaman($id_peminjaman)
+    {
+        $detail_peminjaman = DetailPeminjaman::where('id_peminjaman', $id_peminjaman)
+        ->whereNotNull('id_sarpras')
+        ->select('id_sarpras')->get();
+        return response()->json($detail_peminjaman, 200);
+    }    
+
+    public function getPeminjamanBySarpras($id_sarpras)
+    {
+        $detail_peminjaman = DetailPeminjaman::where('id_sarpras', $id_sarpras)
+        ->select('id_peminjaman')->get();
+        return response()->json($detail_peminjaman, 200);
+    } 
     
 }

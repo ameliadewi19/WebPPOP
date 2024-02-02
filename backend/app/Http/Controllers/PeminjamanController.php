@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class PeminjamanController extends Controller
 {
@@ -68,7 +69,6 @@ class PeminjamanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_proker' => 'sometimes|required',
-            'surat_peminjaman' => 'sometimes|required',
             'status_peminjaman' => 'sometimes|required',
             'catatan' => 'nullable',
         ]);
@@ -104,16 +104,18 @@ class PeminjamanController extends Controller
             // Proses untuk menyimpan dan mengupdate gambar_sarpras
             $suratPath = $request->file('surat_peminjaman')->store('public/surat-pengajuan');
 
+            info('File exists in the request');
+
             // Update jalur gambar di basis data dengan jalur gambar yang baru
             $peminjaman->surat_peminjaman = $suratPath;
 
             // Set kolom link_gambar dengan URL baru
-            $peminjaman->link_gambar = 'http://localhost:8000/storage/surat-pengajuan' . basename($suratPath);
+            $peminjaman->link_surat = 'http://localhost:8000/storage/surat-pengajuan/' . basename($suratPath);
         }
 
         $peminjaman->save();
 
-        return response()->json($peminjaman, 200);
+        return response()->json($request->all(), 200);
     }
 
     // Method for handling HTTP DELETE requests to delete a Peminjaman
@@ -127,5 +129,29 @@ class PeminjamanController extends Controller
         // Delete Peminjaman
         $peminjaman->delete();
         return response()->json(['message' => 'Peminjaman deleted successfully'], 200);
+    }
+
+    // Method for handling HTTP GET requests to show a Peminjaman thas has ACC status
+    public function getAcc($id_proker)
+    {
+        $peminjaman = Peminjaman::where('id_proker', $id_proker)
+        ->where('status_peminjaman', 'ACC Tahap 3 (Sarpras) (Disetujui)')
+        ->get();
+        if (!$peminjaman) {
+            return response()->json(['message' => 'Peminjaman not found'], 404);
+        }
+        return response()->json($peminjaman, 200);
+    }
+
+    // Method for handling HTTP GET proker by peminjaman
+    public function getProker($id)
+    {
+        $peminjaman = Peminjaman::where('id_peminjaman', $id)
+        ->select('id_proker')
+        ->get();
+        if (!$peminjaman) {
+            return response()->json(['message' => 'Peminjaman not found'], 404);
+        }
+        return response()->json($peminjaman, 200);
     }
 }

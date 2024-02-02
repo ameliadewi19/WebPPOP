@@ -195,6 +195,7 @@ Route::group([
     Route::put('/izin-submit/{id}', [ProkerController::class, 'ubahIzinSubmit']);
     Route::get('/getProker', [ProkerController::class, 'getTotalProkerTiapOrmawa']);
     Route::get('/kak/{id}', [ProkerController::class, 'getByKakId']);
+    Route::get('/tanggal/{tanggal}', [ProkerController::class, 'getByTanggal']);
 });
 
 // Detail proker
@@ -260,9 +261,10 @@ Route::group([
     Route::get('/', [SarprasController::class, 'index']); 
     Route::get('/{id}', [SarprasController::class, 'show']);
     Route::post('/', [SarprasController::class, 'store']); 
-    Route::patch('/{id}', [SarprasController::class, 'update']); 
+    Route::post('/{id}', [SarprasController::class, 'update']); 
     Route::delete('/{id}', [SarprasController::class, 'destroy']); 
     Route::get('/tersedia/show', [SarprasController::class, 'getAvailable']); 
+    Route::get('/notInSarpras/{id_sarpras}', [SarprasController::class, 'getNotInSarprasByPeminjaman']);
 });
 
 // INVENTARIS
@@ -285,8 +287,10 @@ Route::group([
 ], function () {
     Route::get('/', [PeminjamanController::class, 'index']); 
     Route::get('/{id}', [PeminjamanController::class, 'show']);
+    Route::get('/acc/{id_proker}', [PeminjamanController::class, 'getAcc']);
+    Route::get('/proker/{id}', [PeminjamanController::class, 'getProker']);
     Route::post('/', [PeminjamanController::class, 'store']); 
-    Route::patch('/{id}', [PeminjamanController::class, 'update']); 
+    Route::post('/{id}', [PeminjamanController::class, 'update']); 
     Route::delete('/{id}', [PeminjamanController::class, 'destroy']); 
 });
 
@@ -298,7 +302,10 @@ Route::group([
     Route::get('/', [DetailPeminjamanController::class, 'index']); 
     Route::get('/{id}', [DetailPeminjamanController::class, 'show']);
     Route::get('/peminjaman/{id}', [DetailPeminjamanController::class, 'getByPeminjaman']);
+    Route::get('/peminjaman/bySarpras/{id_sarpras}', [DetailPeminjamanController::class, 'getPeminjamanBySarpras']);
+    Route::get('/sarpras/{id_peminjaman}', [DetailPeminjamanController::class, 'getSarprasByPeminjaman']);
     Route::post('/', [DetailPeminjamanController::class, 'store']); 
     Route::patch('/{id}', [DetailPeminjamanController::class, 'update']); 
     Route::delete('/{id}', [DetailPeminjamanController::class, 'destroy']); 
+    Route::delete('/peminjaman/{id}', [DetailPeminjamanController::class, 'destroyByPeminjaman']); 
 });

@@ -278,6 +278,14 @@ const KAKAdmin = () => {
                                         renderButton(kak.id_kak)
                                     )}
                             </td>
+
+                                {/* ) : (
+                                    role === 'sekumbem' ? (
+                                        kak.status === 'Diajukan' || kak.status === 'Revisi tahap 1'
+                                    ) : (
+                                        renderButton(kak.id_kak)
+                                    )
+                                )} */}
                             </tr>
                         ))} 
                         </tbody>

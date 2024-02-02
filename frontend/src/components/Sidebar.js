@@ -31,21 +31,23 @@ const Sidebar = () => {
                         </a>
                     </li>
 
+                    {role && role !== 'sarpras' && 
+                    <>
                     <li className={`sidebar-item ${location.pathname === '/kak' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/kak">
-                            <i className="align-middle" data-feather="file-text"></i> <span className="align-middle">KAK</span>
+                            <i className="bi bi-file-text"></i> <span className="align-middle">KAK</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/program-kerja' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/program-kerja">
-                            <i className="align-middle" data-feather="briefcase"></i> <span className="align-middle">Program Kerja</span>
+                            <i className="bi bi-briefcase"></i> <span className="align-middle">Program Kerja</span>
                         </a>
                     </li>
 
                     <li className={`sidebar-item ${location.pathname === '/lpj' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/lpj">
-                            <i className="align-middle" data-feather="folder"></i> <span className="align-middle">LPJ Proker</span>
+                            <i className="bi bi-folder"></i> <span className="align-middle">LPJ Proker</span>
                         </a>
                     </li>
 
@@ -54,14 +56,35 @@ const Sidebar = () => {
                             <i className="bi-list-ol"></i> <span className="align-middle">Pergerakan</span>
                         </a>
                     </li>
+                    </>
+                    }
 
+                    <li className={`sidebar-item ${location.pathname === '/sarpras' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/sarpras">
+                            <i className="bi-building-fill"></i> <span className="align-middle">Sarana Prasarana</span>
+                        </a>
+                    </li>
+                    
                     <li className={`sidebar-item ${location.pathname === '/peminjaman-sarpras' ? 'active' : ''}`}>
                         <a className="sidebar-link" href="/list-pengajuan">
-                            <i className="bi-building"></i> <span className="align-middle">Peminjaman SarPras</span>
+                            <i className="bi-building-fill-check"></i> <span className="align-middle">Peminjaman SarPras</span>
                         </a>
                     </li>
 
-                    {role && role !== 'ormawa' && 
+                    {role && role === 'sarpras' && 
+                    <>
+
+                    <li className={`sidebar-item ${location.pathname === '/pengelolaan-sarana-prasarana' ? 'active' : ''}`}>
+                        <a className="sidebar-link" href="/pengelolaan-sarana-prasarana">
+                        <i class="bi bi-building-fill-gear"></i> <span className="align-middle">Pengelolaan SarPras</span>
+                        </a>
+                    </li>
+
+                    </>
+                    
+                    }   
+                    
+                    {role && role !== 'sarpras' && 
                     <>
 
                     <li className={`sidebar-item ${location.pathname === '/ormawa' ? 'active' : ''}`}>
@@ -104,18 +127,6 @@ const Sidebar = () => {
                     
                     }
 
-                    {role && role === 'sarpras' && 
-                    <>
-
-                    <li className={`sidebar-item ${location.pathname === '/pengelolaan-sarana-prasarana' ? 'active' : ''}`}>
-                        <a className="sidebar-link" href="/pengelolaan-sarana-prasarana">
-                        <i class="bi bi-building-fill-gear"></i> <span className="align-middle">Pengelolaan SarPras</span>
-                        </a>
-                    </li>
-
-                    </>
-                    
-                    }   
                 </ul>
             </div>
         // </nav>
